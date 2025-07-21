@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,19 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Route::middleware('web')->group(function () {
+            Route::get('/redirect', function () {
+                $user = Auth::user();
+
+                if (!$user) {
+                    return redirect('/login');
+                }
+
+                return match ($user->rol) {
+                    'admin' => redirect()->route('admin.index'),
+                    default => redirect()->route('pos'),
+                };
+            })->name('redirect');
+        });
     }
 }

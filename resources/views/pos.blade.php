@@ -141,6 +141,18 @@
                             Impresiones
                         </button>
                         <button
+                            class="h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg"
+                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h4"></path>
+                            </svg>
+                            Salir
+                        </button>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+                            @csrf
+                        </form>
+                        <button
                             class="col-span-2 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center gap-3 text-lg"
                             @click="menu = 'admin'">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -396,6 +408,48 @@
                     }
                 }
             }
+        </script>
+        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-green-200 py-2 px-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-700 z-40">
+            <div>
+            <span class="font-semibold text-green-700">{{ auth()->user()->role ?? 'Usuario' }}: {{ auth()->user()->name ?? '' }}</span>
+            &nbsp;|&nbsp;
+            <span class="font-semibold text-indigo-700">CYBER Y VARIEDADES SANDOVAL</span>
+            </div>
+            <div class="flex items-center gap-4 mt-1 md:mt-0">
+            <span id="fechaHoraActual"></span>
+            <span id="estadoConexion" class="ml-4 flex items-center gap-1">
+                <svg id="iconoConexion" class="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
+                <circle cx="4" cy="4" r="4"/>
+                </svg>
+                <span id="textoConexion">Conectado</span>
+            </span>
+            </div>
+        </div>
+        <script>
+            function actualizarEstadoConexion() {
+            const online = navigator.onLine;
+            const icono = document.getElementById('iconoConexion');
+            const texto = document.getElementById('textoConexion');
+            if (online) {
+                icono.style.color = '#22c55e'; // verde
+                texto.textContent = 'Conectado';
+            } else {
+                icono.style.color = '#ef4444'; // rojo
+                texto.textContent = 'Sin conexión';
+            }
+            }
+            window.addEventListener('online', actualizarEstadoConexion);
+            window.addEventListener('offline', actualizarEstadoConexion);
+            actualizarEstadoConexion();
+        </script>
+        <script>
+            function actualizarFechaHora() {
+                const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const ahora = new Date();
+                document.getElementById('fechaHoraActual').textContent = ahora.toLocaleString('es-HN', opciones);
+            }
+            actualizarFechaHora();
+            setInterval(actualizarFechaHora, 1000);
         </script>
 </body>
 </html>
