@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -8,7 +9,10 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
+
 <body class="bg-gray-100">
 
     <div class="p-6 bg-gradient-to-br from-green-50 via-white to-indigo-100 min-h-[calc(100vh-5rem)]"
@@ -85,9 +89,9 @@
                 <div x-show="menu === 'principal'" class="flex flex-col gap-6 h-full">
                     <button
                         class="w-full h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl py-4 font-bold text-xl shadow transition disabled:opacity-60 flex items-center justify-center"
-                        :disabled="carrito.length === 0"
-                        @click="mostrarModalCobro = true">
-                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        :disabled="carrito.length === 0" @click="mostrarModalCobro = true">
+                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
                             <rect width="20" height="12" x="2" y="9" rx="2"></rect>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 19v2m10-2v2"></path>
@@ -98,43 +102,58 @@
                     <button
                         class="w-full h-16 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-4 font-bold text-xl shadow transition flex items-center justify-center"
                         @click="menu = 'editar'">
-                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6"></path>
+                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6"></path>
                         </svg>
                         Editar transacción
                     </button>
 
                     <div class="grid grid-cols-2 gap-4">
-                        <button class="h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <button
+                            class="h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
                                 <circle cx="12" cy="12" r="10"></circle>
                             </svg>
                             Recargas
                         </button>
-                        <button class="h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
+                        <button
+                            class="h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2">
+                                </path>
                                 <rect width="20" height="12" x="2" y="9" rx="2"></rect>
                             </svg>
                             Remesas
                         </button>
-                        <button class="h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m0 0l-3-3m3 3l3-3"></path>
+                        <button
+                            class="h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m0 0l-3-3m3 3l3-3">
+                                </path>
                                 <circle cx="12" cy="12" r="10"></circle>
                             </svg>
                             Retiros
                         </button>
-                        <button class="h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6"></path>
+                        <button
+                            class="h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6"></path>
                                 <rect width="20" height="12" x="2" y="7" rx="2"></rect>
                             </svg>
                             Servicios
                         </button>
-                        <button class="h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <button
+                            class="h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8m-8-4h8"></path>
                                 <rect width="20" height="12" x="2" y="6" rx="2"></rect>
                             </svg>
@@ -143,8 +162,10 @@
                         <button
                             class="h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7"></path>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7">
+                                </path>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h4"></path>
                             </svg>
                             Salir
@@ -155,7 +176,8 @@
                         <button
                             class="col-span-2 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center gap-3 text-lg"
                             @click="menu = 'admin'">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                             </svg>
                             Admin
@@ -165,9 +187,11 @@
 
                 <!-- Submenú Editar -->
                 <div x-show="menu === 'editar'" class="flex flex-col gap-6 h-full">
-                    <button class="w-full h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                    <button
+                        class="w-full h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
                         @click="vaciarCarrito()">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                         Vaciar carrito
@@ -175,15 +199,19 @@
                     <button
                         class="w-full h-16 bg-yellow-700 hover:bg-yellow-800 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
                         @click="alert('Función en desarrollo')">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 3.5a2.121 2.121 0 013 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 3.5a2.121 2.121 0 013 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path>
                         </svg>
                         Editar líneas
                     </button>
-                    <button class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                    <button
+                        class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
                         Principal
@@ -194,14 +222,17 @@
                 <div x-show="menu === 'admin'" class="flex flex-col gap-6 h-full">
                     <a href="{{ route('productos.index') }}"
                         class="w-full h-16 bg-blue-800 hover:bg-blue-900 text-white rounded-2xl font-bold shadow transition text-center flex items-center justify-center gap-3 text-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18"></path>
                         </svg>
                         Gestión de Productos
                     </a>
-                    <button class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                    <button
+                        class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
                         Principal
@@ -215,7 +246,8 @@
                 <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 border-2 border-green-200 relative">
                     <button @click="cerrarModalCobro()"
                         class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
@@ -244,8 +276,7 @@
                         <label class="block mb-1 font-medium text-gray-700">Cambio (L):</label>
                         <input type="text"
                             class="w-full border-2 border-green-200 rounded-lg p-3 bg-gray-100 font-bold text-xl"
-                            :class="cambio >= 0 ? 'text-green-700' : 'text-red-700'"
-                            :value="cambio.toFixed(2)"
+                            :class="cambio >= 0 ? 'text-green-700' : 'text-red-700'" :value="cambio.toFixed(2)"
                             readonly>
                     </div>
                     <div class="flex justify-end gap-4 mt-6">
@@ -268,23 +299,28 @@
             <!-- MODAL DE CAMBIO PERSONALIZADO -->
             <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                 x-show="mostrarModalCambio" x-transition>
-                <div class="bg-white max-w-sm w-full p-8 rounded-2xl shadow-xl border-2 border-green-300 text-center relative">
+                <div
+                    class="bg-white max-w-sm w-full p-8 rounded-2xl shadow-xl border-2 border-green-300 text-center relative">
                     <button @click="cerrarModalCambio()"
                         class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                     <h2 class="text-3xl font-extrabold text-green-700 mb-3 flex items-center justify-center gap-2">
-                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
                         </svg>
                         ¡Venta exitosa!
                     </h2>
-                    <p class="text-lg text-gray-700 mb-2">Gracias por su compra en <span class="font-bold text-green-800">CYBER Y VARIEDADES SANDOVAL</span>.</p>
+                    <p class="text-lg text-gray-700 mb-2">Gracias por su compra en <span
+                            class="font-bold text-green-800">CYBER Y VARIEDADES SANDOVAL</span>.</p>
                     <template x-if="cambioVenta > 0">
                         <p class="text-xl mb-4 font-semibold">
-                            Cambio a entregar: <span class="text-indigo-600">L. <span x-text="cambioVenta.toFixed(2)"></span></span>
+                            Cambio a entregar: <span class="text-indigo-600">L. <span
+                                    x-text="cambioVenta.toFixed(2)"></span></span>
                         </p>
                     </template>
                     <template x-if="cambioVenta <= 0">
@@ -336,8 +372,14 @@
                             this.calcularTotal();
                             this.search = '';
                         } else {
-                            alert('Producto no encontrado');
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Producto no encontrado',
+                                text: 'Verifica el código ingresado o escaneado.',
+                                confirmButtonColor: '#e3342f'
+                            });
                         }
+
                     },
 
                     quitarProducto(index) {
@@ -394,10 +436,23 @@
                                     this.ventaExitosa = true;
                                     this.mostrarModalCambio = true;
                                 } else {
-                                    alert('❌ Error al guardar la venta.');
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: '❌ No se pudo guardar la venta.',
+                                        confirmButtonColor: '#e3342f'
+                                    });
                                 }
                             })
-                            .catch(() => alert('❌ Error al conectar con el servidor.'));
+                            .catch(() => {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error de red',
+                                    text: '❌ No se pudo conectar con el servidor. Intente nuevamente.',
+                                    confirmButtonColor: '#e3342f'
+                                });
+                            });
+
                     },
 
                     cerrarModalCambio() {
@@ -409,34 +464,36 @@
                 }
             }
         </script>
-        <div class="fixed bottom-0 left-0 w-full bg-white border-t border-green-200 py-2 px-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-700 z-40">
+        <div
+            class="fixed bottom-0 left-0 w-full bg-white border-t border-green-200 py-2 px-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-700 z-40">
             <div>
-            <span class="font-semibold text-green-700">{{ auth()->user()->role ?? 'Usuario' }}: {{ auth()->user()->name ?? '' }}</span>
-            &nbsp;|&nbsp;
-            <span class="font-semibold text-indigo-700">CYBER Y VARIEDADES SANDOVAL</span>
+                <span class="font-semibold text-green-700">{{ auth()->user()->role ?? 'Usuario' }}:
+                    {{ auth()->user()->name ?? '' }}</span>
+                &nbsp;|&nbsp;
+                <span class="font-semibold text-indigo-700">CYBER Y VARIEDADES SANDOVAL</span>
             </div>
             <div class="flex items-center gap-4 mt-1 md:mt-0">
-            <span id="fechaHoraActual"></span>
-            <span id="estadoConexion" class="ml-4 flex items-center gap-1">
-                <svg id="iconoConexion" class="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
-                <circle cx="4" cy="4" r="4"/>
-                </svg>
-                <span id="textoConexion">Conectado</span>
-            </span>
+                <span id="fechaHoraActual"></span>
+                <span id="estadoConexion" class="ml-4 flex items-center gap-1">
+                    <svg id="iconoConexion" class="w-3 h-3" fill="currentColor" viewBox="0 0 8 8">
+                        <circle cx="4" cy="4" r="4" />
+                    </svg>
+                    <span id="textoConexion">Conectado</span>
+                </span>
             </div>
         </div>
         <script>
             function actualizarEstadoConexion() {
-            const online = navigator.onLine;
-            const icono = document.getElementById('iconoConexion');
-            const texto = document.getElementById('textoConexion');
-            if (online) {
-                icono.style.color = '#22c55e'; // verde
-                texto.textContent = 'Conectado';
-            } else {
-                icono.style.color = '#ef4444'; // rojo
-                texto.textContent = 'Sin conexión';
-            }
+                const online = navigator.onLine;
+                const icono = document.getElementById('iconoConexion');
+                const texto = document.getElementById('textoConexion');
+                if (online) {
+                    icono.style.color = '#22c55e'; // verde
+                    texto.textContent = 'Conectado';
+                } else {
+                    icono.style.color = '#ef4444'; // rojo
+                    texto.textContent = 'Sin conexión';
+                }
             }
             window.addEventListener('online', actualizarEstadoConexion);
             window.addEventListener('offline', actualizarEstadoConexion);
@@ -444,7 +501,14 @@
         </script>
         <script>
             function actualizarFechaHora() {
-                const opciones = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const opciones = {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
                 const ahora = new Date();
                 document.getElementById('fechaHoraActual').textContent = ahora.toLocaleString('es-HN', opciones);
             }
@@ -452,4 +516,5 @@
             setInterval(actualizarFechaHora, 1000);
         </script>
 </body>
+
 </html>
