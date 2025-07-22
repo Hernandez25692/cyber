@@ -66,7 +66,22 @@
                 📝 Reporte de Servicios
             </a>
         </div>
-
+        {{-- Recargas --}}
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-indigo-700 mb-4">Recargas</h2>
+            <a href="{{ route('admin.recargas.proveedores.index') }}"
+               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
+            🏬 Proveedores Recarga
+            </a>
+            <a href="{{ route('admin.recargas.paquetes.index') }}"
+               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
+            📦 Paquetes Recarga
+            </a>
+            <a href="{{ route('admin.reportes.recargas') }}"
+               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold flex items-center justify-center gap-2">
+            📊 Reporte Recargas
+            </a>
+        </div>
         {{-- Inventario --}}
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <h2 class="text-lg font-semibold text-green-700 mb-4">Inventario</h2>

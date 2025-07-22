@@ -20,6 +20,10 @@ use App\Http\Controllers\BancoController;
 use App\Http\Controllers\ServicioConfigController;
 use App\Http\Controllers\Api\ServicioDataController;
 use App\Http\Controllers\ServicioRealizadoController;
+use App\Http\Controllers\RecargaPOSController;
+use App\Http\Controllers\ProveedorRecargaController;
+use App\Http\Controllers\PaqueteRecargaController;
+use App\Http\Controllers\ReporteRecargasController;
 
 
 /*
@@ -69,6 +73,9 @@ Route::middleware(['auth'])->prefix('pos')->group(function () {
     // Registrar retiro
     Route::post('/retiros/calcular', [RetiroPOSController::class, 'calcularComision'])->name('pos.retiros.calcular');
     Route::post('/retiros/registrar', [RetiroPOSController::class, 'store'])->name('pos.retiros.store');
+
+    Route::post('/recargas', [RecargaPOSController::class, 'store'])->name('recargas.store');
+    Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
 });
 
 /*
@@ -126,10 +133,17 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     // Servicios - Configuración
     Route::resource('servicios/config', ServicioConfigController::class)->only(['index', 'create', 'store', 'destroy'])->names('servicios.config');
+
+    // ADMIN - Proveedores y paquetes de recarga
+    Route::resource('recargas/proveedores', ProveedorRecargaController::class)->names('recargas.proveedores');
+    Route::resource('recargas/paquetes', PaqueteRecargaController::class)->names('recargas.paquetes');
+    Route::get('/reportes/recargas', [ReporteRecargasController::class, 'index'])->name('reportes.recargas');
 });
 Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo']);
 Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::class, 'comision']);
 Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
+Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
+
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)
