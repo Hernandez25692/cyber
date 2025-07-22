@@ -153,7 +153,8 @@
                             </svg>
                             Servicios
                         </button>
-                        <button
+                        <!-- BOTÓN IMPRESIONES (abre modal de impresión) -->
+                        <button onclick="document.getElementById('modal-impresion').classList.remove('hidden')"
                             class="h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -543,6 +544,53 @@
                 </div>
             </div>
             <!-- FIN MODAL RECARGA -->
+
+            <!-- MODAL: Registrar Impresión -->
+            <div id="modal-impresion" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+                <div class="bg-white rounded-lg max-w-md w-full p-6 relative shadow-lg">
+                    <!-- Cerrar -->
+                    <button onclick="document.getElementById('modal-impresion').classList.add('hidden')"
+                        class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">&times;</button>
+
+                    <h2 class="text-xl font-bold mb-4">🖨 Registrar Impresión</h2>
+
+                    <form method="POST" action="{{ route('impresiones.store') }}">
+                        @csrf
+
+                        <!-- Servicio de Impresión -->
+                        <label class="block font-semibold mb-1">Servicio</label>
+                        <select name="servicio_id" class="w-full border rounded px-3 py-2 mb-3" required>
+                            <option value="">-- Selecciona un servicio --</option>
+                            @foreach($serviciosImpresion as $servicio)
+                                <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- Tipo de Impresión -->
+                        <label class="block font-semibold mb-1">Tipo de Impresión</label>
+                        <select name="tipo_id" class="w-full border rounded px-3 py-2 mb-3" required>
+                            <option value="">-- Selecciona un tipo --</option>
+                            @foreach($tiposImpresion as $tipo)
+                                <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                            @endforeach
+                        </select>
+
+                        <!-- Precio -->
+                        <label class="block font-semibold mb-1">Precio (L)</label>
+                        <input type="number" name="precio" step="0.01" required
+                            class="w-full border px-3 py-2 rounded mb-3" placeholder="Ej: 10.00">
+
+                        <!-- Descripción -->
+                        <label class="block font-semibold mb-1">Descripción (opcional)</label>
+                        <input type="text" name="descripcion"
+                            class="w-full border px-3 py-2 rounded mb-4" placeholder="Ej: Impresión doble cara">
+
+                        <button type="submit"
+                            class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">✅ Registrar</button>
+                    </form>
+                </div>
+            </div>
+            <!-- FIN MODAL IMPRESION -->
 
         </div>
 

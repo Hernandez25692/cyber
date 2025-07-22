@@ -24,6 +24,11 @@ use App\Http\Controllers\RecargaPOSController;
 use App\Http\Controllers\ProveedorRecargaController;
 use App\Http\Controllers\PaqueteRecargaController;
 use App\Http\Controllers\ReporteRecargasController;
+use App\Http\Controllers\ServicioImpresionController;
+use App\Http\Controllers\TipoImpresionController;
+use App\Http\Controllers\ImpresionPOSController;
+use App\Http\Controllers\ReporteImpresionesController;
+
 
 
 /*
@@ -76,6 +81,8 @@ Route::middleware(['auth'])->prefix('pos')->group(function () {
 
     Route::post('/recargas', [RecargaPOSController::class, 'store'])->name('recargas.store');
     Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
+
+    Route::post('/impresiones', [ImpresionPOSController::class, 'store'])->name('impresiones.store');
 });
 
 /*
@@ -138,12 +145,30 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::resource('recargas/proveedores', ProveedorRecargaController::class)->names('recargas.proveedores');
     Route::resource('recargas/paquetes', PaqueteRecargaController::class)->names('recargas.paquetes');
     Route::get('/reportes/recargas', [ReporteRecargasController::class, 'index'])->name('reportes.recargas');
+
+    // Servicios de impresión
+    Route::resource('impresiones/servicios', ServicioImpresionController::class)->only([
+        'index',
+        'create',
+        'store',
+        'destroy'
+    ])->names('impresiones.servicios');
+
+    // Tipos de impresión
+    Route::resource('impresiones/tipos', TipoImpresionController::class)->only([
+        'index',
+        'create',
+        'store',
+        'destroy'
+    ])->names('impresiones.tipos');
+
+    Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
 });
 Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo']);
 Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::class, 'comision']);
 Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
-
+Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

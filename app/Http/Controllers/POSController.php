@@ -7,6 +7,8 @@ use App\Models\Producto;
 use App\Models\TipoServicio;
 use App\Models\Banco;
 use App\Models\ProveedorRecarga;
+use App\Models\ServicioImpresion;
+use App\Models\TipoImpresion;
 
 class POSController extends Controller
 {
@@ -17,8 +19,11 @@ class POSController extends Controller
         $tipos = TipoServicio::all();
         $bancos = Banco::all();
         $proveedores = ProveedorRecarga::all();
+        $serviciosImpresion = ServicioImpresion::all();
+        $tiposImpresion = TipoImpresion::all();
 
         // Retorna vista pos.blade.php con todos los datos
-        return view('pos', compact('productos', 'tipos', 'bancos', 'proveedores'));
+        return view('pos', compact('productos', 'tipos', 'bancos', 'proveedores', 'serviciosImpresion', 'tiposImpresion'));
     }
 }
+    

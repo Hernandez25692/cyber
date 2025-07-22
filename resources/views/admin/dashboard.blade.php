@@ -70,17 +70,35 @@
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
             <h2 class="text-lg font-semibold text-indigo-700 mb-4">Recargas</h2>
             <a href="{{ route('admin.recargas.proveedores.index') }}"
-               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
-            🏬 Proveedores Recarga
+                class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
+                🏬 Proveedores Recarga
             </a>
             <a href="{{ route('admin.recargas.paquetes.index') }}"
-               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
-            📦 Paquetes Recarga
+                class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
+                📦 Paquetes Recarga
             </a>
             <a href="{{ route('admin.reportes.recargas') }}"
-               class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold flex items-center justify-center gap-2">
-            📊 Reporte Recargas
+                class="bg-indigo-600 text-white w-full py-3 rounded-lg shadow hover:bg-indigo-700 transition font-semibold flex items-center justify-center gap-2">
+                📊 Reporte Recargas
             </a>
+        </div>
+
+        {{-- Impresiones --}}
+        <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
+            <h2 class="text-lg font-semibold text-yellow-800 mb-4">Impresiones</h2>
+            <a href="{{ route('admin.impresiones.servicios.index') }}"
+                class="bg-yellow-600 text-white w-full py-3 rounded-lg shadow hover:bg-yellow-700 transition font-semibold mb-2 flex items-center justify-center gap-2">
+                🖨 Servicios de Impresión
+            </a>
+            <a href="{{ route('admin.impresiones.tipos.index') }}"
+                class="bg-yellow-700 text-white w-full py-3 rounded-lg shadow hover:bg-yellow-800 transition font-semibold flex items-center justify-center gap-2">
+                🎨 Tipos de Impresión
+            </a>
+            <a href="{{ route('reportes.impresiones') }}"
+                class="bg-yellow-600 text-white p-6 rounded-xl shadow hover:bg-yellow-700 transition font-semibold">
+                📊 Reporte Impresiones
+            </a>
+
         </div>
         {{-- Inventario --}}
         <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center">
