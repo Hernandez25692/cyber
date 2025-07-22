@@ -46,6 +46,10 @@
             class="bg-purple-600 text-white p-6 rounded-xl shadow hover:bg-purple-700 transition font-semibold">
             📈 Reportes de Remesas
         </a>
+        <a href="{{ route('admin.reporte.servicios') }}"
+            class="bg-pink-600 text-white p-6 rounded-xl shadow hover:bg-pink-700 transition font-semibold">
+            📝 Reporte de Servicios
+        </a>
         <a href="{{ route('admin.reportes.retiros') }}"
             class="bg-indigo-600 text-white p-6 rounded-xl shadow hover:bg-indigo-700 transition font-semibold">
             🏧 Reportes de Retiros

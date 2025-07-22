@@ -141,7 +141,8 @@
                             </svg>
                             Retiros
                         </button>
-                        <button
+                        <!-- BOTÓN SERVICIOS NUEVO -->
+                        <button @click="mostrarModalServicio = true"
                             class="h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -439,6 +440,59 @@
             </div>
             <!-- FIN MODAL RETIRO -->
 
+            <!-- MODAL DE SERVICIO -->
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                x-show="mostrarModalServicio" x-transition>
+                <div class="bg-white w-full max-w-md rounded shadow-lg p-6 relative border-2 border-teal-300">
+                    <button class="absolute top-2 right-2 text-red-500 text-xl font-bold"
+                        @click="cerrarModalServicio()">
+                        &times;
+                    </button>
+                    <h2 class="text-xl font-bold mb-4 text-center text-teal-700">Registrar Servicio</h2>
+                    <form action="{{ route('pos.servicios.store') }}" method="POST" class="space-y-4"
+                        @submit="mostrarModalServicio = false">
+                        @csrf
+
+                        <div>
+                            <label class="block font-semibold">Tipo de Servicio</label>
+                            <select name="tipo_servicio_id" class="w-full border rounded p-2" required>
+                                @foreach ($tipos as $tipo)
+                                    <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Banco</label>
+                            <select name="banco_id" class="w-full border rounded p-2" required>
+                                @foreach ($bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Referencia</label>
+                            <input type="text" name="referencia" class="w-full border rounded px-3 py-2">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Comisión</label>
+                            <input type="number" name="comision" step="0.01"
+                                class="w-full border rounded px-3 py-2" required value="15">
+                        </div>
+
+                        <div class="text-right">
+                            <button type="submit"
+                                class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                                Guardar Servicio
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- FIN MODAL SERVICIO -->
+
         </div>
 
         <script>
@@ -460,6 +514,8 @@
                     mostrarModalRemesa: false,
                     // Retiro modal variable
                     mostrarModalRetiro: false,
+                    // Servicio modal variable
+                    mostrarModalServicio: false,
 
                     addProducto() {
                         const query = this.search.trim().toLowerCase();
@@ -577,6 +633,10 @@
 
                     cerrarModalRetiro() {
                         this.mostrarModalRetiro = false;
+                    },
+
+                    cerrarModalServicio() {
+                        this.mostrarModalServicio = false;
                     }
                 }
             }

@@ -9,11 +9,16 @@ return new class extends Migration {
     {
         Schema::create('servicios_realizados', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('servicio_config_id')->constrained('servicios_config')->onDelete('cascade');
-            $table->string('referencia')->nullable();
+            $table->unsignedBigInteger('tipo_servicio_id');
+            $table->unsignedBigInteger('banco_id');
             $table->decimal('comision', 10, 2);
+            $table->string('referencia')->nullable();
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+
+            $table->foreign('tipo_servicio_id')->references('id')->on('tipos_servicio')->onDelete('cascade');
+            $table->foreign('banco_id')->references('id')->on('bancos')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

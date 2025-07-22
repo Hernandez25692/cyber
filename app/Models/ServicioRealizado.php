@@ -1,20 +1,37 @@
 <?php
+
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\ServicioConfig;
 
 class ServicioRealizado extends Model
 {
+    use HasFactory;
+
     protected $table = 'servicios_realizados';
 
-    protected $fillable = ['user_id', 'servicio_config_id', 'referencia', 'comision'];
+    protected $fillable = [
+        'tipo_servicio_id',
+        'banco_id',
+        'comision',
+        'referencia',
+        'user_id',
+    ];
 
-    public function servicio()
+    // Relación con tipo de servicio
+    public function tipoServicio()
     {
-        return $this->belongsTo(ServicioConfig::class, 'servicio_config_id');
+        return $this->belongsTo(TipoServicio::class, 'tipo_servicio_id');
     }
 
+    // Relación con banco
+    public function banco()
+    {
+        return $this->belongsTo(Banco::class, 'banco_id');
+    }
+
+    // Relación con usuario
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');

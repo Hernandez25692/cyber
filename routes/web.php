@@ -18,6 +18,9 @@ use App\Http\Controllers\TipoServicioRetiroController;
 use App\Http\Controllers\TipoServicioController;
 use App\Http\Controllers\BancoController;
 use App\Http\Controllers\ServicioConfigController;
+use App\Http\Controllers\Api\ServicioDataController;
+use App\Http\Controllers\ServicioRealizadoController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -92,7 +95,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Reportes
     Route::get('/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('reportes.remesas');
     Route::get('/reportes/retiros', [ReporteRetirosController::class, 'index'])->name('reportes.retiros');
-
+    Route::get('/reporte-servicios', [App\Http\Controllers\ServicioRealizadoController::class, 'index'])->name('reporte.servicios');
     // Configuración de tipos de retiro (admin define nombre y comisiones)
     Route::resource('retiros/config', RetiroConfigController::class)->only(['index', 'create', 'store', 'destroy'])->names([
         'index' => 'retiros.config.index',
@@ -124,7 +127,9 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Servicios - Configuración
     Route::resource('servicios/config', ServicioConfigController::class)->only(['index', 'create', 'store', 'destroy'])->names('servicios.config');
 });
-
+Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo']);
+Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::class, 'comision']);
+Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)
