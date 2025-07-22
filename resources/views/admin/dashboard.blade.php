@@ -50,7 +50,28 @@
             class="bg-indigo-600 text-white p-6 rounded-xl shadow hover:bg-indigo-700 transition font-semibold">
             🏧 Reportes de Retiros
         </a>
-
+        <div class="col-span-1 md:col-span-2 lg:col-span-3">
+            <ul class="bg-white rounded-xl shadow p-4 text-left">
+            <li class="mb-2">
+                <span class="font-bold text-sm uppercase text-gray-600">Servicios</span>
+            </li>
+            <li class="ml-4">
+                <a href="{{ route('admin.servicios.tipos.index') }}" class="block py-1 hover:text-purple-600">
+                Tipos de Servicio
+                </a>
+            </li>
+            <li class="ml-4">
+                <a href="{{ route('admin.servicios.bancos.index') }}" class="block py-1 hover:text-purple-600">
+                Bancos
+                </a>
+            </li>
+            <li class="ml-4">
+                <a href="{{ route('admin.servicios.config.index') }}" class="block py-1 hover:text-purple-600">
+                Configuración de Servicios
+                </a>
+            </li>
+            </ul>
+        </div>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
             <button type="submit"

@@ -15,6 +15,9 @@ use App\Http\Controllers\RetiroConfigController;
 use App\Http\Controllers\RetiroPOSController;
 use App\Http\Controllers\ReporteRetirosController;
 use App\Http\Controllers\TipoServicioRetiroController;
+use App\Http\Controllers\TipoServicioController;
+use App\Http\Controllers\BancoController;
+use App\Http\Controllers\ServicioConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,6 +114,15 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         $retiros = \App\Models\RetiroRealizado::with('usuario')->latest()->get();
         return view('admin.retiros.reportes.index', compact('retiros'));
     })->name('retiros.reportes');
+
+    // Servicios - Tipos
+    Route::resource('servicios/tipos', TipoServicioController::class)->only(['index', 'create', 'store', 'destroy'])->names('servicios.tipos');
+
+    // Servicios - Bancos
+    Route::resource('servicios/bancos', BancoController::class)->only(['index', 'create', 'store', 'destroy'])->names('servicios.bancos');
+
+    // Servicios - Configuración
+    Route::resource('servicios/config', ServicioConfigController::class)->only(['index', 'create', 'store', 'destroy'])->names('servicios.config');
 });
 
 /*

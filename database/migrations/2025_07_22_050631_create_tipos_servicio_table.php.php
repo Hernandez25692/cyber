@@ -9,12 +9,7 @@ return new class extends Migration {
     {
         Schema::create('tipos_servicio', function (Blueprint $table) {
             $table->id();
-            $table->string('categoria'); // 'remesa', 'retiro', etc.
-            $table->string('nombre');
-            $table->string('banco')->nullable();
-            $table->decimal('monto_min', 10, 2)->nullable();
-            $table->decimal('monto_max', 10, 2)->nullable();
-            $table->decimal('comision', 10, 2);
+            $table->string('nombre')->unique();
             $table->timestamps();
         });
     }
