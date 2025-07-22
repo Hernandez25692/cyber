@@ -14,8 +14,21 @@
             class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:bg-yellow-600 transition font-semibold">
             💰REMESAS
         </a>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="retirosDropdown" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                💸 Retiros
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="retirosDropdown">
+                <li><a class="dropdown-item" href="{{ route('admin.retiros.config.index') }}">🛠️ Configurar Comisión</a>
+                </li>
+                <li><a class="dropdown-item" href="{{ route('admin.retiros.reportes') }}">📊 Reporte de Retiros</a></li>
+            </ul>
+        </li>
 
-        <a href="#" class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:bg-yellow-600 transition font-semibold">
+
+        <a href="#"
+            class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:bg-yellow-600 transition font-semibold">
             💰 Comisiones y Servicios
         </a>
 
@@ -28,6 +41,14 @@
         <a href="#"
             class="bg-purple-600 text-white p-6 rounded-xl shadow hover:bg-purple-700 transition font-semibold">
             📈 Reportes
+        </a>
+        <a href="{{ route('admin.reportes.remesas') }}"
+            class="bg-purple-600 text-white p-6 rounded-xl shadow hover:bg-purple-700 transition font-semibold">
+            📈 Reportes de Remesas
+        </a>
+        <a href="{{ route('admin.reportes.retiros') }}"
+            class="bg-indigo-600 text-white p-6 rounded-xl shadow hover:bg-indigo-700 transition font-semibold">
+            🏧 Reportes de Retiros
         </a>
 
         <form method="POST" action="{{ route('logout') }}">

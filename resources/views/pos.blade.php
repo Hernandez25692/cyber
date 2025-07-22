@@ -10,7 +10,6 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 
 <body class="bg-gray-100">
@@ -120,7 +119,8 @@
                             </svg>
                             Recargas
                         </button>
-                        <a href="{{ route('remesas.form') }}"
+                        <!-- BOTÓN REMESAS MODIFICADO -->
+                        <button @click="mostrarModalRemesa = true"
                             class="h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -129,9 +129,9 @@
                                 <rect width="20" height="12" x="2" y="9" rx="2"></rect>
                             </svg>
                             Remesas
-                        </a>
-
-                        <button
+                        </button>
+                        <!-- BOTÓN RETIROS NUEVO -->
+                        <button @click="mostrarModalRetiro = true"
                             class="h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -335,6 +335,110 @@
                     </button>
                 </div>
             </div>
+
+            <!-- MODAL DE REMESA -->
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                x-show="mostrarModalRemesa" x-transition>
+                <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border-2 border-blue-300 relative">
+                    <button @click="cerrarModalRemesa()"
+                        class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+
+                    <h2 class="text-2xl font-bold mb-6 text-blue-700 flex items-center gap-2">
+                        <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
+                            <rect width="20" height="12" x="2" y="9" rx="2"></rect>
+                        </svg>
+                        Registrar Remesa
+                    </h2>
+
+                    <form action="{{ route('remesas.store') }}" method="POST" class="space-y-4"
+                        @submit="mostrarModalRemesa = false">
+                        @csrf
+
+                        <div>
+                            <label class="block font-semibold">Monto</label>
+                            <input type="number" step="0.01" name="monto" id="monto"
+                                class="w-full border rounded p-2" required oninput="calcularComision()">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Comisión</label>
+                            <input type="text" id="comision"
+                                class="w-full border rounded p-2 bg-gray-100 font-bold text-blue-700" readonly>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Referencia (opcional)</label>
+                            <input type="text" name="referencia" class="w-full border rounded p-2">
+                        </div>
+
+                        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">
+                            Registrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- FIN MODAL REMESA -->
+
+            <!-- MODAL DE RETIRO -->
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                x-show="mostrarModalRetiro" x-transition>
+                <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border-2 border-purple-300 relative">
+                    <button @click="cerrarModalRetiro()"
+                        class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+
+                    <h2 class="text-2xl font-bold mb-6 text-purple-700 flex items-center gap-2">
+                        <svg class="w-7 h-7 text-purple-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m0 0l-3-3m3 3l3-3"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        Registrar Retiro
+                    </h2>
+
+                    <form action="{{ route('pos.retiros.store') }}" method="POST" class="space-y-4"
+                        @submit="mostrarModalRetiro = false">
+                        @csrf
+
+                        <div>
+                            <label class="block font-semibold">Monto</label>
+                            <input type="number" step="0.01" name="monto" id="montoRetiro"
+                                class="w-full border rounded p-2" required oninput="calcularComisionRetiro()">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Comisión</label>
+                            <input type="text" id="comisionRetiro"
+                                class="w-full border rounded p-2 bg-gray-100 font-bold text-purple-700" readonly>
+                            <!-- input oculto con el valor real -->
+                            <input type="hidden" name="comision" id="inputComisionRetiro">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Referencia (opcional)</label>
+                            <input type="text" name="referencia" class="w-full border rounded p-2">
+                        </div>
+
+                        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
+                            Registrar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+            <!-- FIN MODAL RETIRO -->
+
         </div>
 
         <script>
@@ -352,6 +456,10 @@
                     ventaExitosa: false,
                     mostrarModalCambio: false,
                     cambioVenta: 0,
+                    // Remesa modal variable
+                    mostrarModalRemesa: false,
+                    // Retiro modal variable
+                    mostrarModalRetiro: false,
 
                     addProducto() {
                         const query = this.search.trim().toLowerCase();
@@ -461,7 +569,94 @@
                         this.mostrarModalCambio = false;
                         this.ventaExitosa = false;
                         this.cerrarModalCobro();
+                    },
+
+                    cerrarModalRemesa() {
+                        this.mostrarModalRemesa = false;
+                    },
+
+                    cerrarModalRetiro() {
+                        this.mostrarModalRetiro = false;
                     }
+                }
+            }
+        </script>
+        <script>
+            const remesaRangos = @json(\App\Models\RemesaConfig::all());
+
+            function calcularComision() {
+                const monto = parseFloat(document.getElementById('monto').value);
+                const input = document.getElementById('comision');
+                if (isNaN(monto)) return input.value = '';
+                const r = remesaRangos.find(x =>
+                    parseFloat(x.monto_min) <= monto && parseFloat(x.monto_max) >= monto
+                );
+                input.value = r ? `L. ${parseFloat(r.comision).toFixed(2)}` : '❌ No definido';
+            }
+        </script>
+        <script>
+            function registrarRetiro() {
+                const monto = parseFloat(document.getElementById('montoRetiro').value);
+                const comision = parseFloat(document.getElementById('comisionRetiro').value);
+                const referencia = document.getElementById('referenciaRetiro').value;
+
+                if (isNaN(monto) || isNaN(comision)) {
+                    alert('Debe ingresar un monto válido y calcular la comisión antes de guardar.');
+                    return;
+                }
+
+                axios.post("{{ route('pos.retiros.store') }}", {
+                        monto: monto,
+                        comision: comision,
+                        referencia: referencia
+                    })
+                    .then(response => {
+                        alert('Retiro registrado exitosamente.');
+                        document.getElementById('montoRetiro').value = '';
+                        document.getElementById('comisionRetiro').value = '';
+                        document.getElementById('referenciaRetiro').value = '';
+                        const modal = document.getElementById('modal-retiro');
+                        if (modal) {
+                            modal.style.display = 'none';
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Error al registrar el retiro.');
+                    });
+            }
+        </script>
+
+        <script>
+            const retiroRangos = @json(\App\Models\RetiroConfig::all());
+
+            function calcularComisionRetiro() {
+                const monto = document.getElementById('montoRetiro').value;
+
+                if (monto && parseFloat(monto) > 0) {
+                    fetch('/pos/retiros/calcular', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({
+                                monto: monto
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.comision) {
+                                document.getElementById('comisionRetiro').value =
+                                    `L. ${parseFloat(data.comision).toFixed(2)}`;
+                                document.getElementById('inputComisionRetiro').value = data.comision;
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            document.getElementById('comisionRetiro').value = 'No disponible';
+                            document.getElementById('inputComisionRetiro').value = '';
+                        });
                 }
             }
         </script>
