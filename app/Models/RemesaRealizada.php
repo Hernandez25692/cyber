@@ -19,4 +19,13 @@ class RemesaRealizada extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function banco()
+    {
+        return $this->belongsTo(Banco::class);
+    }
 }

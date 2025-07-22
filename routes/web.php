@@ -28,6 +28,8 @@ use App\Http\Controllers\ServicioImpresionController;
 use App\Http\Controllers\TipoImpresionController;
 use App\Http\Controllers\ImpresionPOSController;
 use App\Http\Controllers\ReporteImpresionesController;
+use App\Http\Controllers\Admin\ReporteGeneralController;
+
 
 
 
@@ -106,6 +108,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Configuración de comisiones para remesas
     Route::resource('remesas', RemesaConfigController::class)->only(['index', 'create', 'store'])->names('remesas');
 
+
     // Reportes
     Route::get('/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('reportes.remesas');
     Route::get('/reportes/retiros', [ReporteRetirosController::class, 'index'])->name('reportes.retiros');
@@ -163,12 +166,16 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     ])->names('impresiones.tipos');
 
     Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
+
+   
+    Route::get('/reportes/general', [ReporteGeneralController::class, 'index'])->name('reportes.general');
 });
 Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo']);
 Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::class, 'comision']);
 Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
 Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
+
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

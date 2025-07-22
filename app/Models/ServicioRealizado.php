@@ -31,8 +31,12 @@ class ServicioRealizado extends Model
         return $this->belongsTo(Banco::class, 'banco_id');
     }
 
-    // Relación con usuario
-    public function usuario()
+    // ✅ Relación con usuario (renombrada de 'usuario' a 'user')
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+      public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

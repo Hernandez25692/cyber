@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\ProveedorRecarga;
 
 class RecargaRealizada extends Model
 {
@@ -19,5 +20,15 @@ class RecargaRealizada extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function proveedor()
+    {
+        return $this->belongsTo(ProveedorRecarga::class, 'proveedor_id');
     }
 }

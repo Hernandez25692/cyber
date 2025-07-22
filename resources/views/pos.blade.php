@@ -50,8 +50,12 @@
                         <tbody>
                             <template x-if="carrito.length === 0">
                                 <tr>
-                                    <td colspan="6" class="text-center py-8 text-gray-400">No hay productos en el
-                                        carrito.</td>
+                                    <td colspan="6" class="text-center py-8 text-gray-400">
+                                        <div class="flex flex-col items-center justify-center">
+                                            <img src="{{ asset('storage/logo/CYBER.png') }}" alt="Logo Cyber" class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
+                                            <span class="text-lg font-semibold">No hay productos en el carrito.</span>
+                                        </div>
+                                    </td>
                                 </tr>
                             </template>
                             <template x-for="(item, index) in carrito" :key="index">
