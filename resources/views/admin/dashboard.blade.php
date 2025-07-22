@@ -10,16 +10,23 @@
             class="bg-blue-600 text-white p-6 rounded-xl shadow hover:bg-blue-700 transition font-semibold">
             👥 Gestión de Usuarios
         </a>
+        <a href="{{ route('admin.remesas.index') }}"
+            class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:bg-yellow-600 transition font-semibold">
+            💰REMESAS
+        </a>
 
         <a href="#" class="bg-yellow-500 text-white p-6 rounded-xl shadow hover:bg-yellow-600 transition font-semibold">
             💰 Comisiones y Servicios
         </a>
 
-        <a href="#" class="bg-green-600 text-white p-6 rounded-xl shadow hover:bg-green-700 transition font-semibold">
+        <a href="{{ route('admin.inventario.index') }}"
+            class="bg-green-600 text-white p-6 rounded-xl shadow hover:bg-green-700 transition font-semibold">
             📦 Inventario
         </a>
 
-        <a href="#" class="bg-purple-600 text-white p-6 rounded-xl shadow hover:bg-purple-700 transition font-semibold">
+
+        <a href="#"
+            class="bg-purple-600 text-white p-6 rounded-xl shadow hover:bg-purple-700 transition font-semibold">
             📈 Reportes
         </a>
 

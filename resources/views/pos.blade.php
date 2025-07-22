@@ -120,7 +120,7 @@
                             </svg>
                             Recargas
                         </button>
-                        <button
+                        <a href="{{ route('remesas.form') }}"
                             class="h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -129,7 +129,8 @@
                                 <rect width="20" height="12" x="2" y="9" rx="2"></rect>
                             </svg>
                             Remesas
-                        </button>
+                        </a>
+
                         <button
                             class="h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"

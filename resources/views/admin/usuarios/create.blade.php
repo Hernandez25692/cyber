@@ -39,5 +39,8 @@
         <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
             Guardar Usuario
         </button>
+        <a href="{{ route('admin.usuarios.index') }}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+            ← Regresar
+        </a>
     </form>
 @endsection

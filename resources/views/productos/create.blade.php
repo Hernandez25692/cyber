@@ -1,9 +1,10 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold">Registrar nuevo producto</h2>
-    </x-slot>
+@extends('layouts.admin')
 
-    <div class="p-4 max-w-xl mx-auto">
+@section('title', 'Registrar nuevo producto')
+
+@section('content')
+    <div class="max-w-xl mx-auto bg-white rounded-lg shadow p-6">
+        <h2 class="text-xl font-semibold mb-6">Registrar nuevo producto</h2>
         <form action="{{ route('productos.store') }}" method="POST" class="space-y-4">
             @csrf
 
@@ -48,4 +49,4 @@
             </div>
         </form>
     </div>
-</x-app-layout>
+@endsection

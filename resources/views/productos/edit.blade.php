@@ -1,8 +1,8 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="text-xl font-semibold">Editar producto</h2>
-    </x-slot>
+@extends('layouts.admin')
 
+@section('title', 'Inventario - Lista de Productos')
+
+@section('content')
     <div class="p-4 max-w-xl mx-auto">
         <form action="{{ route('productos.update', $producto) }}" method="POST" class="space-y-4">
             @csrf
@@ -51,4 +51,4 @@
             </div>
         </form>
     </div>
-</x-app-layout>
+@endsection

@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="mb-6 flex items-center gap-4">
-        <a href="{{ url()->previous() }}"
+        <a href="{{ route('admin.index') }}"
             class="bg-gray-500 text-white px-4 py-2 rounded shadow hover:bg-gray-600">← Regresar</a>
         <a href="{{ route('admin.usuarios.create') }}"
             class="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700">➕

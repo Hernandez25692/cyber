@@ -8,6 +8,8 @@ use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\VentaController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\RemesaPOSController;
+use App\Http\Controllers\RemesaConfigController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,7 +79,29 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
         'destroy' => 'usuarios.destroy',
     ])->only(['index', 'create', 'store', 'destroy']);
 
+    Route::get('/inventario', function () {
+        return redirect()->route('admin.productos.index');
+    })->name('inventario.index');
+
+    Route::resource('productos', ProductoController::class)->names([
+        'index' => 'productos.index',
+        'create' => 'productos.create',
+        'store' => 'productos.store',
+        'edit' => 'productos.edit',
+        'update' => 'productos.update',
+        'destroy' => 'productos.destroy'
+    ]);
     // Aquí se agregarán: comisiones, inventario, reportes...
+});
+// ADMIN: Configurar comisiones
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('remesas', RemesaConfigController::class)->only(['index', 'create', 'store']);
+});
+
+// CAJERO: Registrar remesa
+Route::middleware(['auth'])->prefix('pos')->group(function () {
+    Route::get('/remesas', [RemesaPOSController::class, 'form'])->name('remesas.form');
+    Route::post('/remesas', [RemesaPOSController::class, 'store'])->name('remesas.store');
 });
 
 /*
