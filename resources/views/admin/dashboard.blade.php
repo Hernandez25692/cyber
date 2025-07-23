@@ -212,6 +212,13 @@
                             class="block w-full text-center mt-6 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-medium shadow-sm">
                             Gestionar Inventario
                         </a>
+                        <a href="{{ route('inventario.entrada') }}"
+                            class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mt-4 inline-block">
+                            ➕ Ingreso de Inventario
+                        </a>
+                        <a href="{{ route('ordenes-entrada.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                            📜 Historial de Órdenes
+                        </a>
                     </div>
                 </div>
 

@@ -29,6 +29,8 @@ use App\Http\Controllers\TipoImpresionController;
 use App\Http\Controllers\ImpresionPOSController;
 use App\Http\Controllers\ReporteImpresionesController;
 use App\Http\Controllers\Admin\ReporteGeneralController;
+use App\Http\Controllers\OrdenEntradaController;
+use App\Models\Producto;
 
 
 
@@ -113,7 +115,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     // Reporte general
     Route::get('/reportes/general', [ReporteGeneralController::class, 'index'])->name('reportes.general');
 
-    
+
     Route::get('/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('reportes.remesas');
     Route::get('/reportes/retiros', [ReporteRetirosController::class, 'index'])->name('reportes.retiros');
     Route::get('/reporte-servicios', [App\Http\Controllers\ServicioRealizadoController::class, 'index'])->name('reporte.servicios');
@@ -176,6 +178,30 @@ Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::cla
 Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
 Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
+
+
+Route::get('productos/{id}/entrada', [ProductoController::class, 'entrada'])->name('productos.entrada');
+Route::post('productos/{id}/entrada', [ProductoController::class, 'registrarEntrada'])->name('productos.registrarEntrada');
+Route::get('/inventario/entrada', [OrdenEntradaController::class, 'create'])->name('inventario.entrada');
+Route::post('/inventario/entrada', [OrdenEntradaController::class, 'store'])->name('inventario.entrada.store');
+Route::match(['get', 'post'], '/inventario/ordenes-entrada', [OrdenEntradaController::class, 'index'])->name('ordenes-entrada.index');
+
+
+Route::get('/api/producto/{codigo}', function ($codigo) {
+    $producto = Producto::where('codigo', $codigo)->first();
+
+    if (!$producto) {
+        return response()->json(['error' => 'No encontrado'], 404);
+    }
+
+    return response()->json([
+        'id' => $producto->id,
+        'codigo' => $producto->codigo,
+        'nombre' => $producto->nombre,
+        'stock' => $producto->stock,
+    ]);
+})->middleware('auth');
+
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)
