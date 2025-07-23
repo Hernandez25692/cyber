@@ -52,7 +52,7 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-8 text-gray-400">
                                         <div class="flex flex-col items-center justify-center">
-                                            <img src="{{ asset('storage/logo/CYBER.png') }}" alt="Logo Cyber" class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
+                                            <img src="{{ asset('storage/logo/logo1.png') }}" alt="Logo Cyber" class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
                                             <span class="text-lg font-semibold">No hay productos en el carrito.</span>
                                         </div>
                                     </td>
@@ -64,7 +64,8 @@
                                     <td class="border-b p-3" x-text="item.nombre"></td>
                                     <td class="border-b p-3 text-center">
                                         <input type="number" class="w-16 border rounded text-center bg-white"
-                                            x-model.number="item.cantidad" min="1" @input="calcularTotal()">
+                                            x-model.number="item.cantidad" min="1"
+                                            @input="if(item.cantidad < 1) item.cantidad = 1; calcularTotal()">
                                     </td>
                                     <td class="border-b p-3 text-right font-semibold text-green-700"
                                         x-text="`L. ${item.precio.toFixed(2)}`"></td>
@@ -620,6 +621,30 @@
                     // Servicio modal variable
                     mostrarModalServicio: false,
 
+                    // --- LOCAL STORAGE ---
+                    guardarCarritoLocal() {
+                        localStorage.setItem('pos_carrito', JSON.stringify(this.carrito));
+                    },
+                    cargarCarritoLocal() {
+                        const data = localStorage.getItem('pos_carrito');
+                        if (data) {
+                            try {
+                                this.carrito = JSON.parse(data);
+                            } catch (e) {
+                                this.carrito = [];
+                            }
+                        }
+                    },
+                    limpiarCarritoLocal() {
+                        localStorage.removeItem('pos_carrito');
+                    },
+                    // --- FIN LOCAL STORAGE ---
+
+                    init() {
+                        this.cargarCarritoLocal();
+                        this.calcularTotal();
+                    },
+
                     addProducto() {
                         const query = this.search.trim().toLowerCase();
                         if (!query) return;
@@ -639,6 +664,7 @@
                             }
                             this.calcularTotal();
                             this.search = '';
+                            this.guardarCarritoLocal();
                         } else {
                             Swal.fire({
                                 icon: 'error',
@@ -653,6 +679,7 @@
                     quitarProducto(index) {
                         this.carrito.splice(index, 1);
                         this.calcularTotal();
+                        this.guardarCarritoLocal();
                     },
 
                     vaciarCarrito() {
@@ -660,11 +687,13 @@
                         this.total = 0;
                         this.montoRecibido = 0;
                         this.cambio = 0;
+                        this.limpiarCarritoLocal();
                     },
 
                     calcularTotal() {
                         this.total = this.carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
                         this.calcularCambio();
+                        this.guardarCarritoLocal();
                     },
 
                     calcularCambio() {
@@ -703,6 +732,7 @@
                                     this.cambioVenta = this.cambio;
                                     this.ventaExitosa = true;
                                     this.mostrarModalCambio = true;
+                                    this.limpiarCarritoLocal();
                                 } else {
                                     Swal.fire({
                                         icon: 'error',
@@ -920,6 +950,12 @@
             actualizarFechaHora();
             setInterval(actualizarFechaHora, 1000);
         </script>
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('posApp', posApp);
+            });
+        </script>
+    </div>
 </body>
 
 </html>
