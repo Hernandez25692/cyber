@@ -110,6 +110,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
 
     // Reportes
+    // Reporte general
+    Route::get('/reportes/general', [ReporteGeneralController::class, 'index'])->name('reportes.general');
+
+    
     Route::get('/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('reportes.remesas');
     Route::get('/reportes/retiros', [ReporteRetirosController::class, 'index'])->name('reportes.retiros');
     Route::get('/reporte-servicios', [App\Http\Controllers\ServicioRealizadoController::class, 'index'])->name('reporte.servicios');
@@ -166,16 +170,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     ])->names('impresiones.tipos');
 
     Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
-
-   
-    Route::get('/reportes/general', [ReporteGeneralController::class, 'index'])->name('reportes.general');
 });
 Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo']);
 Route::get('/comision-servicio/{tipoId}/{bancoId}', [ServicioDataController::class, 'comision']);
 Route::post('/pos/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
 Route::get('/reportes/impresiones', [ReporteImpresionesController::class, 'index'])->name('reportes.impresiones');
-
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

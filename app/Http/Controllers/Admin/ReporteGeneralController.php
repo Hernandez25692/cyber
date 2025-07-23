@@ -19,43 +19,74 @@ class ReporteGeneralController extends Controller
 
         $desde = $request->input('desde', now()->subMonth()->format('Y-m-d')) . ' 00:00:00';
         $hasta = $request->input('hasta', now()->format('Y-m-d')) . ' 23:59:59';
+
         $user_id = $request->user_id;
 
-        // Remesas
-        $remesas = RemesaRealizada::with('user', 'banco')
-            ->whereBetween('created_at', [$desde, $hasta]);
-        // Retiros
-        $retiros = RetiroRealizado::with('user', 'banco')
-            ->whereBetween('created_at', [$desde, $hasta]);
-        // Servicios
-        $servicios = ServicioRealizado::with('user', 'tipoServicio', 'banco')
-            ->whereBetween('created_at', [$desde, $hasta]);
-        // Recargas
-        $recargas = RecargaRealizada::with('user', 'proveedor')
-            ->whereBetween('created_at', [$desde, $hasta]);
-        // Impresiones
-        $impresiones = ImpresionRealizada::with('user', 'servicio', 'tipo')
-            ->whereBetween('created_at', [$desde, $hasta]);
+        // Cargar todas las relaciones necesarias con eager loading
+        $remesasQuery = RemesaRealizada::with('banco', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
+        $retirosQuery = RetiroRealizado::with('banco', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
+        $serviciosQuery = ServicioRealizado::with('tipoServicio', 'banco', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
+        $recargasQuery = RecargaRealizada::with('proveedor', 'paquete', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
+        $impresionesQuery = ImpresionRealizada::with('servicio', 'tipo', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
 
-        // Si hay filtro por usuario
         if ($user_id) {
-            $remesas->where('user_id', $user_id);
-            $retiros->where('user_id', $user_id);
-            $servicios->where('user_id', $user_id);
-            $recargas->where('user_id', $user_id);
-            $impresiones->where('user_id', $user_id);
+            $remesasQuery->where('user_id', $user_id);
+            $retirosQuery->where('user_id', $user_id);
+            $serviciosQuery->where('user_id', $user_id);
+            $recargasQuery->where('user_id', $user_id);
+            $impresionesQuery->where('user_id', $user_id);
         }
+
+        // Ejecutar queries
+        $remesas = $remesasQuery->get();
+        $retiros = $retirosQuery->get();
+        $servicios = $serviciosQuery->get();
+        $recargas = $recargasQuery->get();
+        $impresiones = $impresionesQuery->get();
+
+        // Cálculos de totales
+        $totales = [
+            'remesas' => [
+                'total' => $remesas->sum('monto'),
+                'ganancia' => $remesas->sum('comision'),
+            ],
+            'retiros' => [
+                'total' => $retiros->sum('monto'),
+                'ganancia' => $retiros->sum('comision'),
+            ],
+            'servicios' => [
+                'total' => $servicios->sum('comision'), // no hay monto
+                'ganancia' => $servicios->sum('comision'),
+            ],
+            'recargas' => [
+                'total' => $recargas->sum(fn($r) => $r->paquete->precio ?? 0),
+                'ganancia' => 0, // si manejas comisión se puede ajustar
+            ],
+            'impresiones' => [
+                'total' => $impresiones->sum('precio'),
+                'ganancia' => 0, // si manejas comisión, ajusta aquí
+            ],
+        ];
+
+        // Resumen general
+        $resumen = [
+            'total_operaciones' => $remesas->count() + $retiros->count() + $servicios->count() + $recargas->count() + $impresiones->count(),
+            'total_ganancia' => $totales['remesas']['ganancia'] + $totales['retiros']['ganancia'] + $totales['servicios']['ganancia'],
+            'total_monto' => $totales['remesas']['total'] + $totales['retiros']['total'] + $totales['recargas']['total'] + $totales['impresiones']['total'],
+        ];
 
         return view('admin.reportes.general', [
             'users' => $users,
-            'remesas' => $remesas->get(),
-            'retiros' => $retiros->get(),
-            'servicios' => $servicios->get(),
-            'recargas' => $recargas->get(),
-            'impresiones' => $impresiones->get(),
+            'remesas' => $remesas,
+            'retiros' => $retiros,
+            'servicios' => $servicios,
+            'recargas' => $recargas,
+            'impresiones' => $impresiones,
+            'totales' => $totales,
+            'resumen' => $resumen,
             'filtros' => [
-                'desde' => substr($desde, 0, 10),
-                'hasta' => substr($hasta, 0, 10),
+                'desde' => $desde,
+                'hasta' => $hasta,
                 'user_id' => $user_id,
             ]
         ]);
