@@ -216,9 +216,15 @@
                             class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mt-4 inline-block">
                             ➕ Ingreso de Inventario
                         </a>
-                        <a href="{{ route('ordenes-entrada.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <a href="{{ route('ordenes-entrada.index') }}"
+                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                             📜 Historial de Órdenes
                         </a>
+                        <a href="{{ route('inventario.ajuste.index') }}"
+                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('inventario.ajuste.*') ? 'font-bold text-blue-700' : '' }}">
+                            Ajuste de Inventario
+                        </a>
+
                     </div>
                 </div>
 

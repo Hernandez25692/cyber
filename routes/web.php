@@ -185,6 +185,8 @@ Route::post('productos/{id}/entrada', [ProductoController::class, 'registrarEntr
 Route::get('/inventario/entrada', [OrdenEntradaController::class, 'create'])->name('inventario.entrada');
 Route::post('/inventario/entrada', [OrdenEntradaController::class, 'store'])->name('inventario.entrada.store');
 Route::match(['get', 'post'], '/inventario/ordenes-entrada', [OrdenEntradaController::class, 'index'])->name('ordenes-entrada.index');
+Route::get('/inventario/ajuste', [App\Http\Controllers\AjusteInventarioController::class, 'index'])->name('inventario.ajuste.index');
+Route::post('/inventario/ajuste', [App\Http\Controllers\AjusteInventarioController::class, 'store'])->name('inventario.ajuste.store');
 
 
 Route::get('/api/producto/{codigo}', function ($codigo) {
