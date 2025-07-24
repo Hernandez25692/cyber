@@ -216,6 +216,9 @@ Route::get('/api/producto/{codigo}', function ($codigo) {
 
 Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'formulario'])->name('ajustes.formulario');
 Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'crear'])->name('ajustes.formulario');
+Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
+Route::get('/ventas/reporte-productos', [VentaController::class, 'reporteProductos'])->name('ventas.reporte.productos');
+
 
 /*
 |--------------------------------------------------------------------------

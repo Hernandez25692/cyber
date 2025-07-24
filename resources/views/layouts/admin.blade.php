@@ -103,6 +103,29 @@
                             </div>
                         </div>
 
+                        <!-- Ventas -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'ventas' ? null : 'ventas'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="shopping-cart" class="w-5 h-5 mr-3 text-blue-400"></i>
+                                    <span>Ventas</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'ventas')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('ventas.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">🧾 Historial de Ventas</a>
+                                <a href="{{ route('ventas.reporte.productos') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">📊 Reporte de Productos Vendidos</a>
+                            </div>
+                        </div>
+
                         <!-- Remesas -->
                         <div x-data="{ open: false }" class="nav-item">
                             <button 

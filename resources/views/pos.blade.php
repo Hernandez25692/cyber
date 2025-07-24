@@ -52,7 +52,8 @@
                                 <tr>
                                     <td colspan="6" class="text-center py-8 text-gray-400">
                                         <div class="flex flex-col items-center justify-center">
-                                            <img src="{{ asset('storage/logo/logo1.png') }}" alt="Logo Cyber" class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
+                                            <img src="{{ asset('storage/logo/logo1.png') }}" alt="Logo Cyber"
+                                                class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
                                             <span class="text-lg font-semibold">No hay productos en el carrito.</span>
                                         </div>
                                     </td>
@@ -116,7 +117,7 @@
 
                     <div class="grid grid-cols-2 gap-4">
                         <!-- BOTÓN RECARGAS NUEVO -->
-                        <button onclick="document.getElementById('modal-recarga').classList.remove('hidden')" 
+                        <button onclick="document.getElementById('modal-recarga').classList.remove('hidden')"
                             class="h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -501,15 +502,16 @@
             <!-- FIN MODAL SERVICIO -->
 
             <!-- MODAL DE RECARGA -->
-            <div id="modal-recarga" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div id="modal-recarga"
+                class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
                 <div class="bg-white rounded shadow-lg max-w-md w-full p-6 relative">
                     <!-- Botón cerrar -->
-                    <button onclick="document.getElementById('modal-recarga').classList.add('hidden')" 
+                    <button onclick="document.getElementById('modal-recarga').classList.add('hidden')"
                         class="absolute top-2 right-2 text-gray-600 hover:text-red-500 text-xl">&times;</button>
 
                     <h2 class="text-xl font-bold mb-4">📲 Registrar Recarga</h2>
 
-                    @if(session('success'))
+                    @if (session('success'))
                         <div class="bg-green-100 text-green-800 p-3 mb-4 rounded">
                             {{ session('success') }}
                         </div>
@@ -522,36 +524,41 @@
                         <label class="block mb-1 font-semibold">Proveedor</label>
                         <select id="recarga_proveedor" class="w-full border rounded px-3 py-2 mb-3" required>
                             <option value="">-- Selecciona un proveedor --</option>
-                            @foreach($proveedores as $proveedor)
+                            @foreach ($proveedores as $proveedor)
                                 <option value="{{ $proveedor->id }}">{{ $proveedor->nombre }}</option>
                             @endforeach
                         </select>
 
                         <!-- Paquete -->
                         <label class="block mb-1 font-semibold">Paquete</label>
-                        <select name="paquete_id" id="recarga_paquete" class="w-full border rounded px-3 py-2 mb-3" required>
+                        <select name="paquete_id" id="recarga_paquete" class="w-full border rounded px-3 py-2 mb-3"
+                            required>
                             <option value="">-- Selecciona un paquete --</option>
                         </select>
 
                         <!-- Precio -->
                         <div id="recarga_precio_container" class="mb-3 hidden">
                             <label class="block font-semibold mb-1">Precio</label>
-                            <input type="text" id="recarga_precio" class="w-full border px-3 py-2 rounded bg-gray-100" readonly>
+                            <input type="text" id="recarga_precio"
+                                class="w-full border px-3 py-2 rounded bg-gray-100" readonly>
                         </div>
 
                         <!-- Número -->
                         <label class="block font-semibold mb-1">Número de Celular (opcional)</label>
-                        <input type="text" name="numero" class="w-full border px-3 py-2 rounded mb-4" placeholder="Ej: 99887766">
+                        <input type="text" name="numero" class="w-full border px-3 py-2 rounded mb-4"
+                            placeholder="Ej: 99887766">
 
                         <button type="submit"
-                            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">✅ Registrar</button>
+                            class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">✅
+                            Registrar</button>
                     </form>
                 </div>
             </div>
             <!-- FIN MODAL RECARGA -->
 
             <!-- MODAL: Registrar Impresión -->
-            <div id="modal-impresion" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+            <div id="modal-impresion"
+                class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
                 <div class="bg-white rounded-lg max-w-md w-full p-6 relative shadow-lg">
                     <!-- Cerrar -->
                     <button onclick="document.getElementById('modal-impresion').classList.add('hidden')"
@@ -566,7 +573,7 @@
                         <label class="block font-semibold mb-1">Servicio</label>
                         <select name="servicio_id" class="w-full border rounded px-3 py-2 mb-3" required>
                             <option value="">-- Selecciona un servicio --</option>
-                            @foreach($serviciosImpresion as $servicio)
+                            @foreach ($serviciosImpresion as $servicio)
                                 <option value="{{ $servicio->id }}">{{ $servicio->nombre }}</option>
                             @endforeach
                         </select>
@@ -575,7 +582,7 @@
                         <label class="block font-semibold mb-1">Tipo de Impresión</label>
                         <select name="tipo_id" class="w-full border rounded px-3 py-2 mb-3" required>
                             <option value="">-- Selecciona un tipo --</option>
-                            @foreach($tiposImpresion as $tipo)
+                            @foreach ($tiposImpresion as $tipo)
                                 <option value="{{ $tipo->id }}">{{ $tipo->nombre }}</option>
                             @endforeach
                         </select>
@@ -587,11 +594,12 @@
 
                         <!-- Descripción -->
                         <label class="block font-semibold mb-1">Descripción (opcional)</label>
-                        <input type="text" name="descripcion"
-                            class="w-full border px-3 py-2 rounded mb-4" placeholder="Ej: Impresión doble cara">
+                        <input type="text" name="descripcion" class="w-full border px-3 py-2 rounded mb-4"
+                            placeholder="Ej: Impresión doble cara">
 
                         <button type="submit"
-                            class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">✅ Registrar</button>
+                            class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">✅
+                            Registrar</button>
                     </form>
                 </div>
             </div>
@@ -714,8 +722,10 @@
                                 cantidad: p.cantidad,
                                 precio: p.precio
                             })),
-                            total: this.total
+                            total: this.total,
+                            monto_recibido: this.montoRecibido
                         };
+
 
                         fetch('{{ route('ventas.store') }}', {
                                 method: 'POST',
@@ -855,49 +865,51 @@
         </script>
         <!-- Recarga JS Dinámico -->
         <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const proveedor = document.getElementById('recarga_proveedor');
-            const paquete = document.getElementById('recarga_paquete');
-            const precio = document.getElementById('recarga_precio');
-            const precioContainer = document.getElementById('recarga_precio_container');
+            document.addEventListener('DOMContentLoaded', function() {
+                const proveedor = document.getElementById('recarga_proveedor');
+                const paquete = document.getElementById('recarga_paquete');
+                const precio = document.getElementById('recarga_precio');
+                const precioContainer = document.getElementById('recarga_precio_container');
 
-            if (proveedor) {
-                proveedor.addEventListener('change', function () {
-                    const proveedorId = this.value;
-                    paquete.innerHTML = '<option value="">Cargando...</option>';
-                    precio.value = '';
-                    precioContainer.classList.add('hidden');
-
-                    if (proveedorId) {
-                        fetch(`/paquetes-por-proveedor/${proveedorId}`)
-                            .then(res => res.json())
-                            .then(data => {
-                                paquete.innerHTML = '<option value="">-- Selecciona un paquete --</option>';
-                                data.forEach(p => {
-                                    const opt = document.createElement('option');
-                                    opt.value = p.id;
-                                    opt.dataset.precio = p.precio;
-                                    opt.textContent = `${p.descripcion} - L ${parseFloat(p.precio).toFixed(2)}`;
-                                    paquete.appendChild(opt);
-                                });
-                            });
-                    }
-                });
-            }
-
-            if (paquete) {
-                paquete.addEventListener('change', function () {
-                    const selected = this.options[this.selectedIndex];
-                    const valor = selected.dataset.precio;
-                    if (valor) {
-                        precio.value = `L ${parseFloat(valor).toFixed(2)}`;
-                        precioContainer.classList.remove('hidden');
-                    } else {
+                if (proveedor) {
+                    proveedor.addEventListener('change', function() {
+                        const proveedorId = this.value;
+                        paquete.innerHTML = '<option value="">Cargando...</option>';
+                        precio.value = '';
                         precioContainer.classList.add('hidden');
-                    }
-                });
-            }
-        });
+
+                        if (proveedorId) {
+                            fetch(`/paquetes-por-proveedor/${proveedorId}`)
+                                .then(res => res.json())
+                                .then(data => {
+                                    paquete.innerHTML =
+                                        '<option value="">-- Selecciona un paquete --</option>';
+                                    data.forEach(p => {
+                                        const opt = document.createElement('option');
+                                        opt.value = p.id;
+                                        opt.dataset.precio = p.precio;
+                                        opt.textContent =
+                                            `${p.descripcion} - L ${parseFloat(p.precio).toFixed(2)}`;
+                                        paquete.appendChild(opt);
+                                    });
+                                });
+                        }
+                    });
+                }
+
+                if (paquete) {
+                    paquete.addEventListener('change', function() {
+                        const selected = this.options[this.selectedIndex];
+                        const valor = selected.dataset.precio;
+                        if (valor) {
+                            precio.value = `L ${parseFloat(valor).toFixed(2)}`;
+                            precioContainer.classList.remove('hidden');
+                        } else {
+                            precioContainer.classList.add('hidden');
+                        }
+                    });
+                }
+            });
         </script>
         <div
             class="fixed bottom-0 left-0 w-full bg-white border-t border-green-200 py-2 px-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-700 z-40">
