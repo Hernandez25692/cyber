@@ -74,7 +74,14 @@
                                         x-text="`L. ${(item.precio * item.cantidad).toFixed(2)}`"></td>
                                     <td class="border-b p-3 text-center">
                                         <button @click="quitarProducto(index)"
-                                            class="text-red-600 hover:underline font-semibold transition">Eliminar</button>
+                                            class="text-red-600 hover:text-red-800 transition" title="Eliminar">
+                                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                                                <rect x="5" y="6" width="14" height="14" rx="2"></rect>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6"></path>
+                                            </svg>
+                                        </button>
                                     </td>
                                 </tr>
                             </template>
@@ -328,9 +335,8 @@
                     <p class="text-lg text-gray-700 mb-2">Gracias por su compra en <span
                             class="font-bold text-green-800">CYBER Y VARIEDADES SANDOVAL</span>.</p>
                     <template x-if="cambioVenta > 0">
-                        <p class="text-xl mb-4 font-semibold">
-                            Cambio a entregar: <span class="text-indigo-600">L. <span
-                                    x-text="cambioVenta.toFixed(2)"></span></span>
+                        <p class="text-3xl mb-6 font-extrabold text-white bg-indigo-600 rounded-xl py-4 shadow-lg">
+                            Cambio: <span class="text-yellow-300">L  <span x-text="cambioVenta.toFixed(2)"></span></span>
                         </p>
                     </template>
                     <template x-if="cambioVenta <= 0">
