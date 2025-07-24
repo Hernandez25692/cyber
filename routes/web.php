@@ -31,7 +31,8 @@ use App\Http\Controllers\ReporteImpresionesController;
 use App\Http\Controllers\Admin\ReporteGeneralController;
 use App\Http\Controllers\OrdenEntradaController;
 use App\Models\Producto;
-
+use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\AjusteInventarioController;
 
 
 
@@ -187,7 +188,15 @@ Route::post('/inventario/entrada', [OrdenEntradaController::class, 'store'])->na
 Route::match(['get', 'post'], '/inventario/ordenes-entrada', [OrdenEntradaController::class, 'index'])->name('ordenes-entrada.index');
 Route::get('/inventario/ajuste', [App\Http\Controllers\AjusteInventarioController::class, 'index'])->name('inventario.ajuste.index');
 Route::post('/inventario/ajuste', [App\Http\Controllers\AjusteInventarioController::class, 'store'])->name('inventario.ajuste.store');
+Route::get('/inventario/sugerencias', [InventarioController::class, 'sugerenciaPedido'])->name('inventario.sugerencias');
 
+Route::prefix('ajustes')->middleware(['auth'])->group(function () {
+    Route::get('/crear', [AjusteInventarioController::class, 'crear'])->name('ajustes.crear');
+    Route::post('/guardar', [AjusteInventarioController::class, 'guardar'])->name('ajustes.guardar');
+    Route::get('/historial', [AjusteInventarioController::class, 'historial'])->name('ajustes.historial');
+    Route::get('/detalle/{id}', [AjusteInventarioController::class, 'detalle'])->name('ajustes.detalle');
+    Route::post('/buscar-producto', [AjusteInventarioController::class, 'buscarProducto'])->name('ajustes.buscar');
+});
 
 Route::get('/api/producto/{codigo}', function ($codigo) {
     $producto = Producto::where('codigo', $codigo)->first();
@@ -203,6 +212,10 @@ Route::get('/api/producto/{codigo}', function ($codigo) {
         'stock' => $producto->stock,
     ]);
 })->middleware('auth');
+
+
+Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'formulario'])->name('ajustes.formulario');
+Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'crear'])->name('ajustes.formulario');
 
 /*
 |--------------------------------------------------------------------------

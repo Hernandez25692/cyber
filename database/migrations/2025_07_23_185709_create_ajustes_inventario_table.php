@@ -13,15 +13,11 @@ return new class extends Migration
     {
         Schema::create('ajustes_inventario', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('producto_id');
-            $table->integer('stock_sistema');
-            $table->integer('stock_fisico');
-            $table->integer('diferencia');
-            $table->text('observacion')->nullable();
+            $table->string('codigo'); // AI-0001
+            $table->text('descripcion')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
 
-            $table->foreign('producto_id')->references('id')->on('productos')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }

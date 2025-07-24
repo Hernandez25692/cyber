@@ -220,10 +220,31 @@
                             class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                             📜 Historial de Órdenes
                         </a>
-                        <a href="{{ route('inventario.ajuste.index') }}"
-                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->routeIs('inventario.ajuste.*') ? 'font-bold text-blue-700' : '' }}">
-                            Ajuste de Inventario
-                        </a>
+                        <!-- Sección de Inventario -->
+                        <li class="mt-4">
+                            <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide px-4">Inventario</h2>
+                        </li>
+
+                        
+                        
+                        <li>
+                            <a href="{{ route('ajustes.formulario') }}"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                🧮 Ajuste de Inventario
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('ajustes.historial') }}"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                📋 Historial de Ajustes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ route('inventario.sugerencias') }}"
+                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                🛒 Sugerencias de Pedido
+                            </a>
+                        </li>
 
                     </div>
                 </div>
