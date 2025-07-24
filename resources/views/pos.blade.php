@@ -54,7 +54,7 @@
                                         <div class="flex flex-col items-center justify-center">
                                             <img src="{{ asset('storage/logo/logo1.png') }}" alt="Logo Cyber"
                                                 class="mx-auto mb-5 w-52 h-52 object-contain opacity-80">
-                                            <span class="text-lg font-semibold">No hay productos en el carrito.</span>
+                                            <span class="text-lg font-semibold">No hay productos a facturar.</span>
                                         </div>
                                     </td>
                                 </tr>

@@ -10,11 +10,31 @@ use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $ventas = Venta::with('user')->latest()->paginate(20);
-        return view('ventas.index', compact('ventas'));
+        $ventas = Venta::with(['user', 'detalles.producto'])
+            ->when($request->user_id, function ($q) use ($request) {
+                $q->where('user_id', $request->user_id);
+            })
+            ->when($request->desde, function ($q) use ($request) {
+                $q->whereDate('created_at', '>=', $request->desde);
+            })
+            ->when($request->hasta, function ($q) use ($request) {
+                $q->whereDate('created_at', '<=', $request->hasta);
+            })
+            ->when($request->codigo, function ($q) use ($request) {
+                $q->whereHas('detalles.producto', function ($query) use ($request) {
+                    $query->where('codigo', 'like', '%' . $request->codigo . '%');
+                });
+            })
+            ->latest()
+            ->paginate(20);
+
+        $cajeros = \App\Models\User::all(); // Puedes limitar por rol si lo deseas
+
+        return view('ventas.index', compact('ventas', 'cajeros'));
     }
+
 
     public function store(Request $request)
     {
@@ -90,5 +110,12 @@ class VentaController extends Controller
             ->get();
 
         return view('ventas.reporte_productos', compact('reporte'));
+    }
+
+    public function show(Venta $venta)
+    {
+        $venta->load(['user', 'detalles.producto']);
+
+        return view('ventas.show', compact('venta'));
     }
 }
