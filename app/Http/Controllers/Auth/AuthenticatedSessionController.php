@@ -30,10 +30,19 @@ class AuthenticatedSessionController extends Controller
             'password' => 'required',
         ]);
 
+        $user = \App\Models\User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return back()->withErrors(['email' => '❌ Credenciales incorrectas.']);
+        }
+
+        if (!$user->activo) {
+            return back()->withErrors(['email' => '⚠️ Tu cuenta está inactiva. Contacta al administrador.']);
+        }
+
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
             $request->session()->regenerate();
 
-            // Redirección según el rol
             $rol = Auth::user()->rol;
 
             if ($rol === 'admin') {
@@ -43,10 +52,9 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended('/pos');
         }
 
-        return back()->withErrors([
-            'email' => 'Las credenciales no coinciden.',
-        ]);
+        return back()->withErrors(['email' => '❌ Credenciales incorrectas.']);
     }
+
 
     /**
      * Destroy an authenticated session.

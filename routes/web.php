@@ -219,6 +219,8 @@ Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'crear'])-
 Route::get('/ventas', [VentaController::class, 'index'])->name('ventas.index');
 Route::get('/ventas/reporte-productos', [VentaController::class, 'reporteProductos'])->name('ventas.reporte.productos');
 Route::get('/ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
+Route::get('/admin/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('admin.usuarios.edit');
+Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])->name('admin.usuarios.update');
 
 
 /*

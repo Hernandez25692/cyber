@@ -39,6 +39,7 @@
                         <th class="p-3 text-left">Nombre</th>
                         <th class="p-3 text-left">Email</th>
                         <th class="p-3 text-left">Rol</th>
+                        <th class="p-3 text-left">Estado</th>
                         <th class="p-3 text-center">Acciones</th>
                     </tr>
                 </thead>
@@ -48,19 +49,16 @@
                             <td class="p-3">{{ $user->name }}</td>
                             <td class="p-3">{{ $user->email }}</td>
                             <td class="p-3 capitalize">{{ $user->rol }}</td>
+                            <td class="p-3">
+                                @if ($user->activo)
+                                    <span class="px-2 py-1 bg-green-200 text-green-800 rounded text-xs">Activo</span>
+                                @else
+                                    <span class="px-2 py-1 bg-red-200 text-red-800 rounded text-xs">Inactivo</span>
+                                @endif
+                            </td>
                             <td class="p-3 text-center">
-                                <div class="flex justify-center gap-2">
-                                    
-                                    <form method="POST" action="{{ route('admin.usuarios.destroy', $user->id) }}"
-                                        onsubmit="return confirm('¿Eliminar este usuario?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700 flex items-center gap-1 transition">
-                                            🗑️ Eliminar
-                                        </button>
-                                    </form>
-                                </div>
+                                <a href="{{ route('admin.usuarios.edit', $user->id) }}"
+                                   class="text-blue-600 hover:underline">✏️ Editar</a>
                             </td>
                         </tr>
                     @endforeach

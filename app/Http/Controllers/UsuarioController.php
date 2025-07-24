@@ -47,4 +47,31 @@ class UsuarioController extends Controller
         User::destroy($id);
         return back()->with('success', '🗑️ Usuario eliminado.');
     }
+
+    public function edit($id)
+    {
+        $usuario = User::findOrFail($id);
+        return view('admin.usuarios.edit', compact('usuario'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $usuario = User::findOrFail($id);
+
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $usuario->id,
+            'rol' => 'required|in:admin,cajero',
+            'activo' => 'required|boolean',
+        ]);
+
+        $usuario->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'rol' => $request->rol,
+            'activo' => $request->activo,
+        ]);
+
+        return redirect()->route('admin.usuarios.index')->with('success', '✅ Usuario actualizado.');
+    }
 }
