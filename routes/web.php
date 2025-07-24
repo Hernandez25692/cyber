@@ -33,6 +33,7 @@ use App\Http\Controllers\OrdenEntradaController;
 use App\Models\Producto;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AjusteInventarioController;
+use App\Http\Controllers\ReporteProductoController;
 
 
 
@@ -221,6 +222,7 @@ Route::get('/ventas/reporte-productos', [VentaController::class, 'reporteProduct
 Route::get('/ventas/{venta}', [VentaController::class, 'show'])->name('ventas.show');
 Route::get('/admin/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->name('admin.usuarios.edit');
 Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])->name('admin.usuarios.update');
+Route::get('/admin/reportes/utilidad-productos', [ReporteProductoController::class, 'reporteUtilidad'])->name('admin.reportes.utilidad.productos');
 
 
 /*
