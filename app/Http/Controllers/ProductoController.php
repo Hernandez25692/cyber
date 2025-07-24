@@ -9,11 +9,45 @@ use App\Models\EntradaInventario;
 
 class ProductoController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $productos = Producto::orderBy('nombre')->get();
-        return view('productos.index', compact('productos'));
+        $query = Producto::query();
+
+        if ($request->filled('busqueda')) {
+            $query->where('nombre', 'like', '%' . $request->busqueda . '%')
+                ->orWhere('codigo', 'like', '%' . $request->busqueda . '%');
+        }
+
+        if ($request->filled('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+
+        if ($request->filled('stock')) {
+            if ($request->stock == 'bajo') {
+                $query->where('stock', '<=', 10);
+            } elseif ($request->stock == 'sin') {
+                $query->where('stock', '=', 0);
+            } elseif ($request->stock == 'disponible') {
+                $query->where('stock', '>', 5);
+            }
+        }
+
+        if ($request->filled('min_precio')) {
+            $query->where('precio_venta', '>=', $request->min_precio);
+        }
+
+        if ($request->filled('max_precio')) {
+            $query->where('precio_venta', '<=', $request->max_precio);
+        }
+
+        $productos = $query->paginate(20);
+
+        // Para el filtro por categorías
+        $categorias = Producto::select('categoria')->distinct()->pluck('categoria');
+
+        return view('productos.index', compact('productos', 'categorias'));
     }
+
 
     public function create()
     {

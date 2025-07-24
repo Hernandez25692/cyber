@@ -63,7 +63,14 @@ class OrdenEntradaController extends Controller
         // Filtro por nombre de producto
         if ($request->filled('producto')) {
             $query->whereHas('detalles.producto', function ($q) use ($request) {
-                $q->where('nombre', 'like', '%' . $request->producto . '%');
+            $q->where('nombre', 'like', '%' . $request->producto . '%');
+            });
+        }
+
+        // Filtro por código de producto
+        if ($request->filled('codigo')) {
+            $query->whereHas('detalles.producto', function ($q) use ($request) {
+            $q->where('codigo', 'like', '%' . $request->codigo . '%');
             });
         }
 

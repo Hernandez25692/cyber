@@ -3,66 +3,57 @@
 @section('title', 'Panel de Administración')
 
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-10">
                 <div>
-                    <h1 class="text-4xl font-extrabold text-gray-900 tracking-tight">👨‍💼 Panel de Administración</h1>
-                    <p class="mt-2 text-lg text-gray-600">Gestión integral de todos los servicios</p>
+                    <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Panel de Administración</h1>
+                    <p class="mt-2 text-gray-600">Gestión integral de todos los servicios</p>
                 </div>
-                <ul>
-                    <li>
-                        <a href="{{ route('admin.reportes.general') }}" class="btn">📊 Reporte General</a>
-
-                    </li>
-                </ul>
+                <div class="mt-4 md:mt-0">
+                    <a href="{{ route('admin.reportes.general') }}"
+                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <i data-feather="bar-chart-2" class="w-4 h-4 mr-2"></i>
+                        Reporte General
+                    </a>
+                </div>
             </div>
 
             <!-- Dashboard Cards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Usuarios Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-blue-50 text-blue-600">
+                                <i data-feather="users" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Gestión de Usuarios</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Gestión de Usuarios</h2>
                         </div>
                         <a href="{{ route('admin.usuarios.index') }}"
-                            class="block w-full text-center mt-6 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200 font-medium shadow-sm">
+                            class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                             Acceder al módulo
                         </a>
                     </div>
                 </div>
 
                 <!-- Remesas Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-yellow-50 text-yellow-600">
+                                <i data-feather="dollar-sign" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Remesas</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Remesas</h2>
                         </div>
                         <div class="space-y-3">
                             <a href="{{ route('admin.remesas.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
                                 Gestión de Remesas
                             </a>
                             <a href="{{ route('admin.reportes.remesas') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200">
                                 Reportes de Remesas
                             </a>
                         </div>
@@ -70,93 +61,77 @@
                 </div>
 
                 <!-- Retiros Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-green-100 text-green-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-green-50 text-green-600">
+                                <i data-feather="credit-card" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Retiros</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Retiros</h2>
                         </div>
                         <div class="space-y-3">
                             <a href="{{ route('admin.retiros.config.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
                                 Configurar Comisión
                             </a>
                             <a href="{{ route('admin.retiros.reportes') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                 Reporte de Retiros
                             </a>
-
                         </div>
                     </div>
                 </div>
 
                 <!-- Servicios Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-pink-100 text-pink-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M13 10V3L4 14h7v7l9-11h-7z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-pink-50 text-pink-600">
+                                <i data-feather="zap" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Servicios</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Servicios</h2>
                         </div>
-                        <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
                             <a href="{{ route('admin.servicios.tipos.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-pink-500 to-pink-600 text-white rounded-lg hover:from-pink-600 hover:to-pink-700 transition-all duration-200 font-medium shadow-sm">
-                                Tipos de Servicio
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors duration-200">
+                                Tipos
                             </a>
                             <a href="{{ route('admin.servicios.bancos.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-pink-400 to-pink-500 text-white rounded-lg hover:from-pink-500 hover:to-pink-600 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors duration-200">
                                 Bancos
                             </a>
                             <a href="{{ route('admin.servicios.config.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-pink-600 to-pink-700 text-white rounded-lg hover:from-pink-700 hover:to-pink-800 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-pink-700 hover:bg-pink-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors duration-200">
                                 Configuración
                             </a>
                             <a href="{{ route('admin.reporte.servicios') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-pink-300 to-pink-400 text-white rounded-lg hover:from-pink-400 hover:to-pink-500 transition-all duration-200 font-medium shadow-sm">
-                                Reporte de Servicios
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-pink-400 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 transition-colors duration-200">
+                                Reportes
                             </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Recargas Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-indigo-100 text-indigo-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-indigo-50 text-indigo-600">
+                                <i data-feather="smartphone" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Recargas</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Recargas</h2>
                         </div>
-                        <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
                             <a href="{{ route('admin.recargas.proveedores.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-500 to-indigo-600 text-white rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                 Proveedores
                             </a>
                             <a href="{{ route('admin.recargas.paquetes.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-400 to-indigo-500 text-white rounded-lg hover:from-indigo-500 hover:to-indigo-600 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                 Paquetes
                             </a>
                             <a href="{{ route('admin.reportes.recargas') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white rounded-lg hover:from-indigo-700 hover:to-indigo-800 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-indigo-700 hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200 col-span-2">
                                 Reportes
                             </a>
                         </div>
@@ -164,30 +139,25 @@
                 </div>
 
                 <!-- Impresiones Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-yellow-50 text-yellow-600">
+                                <i data-feather="printer" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Impresiones</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Impresiones</h2>
                         </div>
-                        <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
                             <a href="{{ route('admin.impresiones.servicios.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-yellow-500 to-yellow-600 text-white rounded-lg hover:from-yellow-600 hover:to-yellow-700 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
                                 Servicios
                             </a>
                             <a href="{{ route('admin.impresiones.tipos.index') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-yellow-600 to-yellow-700 text-white rounded-lg hover:from-yellow-700 hover:to-yellow-800 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-700 hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
                                 Tipos
                             </a>
                             <a href="{{ route('reportes.impresiones') }}"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-yellow-400 to-yellow-500 text-white rounded-lg hover:from-yellow-500 hover:to-yellow-600 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200 col-span-2">
                                 Reportes
                             </a>
                         </div>
@@ -195,81 +165,66 @@
                 </div>
 
                 <!-- Inventario Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-green-100 text-green-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-green-50 text-green-600">
+                                <i data-feather="package" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Inventario</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Inventario</h2>
                         </div>
-                        <a href="{{ route('admin.inventario.index') }}"
-                            class="block w-full text-center mt-6 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition-all duration-200 font-medium shadow-sm">
-                            Gestionar Inventario
-                        </a>
-                        <a href="{{ route('inventario.entrada') }}"
-                            class="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mt-4 inline-block">
-                            ➕ Ingreso de Inventario
-                        </a>
-                        <a href="{{ route('ordenes-entrada.index') }}"
-                            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                            📜 Historial de Órdenes
-                        </a>
-                        <!-- Sección de Inventario -->
-                        <li class="mt-4">
-                            <h2 class="text-xs font-semibold text-gray-400 uppercase tracking-wide px-4">Inventario</h2>
-                        </li>
-
-                        
-                        
-                        <li>
-                            <a href="{{ route('ajustes.formulario') }}"
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                🧮 Ajuste de Inventario
+                        <div class="space-y-3">
+                            <a href="{{ route('admin.inventario.index') }}"
+                                class="inline-flex items-center justify-center w-full px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors duration-200">
+                                Gestionar Inventario
                             </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('ajustes.historial') }}"
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                📋 Historial de Ajustes
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('inventario.sugerencias') }}"
-                                class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                🛒 Sugerencias de Pedido
-                            </a>
-                        </li>
-
+                            <div class="grid grid-cols-2 gap-2">
+                                <a href="{{ route('inventario.entrada') }}"
+                                    class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                                    <i data-feather="plus" class="w-3 h-3 mr-1"></i> Ingreso
+                                </a>
+                                <a href="{{ route('ordenes-entrada.index') }}"
+                                    class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-gray-700 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                    <i data-feather="list" class="w-3 h-3 mr-1"></i> Historial
+                                </a>
+                            </div>
+                            <div class="pt-2 border-t border-gray-200">
+                                <h3 class="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">Ajustes</h3>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <a href="{{ route('ajustes.formulario') }}"
+                                        class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                        <i data-feather="edit" class="w-3 h-3 mr-1"></i> Ajustar
+                                    </a>
+                                    <a href="{{ route('ajustes.historial') }}"
+                                        class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200">
+                                        <i data-feather="file-text" class="w-3 h-3 mr-1"></i> Historial
+                                    </a>
+                                    <a href="{{ route('inventario.sugerencias') }}"
+                                        class="inline-flex items-center justify-center px-3 py-1.5 border border-transparent text-xs font-medium rounded shadow-sm text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors duration-200 col-span-2">
+                                        <i data-feather="shopping-cart" class="w-3 h-3 mr-1"></i> Sugerencias
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Comisiones Card -->
-                <div
-                    class="bg-white rounded-xl shadow-lg overflow-hidden transition-transform duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="bg-white rounded-lg shadow overflow-hidden transition-all duration-200 hover:shadow-md">
                     <div class="p-6">
                         <div class="flex items-center mb-4">
-                            <div class="p-3 rounded-full bg-purple-100 text-purple-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2z" />
-                                </svg>
+                            <div class="p-3 rounded-lg bg-purple-50 text-purple-600">
+                                <i data-feather="award" class="w-6 h-6"></i>
                             </div>
-                            <h2 class="ml-4 text-xl font-semibold text-gray-800">Comisiones</h2>
+                            <h2 class="ml-4 text-lg font-semibold text-gray-800">Comisiones</h2>
                         </div>
-                        <div class="space-y-3">
+                        <div class="grid grid-cols-2 gap-3">
                             <a href="#"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition-all duration-200 font-medium shadow-sm">
-                                Comisiones y Servicios
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200">
+                                Comisiones
                             </a>
                             <a href="#"
-                                class="block w-full text-center px-4 py-2 bg-gradient-to-r from-purple-400 to-purple-500 text-white rounded-lg hover:from-purple-500 hover:to-purple-600 transition-all duration-200 font-medium shadow-sm">
+                                class="inline-flex items-center justify-center px-3 py-2 border border-transparent text-xs font-medium rounded shadow-sm text-white bg-purple-500 hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-200">
                                 Reportes
                             </a>
                         </div>
@@ -278,4 +233,10 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+        });
+    </script>
 @endsection

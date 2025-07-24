@@ -7,225 +7,389 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Panel de administración del sistema">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon.png">
-
-    <!-- Preconnect para fuentes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        [x-cloak] { display: none !important; }
+        .sidebar-transition {
+            transition: all 0.3s ease-in-out;
+        }
+        .nav-item {
+            position: relative;
+        }
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: currentColor;
+            transition: width 0.3s ease;
+        }
+        .nav-item:hover::after {
+            width: 100%;
+        }
+        .submenu-enter {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        .submenu-enter-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.2s ease-out;
+        }
+        .submenu-leave {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .submenu-leave-active {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease-in;
+        }
+    </style>
 </head>
 
-<body class="bg-gray-50 min-h-screen antialiased">
-    <!-- Barra superior -->
-    <header class="fixed top-0 left-0 w-full bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
+<body class="bg-gray-50 min-h-screen antialiased font-sans">
+    <!-- Layout con sidebar y contenido -->
+    <div class="flex h-screen overflow-hidden" x-data="{ sidebarOpen: window.innerWidth > 1024, mobileSubmenu: null }" @resize.window="sidebarOpen = window.innerWidth > 1024">
+        <!-- Sidebar oscuro - Versión desktop -->
+        <aside 
+            class="fixed lg:static inset-y-0 left-0 z-40 w-64 bg-gray-900 text-white sidebar-transition transform lg:translate-x-0"
+            :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
+            @click.outside="if(window.innerWidth < 1024) sidebarOpen = false"
+        >
+            <div class="flex flex-col h-full">
                 <!-- Logo y marca -->
-                <div class="flex-shrink-0 flex items-center space-x-3">
-                    <img src="{{ asset('storage/logo/LOGO1.png') }}" alt="Logo CYBER Y VARIEDADES SANDOVAL"
-                        class="w-12 h-12 object-contain rounded-full">
-                    <svg class="h-8 w-8 text-green-200" fill="currentColor" viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="ml-2 text-xl font-bold tracking-tight">Admin<span
-                            class="text-green-200">Pro</span></span>
+                <div class="flex items-center justify-between h-16 px-6 py-4 border-b border-gray-800">
+                    <div class="flex items-center space-x-3">
+                        <img src="{{ asset('storage/logo/LOGO1.png') }}" alt="Logo" class="w-10 h-10 object-contain rounded-full">
+                        <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
+                            Admin<span class="font-light">Pro</span>
+                        </span>
+                    </div>
+                    <button @click="sidebarOpen = false" class="lg:hidden text-gray-400 hover:text-white">
+                        <i data-feather="x"></i>
+                    </button>
                 </div>
 
-                <!-- Navegación principal -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="{{ route('admin.index') }}"
-                        class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-green-500 transition duration-150 ease-in-out flex items-center">
-                        <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                            </path>
-                        </svg>
-                        Inicio
-                    </a>
-                    <a href="#"
-                        class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-green-500 transition duration-150 ease-in-out flex items-center">
-                        <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                            </path>
-                        </svg>
-                        Usuarios
-                    </a>
-                    <a href="#"
-                        class="px-3 py-2 rounded-md text-sm font-medium text-white hover:bg-green-500 transition duration-150 ease-in-out flex items-center">
-                        <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                            </path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        </svg>
-                        Configuración
-                    </a>
+                <!-- Menú principal -->
+                <nav class="flex-1 overflow-y-auto py-4 px-2">
+                    <div class="space-y-1">
+                        <!-- Usuarios -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'usuarios' ? null : 'usuarios'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="users" class="w-5 h-5 mr-3"></i>
+                                    <span>Usuarios</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'usuarios')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.usuarios.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Gestión de Usuarios</a>
+                            </div>
+                        </div>
+
+                        <!-- Remesas -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'remesas' ? null : 'remesas'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="dollar-sign" class="w-5 h-5 mr-3 text-yellow-400"></i>
+                                    <span>Remesas</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'remesas')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.remesas.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Gestión de Remesas</a>
+                                <a href="{{ route('admin.reportes.remesas') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reportes de Remesas</a>
+                            </div>
+                        </div>
+
+                        <!-- Retiros -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'retiros' ? null : 'retiros'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="credit-card" class="w-5 h-5 mr-3 text-green-400"></i>
+                                    <span>Retiros</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'retiros')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.retiros.config.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Configurar Comisión</a>
+                                <a href="{{ route('admin.retiros.reportes') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reporte de Retiros</a>
+                            </div>
+                        </div>
+
+                        <!-- Servicios -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'servicios' ? null : 'servicios'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="zap" class="w-5 h-5 mr-3 text-pink-400"></i>
+                                    <span>Servicios</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'servicios')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.servicios.tipos.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Tipos de Servicio</a>
+                                <a href="{{ route('admin.servicios.bancos.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Bancos</a>
+                                <a href="{{ route('admin.servicios.config.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Configuración</a>
+                                <a href="{{ route('admin.reporte.servicios') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reporte de Servicios</a>
+                            </div>
+                        </div>
+
+                        <!-- Recargas -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'recargas' ? null : 'recargas'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="smartphone" class="w-5 h-5 mr-3 text-indigo-400"></i>
+                                    <span>Recargas</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'recargas')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.recargas.proveedores.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Proveedores</a>
+                                <a href="{{ route('admin.recargas.paquetes.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Paquetes</a>
+                                <a href="{{ route('admin.reportes.recargas') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reportes</a>
+                            </div>
+                        </div>
+
+                        <!-- Impresiones -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'impresiones' ? null : 'impresiones'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="printer" class="w-5 h-5 mr-3 text-yellow-400"></i>
+                                    <span>Impresiones</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'impresiones')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.impresiones.servicios.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Servicios</a>
+                                <a href="{{ route('admin.impresiones.tipos.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Tipos</a>
+                                <a href="{{ route('reportes.impresiones') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reportes</a>
+                            </div>
+                        </div>
+
+                        <!-- Inventario -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'inventario' ? null : 'inventario'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="package" class="w-5 h-5 mr-3 text-green-400"></i>
+                                    <span>Inventario</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'inventario')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="{{ route('admin.inventario.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Gestionar Inventario</a>
+                                <a href="{{ route('inventario.entrada') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Ingreso de Inventario</a>
+                                <a href="{{ route('ordenes-entrada.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Historial de Órdenes</a>
+                                <div class="border-t border-gray-700 my-1"></div>
+                                <a href="{{ route('ajustes.formulario') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Ajuste de Inventario</a>
+                                <a href="{{ route('ajustes.historial') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Historial de Ajustes</a>
+                                <a href="{{ route('inventario.sugerencias') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Sugerencias de Pedido</a>
+                            </div>
+                        </div>
+
+                        <!-- Comisiones -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button 
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'comisiones' ? null : 'comisiones'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{'bg-gray-800': open}"
+                            >
+                                <div class="flex items-center">
+                                    <i data-feather="award" class="w-5 h-5 mr-3 text-purple-400"></i>
+                                    <span>Comisiones</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200" :class="{'transform rotate-180': open}"></i>
+                            </button>
+                            <div 
+                                x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'comisiones')" 
+                                x-collapse
+                                class="mt-1 space-y-1 pl-12"
+                            >
+                                <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Comisiones y Servicios</a>
+                                <a href="#" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reportes</a>
+                            </div>
+                        </div>
+                    </div>
                 </nav>
 
-                <!-- Menú usuario -->
-                <div class="ml-4 flex items-center md:ml-6">
-                    <!-- Botón cerrar sesión -->
+                <!-- Pie de sidebar -->
+                <div class="p-4 border-t border-gray-800">
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit"
-                            class="flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
-                            <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                                </path>
-                            </svg>
+                        <button type="submit" class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                            <i data-feather="log-out" class="w-4 h-4 mr-2"></i>
                             Cerrar sesión
                         </button>
                     </form>
                 </div>
+            </div>
+        </aside>
 
-                <!-- Botón menú móvil -->
-                <div class="-mr-2 flex md:hidden">
-                    <button type="button"
-                        class="inline-flex items-center justify-center p-2 rounded-md text-green-200 hover:text-white hover:bg-green-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-                        aria-controls="mobile-menu" aria-expanded="false" id="mobile-menu-button">
-                        <span class="sr-only">Abrir menú</span>
-                        <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                            stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
-                        <svg class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+        <!-- Contenido principal -->
+        <div class="flex-1 flex flex-col overflow-hidden">
+            <!-- Barra superior -->
+            <header class="bg-white shadow-sm z-30">
+                <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+                    <!-- Botón para abrir sidebar en móvil -->
+                    <button 
+                        @click="sidebarOpen = true" 
+                        class="lg:hidden text-gray-500 hover:text-gray-600 focus:outline-none"
+                    >
+                        <i data-feather="menu"></i>
                     </button>
+
+                    <!-- Espacio para breadcrumbs o título -->
+                    <div class="flex-1 ml-4">
+                        <h1 class="text-lg font-semibold text-gray-900">@yield('title', 'Panel de Administración')</h1>
+                    </div>
+
+                    <!-- Menú usuario -->
+                    <div class="flex items-center space-x-4">
+                        <div class="relative" x-data="{ open: false }">
+                            <button 
+                                @click="open = !open" 
+                                class="flex items-center space-x-2 focus:outline-none"
+                            >
+                                <div class="h-8 w-8 rounded-full bg-gradient-to-r from-green-400 to-blue-500 flex items-center justify-center text-white font-semibold">
+                                    {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                </div>
+                                <span class="hidden md:inline text-sm font-medium text-gray-700">{{ Auth::user()->name }}</span>
+                                <i data-feather="chevron-down" class="hidden md:inline w-4 h-4 text-gray-500"></i>
+                            </button>
+                            
+                            <div 
+                                x-show="open" 
+                                @click.outside="open = false"
+                                x-transition:enter="transition ease-out duration-100"
+                                x-transition:enter-start="transform opacity-0 scale-95"
+                                x-transition:enter-end="transform opacity-100 scale-100"
+                                x-transition:leave="transition ease-in duration-75"
+                                x-transition:leave-start="transform opacity-100 scale-100"
+                                x-transition:leave-end="transform opacity-0 scale-95"
+                                class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
+                                x-cloak
+                            >
+                                <div class="py-1">
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                            Cerrar sesión
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </header>
 
-        <!-- Menú móvil -->
-        <div class="hidden md:hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-green-700">
-                <a href="{{ route('admin.index') }}"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-600 flex items-center">
-                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
-                        </path>
-                    </svg>
-                    Inicio
-                </a>
-                <a href="#"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-600 flex items-center">
-                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                    Usuarios
-                </a>
-                <a href="#"
-                    class="block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-600 flex items-center">
-                    <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                        </path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                    </svg>
-                    Configuración
-                </a>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit"
-                        class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-white hover:bg-green-600 flex items-center">
-                        <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
-                            </path>
-                        </svg>
-                        Cerrar sesión
-                    </button>
-                </form>
-            </div>
-        </div>
-    </header>
+            <!-- Contenido -->
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-gray-50">
+                <!-- Alertas -->
+                @if (session('success'))
+                    <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg shadow-sm">
+                        <div class="flex items-center">
+                            <i data-feather="check-circle" class="h-5 w-5 text-green-500 mr-3"></i>
+                            <p class="font-medium text-green-700">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
 
-    <!-- Contenido principal -->
-    <main class="w-full px-0 sm:px-0 lg:px-0 pt-28 pb-12">
-        <!-- Notificaciones -->
-        @if (session('success'))
-            <div
-                class="mb-8 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-lg shadow-sm max-w-7xl mx-auto">
-                <div class="flex items-center">
-                    <svg class="h-5 w-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="font-medium">{{ session('success') }}</p>
+                @if (session('error'))
+                    <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 rounded-lg shadow-sm">
+                        <div class="flex items-center">
+                            <i data-feather="alert-circle" class="h-5 w-5 text-red-500 mr-3"></i>
+                            <p class="font-medium text-red-700">{{ session('error') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                <!-- Contenido principal -->
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    @yield('content')
                 </div>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div
-                class="mb-8 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg shadow-sm max-w-7xl mx-auto">
-                <div class="flex items-center">
-                    <svg class="h-5 w-5 text-red-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <p class="font-medium">{{ session('error') }}</p>
-                </div>
-            </div>
-        @endif
-
-        <!-- Contenido dinámico -->
-        <div class="w-full bg-white shadow-none border-none rounded-none">
-            @yield('content')
+            </main>
         </div>
-    </main>
+    </div>
 
-    <!-- Script para menú móvil -->
+    <!-- Script para inicializar Feather Icons -->
     <script>
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            const isHidden = menu.classList.contains('hidden');
-
-            // Alternar iconos
-            const svgOpen = this.querySelector('svg.block');
-            const svgClose = this.querySelector('svg.hidden');
-
-            if (isHidden) {
-                menu.classList.remove('hidden');
-                svgOpen.classList.add('hidden');
-                svgOpen.classList.remove('block');
-                svgClose.classList.add('block');
-                svgClose.classList.remove('hidden');
-            } else {
-                menu.classList.add('hidden');
-                svgOpen.classList.add('block');
-                svgOpen.classList.remove('hidden');
-                svgClose.classList.add('hidden');
-                svgClose.classList.remove('block');
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            
+            // Actualizar Feather Icons cuando Alpine.js actualice el DOM
+            document.addEventListener('alpine:init', () => {
+                Alpine.effect(() => {
+                    Alpine.store('sidebarOpen');
+                    setTimeout(() => feather.replace(), 10);
+                });
+            });
         });
     </script>
+    
     @yield('scripts')
-
 </body>
-
 </html>
