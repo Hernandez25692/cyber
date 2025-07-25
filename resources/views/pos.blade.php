@@ -626,62 +626,67 @@
             </div>
             <!-- FIN MODAL IMPRESION -->
 
-            <!-- MODAL CONSULTA DE PRECIO PERSONALIZADO -->
+            <!-- MODAL CONSULTA DE PRECIO -->
             <div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
                 x-show="mostrarModalConsulta" x-transition>
-                <div
-                    class="bg-gradient-to-br from-indigo-50 via-white to-indigo-100 max-w-lg w-full p-8 rounded-3xl shadow-2xl border-4 border-indigo-400 relative">
+                <div class="bg-white max-w-3xl w-full p-6 rounded-2xl shadow-2xl border-4 border-blue-900 relative font-sans"
+                    style="max-height: 90vh; display: flex; flex-direction: column;">
                     <button @click="cerrarModalConsulta()"
-                        class="absolute top-4 right-4 text-indigo-400 hover:text-red-600 transition text-2xl font-bold">
+                        class="absolute top-4 right-4 text-blue-900 hover:text-red-600 transition text-2xl font-bold">
                         &times;
                     </button>
 
-                    <h2 class="text-3xl font-extrabold mb-6 text-indigo-800 text-center flex items-center justify-center gap-2">
-                        <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
-                        </svg>
-                        Consulta de Precio
-                    </h2>
+                    <h2 class="text-2xl font-bold mb-4 text-blue-900 text-center tracking-wide">🔍 Consulta de Precios</h2>
 
-                    <input type="text" x-model="consultaBusqueda"
-                        placeholder="Buscar por código, nombre o descripción"
-                        class="w-full border-2 border-indigo-300 rounded-xl p-4 mb-5 shadow text-lg focus:ring-2 focus:ring-indigo-400 transition"
-                        @input="buscarProductoConsulta" autofocus>
+                    <div class="mb-4 flex gap-3 items-center">
+                        <input type="text" x-model="consultaBusqueda"
+                            placeholder="Buscar por código, nombre o descripción"
+                            class="flex-1 border border-blue-900 rounded px-4 py-2 text-base focus:ring-2 focus:ring-blue-900 bg-blue-50 font-semibold text-blue-900 transition"
+                            @input="buscarProductosConsulta">
+                    </div>
 
-                    <template x-if="productoConsulta">
-                        <div class="bg-white p-6 rounded-2xl shadow-lg space-y-3 text-center border-2 border-indigo-200 cursor-pointer hover:bg-indigo-50 transition"
-                            @dblclick="agregarDesdeConsulta()">
-                            <h3 class="text-2xl font-bold text-indigo-700" x-text="productoConsulta.nombre"></h3>
-                            <p class="text-base text-gray-600" x-text="`Código: ${productoConsulta.codigo}`"></p>
-                            <template x-if="productoConsulta.descripcion">
-                                <p class="text-sm text-gray-500 italic" x-text="productoConsulta.descripcion"></p>
-                            </template>
-                            <p class="text-3xl font-extrabold text-green-700 mt-2"
-                                x-text="`L. ${parseFloat(productoConsulta.precio_venta).toFixed(2)}`"></p>
-                            <p class="text-xs text-indigo-600">(Doble clic para agregar al carrito)</p>
-                        </div>
-                    </template>
-
-                    <template x-if="!productoConsulta && consultaBusqueda.length >= 3">
-                        <div class="text-center text-red-600 font-semibold mt-6 flex flex-col items-center">
-                            <svg class="w-10 h-10 mb-2 text-red-400" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"></path>
-                            </svg>
-                            <span>❌ Producto no encontrado.</span>
-                        </div>
-                    </template>
-                    <div class="mt-8 flex justify-center">
-                        <button @click="cerrarModalConsulta()"
-                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-8 rounded-xl shadow text-lg transition">
-                            Cerrar
-                        </button>
+                    <div class="overflow-x-auto rounded border border-blue-200 bg-blue-50 flex-1"
+                        style="max-height: 50vh; min-height: 200px; overflow-y: auto;">
+                        <table class="min-w-full text-sm text-blue-900">
+                            <thead class="bg-blue-900 text-white sticky top-0 z-10">
+                                <tr>
+                                    <th class="px-3 py-2 border-b border-blue-200 font-bold text-left">Código</th>
+                                    <th class="px-3 py-2 border-b border-blue-200 font-bold text-left">Nombre</th>
+                                    <th class="px-3 py-2 border-b border-blue-200 font-bold text-right">Precio</th>
+                                    <th class="px-3 py-2 border-b border-blue-200 font-bold text-center">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template x-if="productosFiltrados.length === 0 && consultaBusqueda.length >= 3">
+                                    <tr>
+                                        <td colspan="5" class="text-center py-8 text-red-600 font-semibold bg-white">
+                                            ❌ No se encontraron productos.
+                                        </td>
+                                    </tr>
+                                </template>
+                                <template x-for="prod in productosFiltrados" :key="prod.id">
+                                    <tr class="hover:bg-blue-100 transition cursor-pointer"
+                                        @dblclick="agregarDesdeConsulta(prod)">
+                                        <td class="px-3 py-2 border-b border-blue-100 font-mono" x-text="prod.codigo"></td>
+                                        <td class="px-3 py-2 border-b border-blue-100 font-semibold" x-text="prod.nombre"></td>
+                                        <td class="px-3 py-2 border-b border-blue-100 text-right font-bold text-green-700" x-text="`L. ${parseFloat(prod.precio_venta).toFixed(2)}`"></td>
+                                        <td class="px-3 py-2 border-b border-blue-100 text-center">
+                                            <button @click="agregarDesdeConsulta(prod)"
+                                                class="bg-blue-900 hover:bg-blue-700 text-white px-3 py-1 rounded shadow text-xs font-bold transition">
+                                                Agregar
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-2 text-xs text-gray-500 text-right">
+                        Doble clic en una fila también agrega el producto.
                     </div>
                 </div>
             </div>
+
             <!-- FIN MODAL CONSULTA DE PRECIO PERSONALIZADO -->
 
         </div>
@@ -709,48 +714,47 @@
                     mostrarModalServicio: false,
 
                     // Consulta de precio
+                    // MODAL CONSULTA DE PRECIO
                     mostrarModalConsulta: false,
                     consultaBusqueda: '',
-                    productoConsulta: null,
+                    productosFiltrados: [],
 
                     cerrarModalConsulta() {
                         this.mostrarModalConsulta = false;
                         this.consultaBusqueda = '';
-                        this.productoConsulta = null;
+                        this.productosFiltrados = [];
                     },
 
-                    buscarProductoConsulta() {
-                        const query = this.consultaBusqueda.trim().toLowerCase();
-                        if (query.length < 3) {
-                            this.productoConsulta = null;
+                    buscarProductosConsulta() {
+                        const q = this.consultaBusqueda.trim().toLowerCase();
+                        if (q.length < 3) {
+                            this.productosFiltrados = [];
                             return;
                         }
 
-                        this.productoConsulta = this.productos.find(p =>
-                            p.codigo.toLowerCase() === query ||
-                            p.nombre.toLowerCase().includes(query) ||
-                            (p.descripcion && p.descripcion.toLowerCase().includes(query))
-                        ) || null;
+                        this.productosFiltrados = this.productos.filter(p =>
+                            p.codigo.toLowerCase().includes(q) ||
+                            p.nombre.toLowerCase().includes(q) ||
+                            (p.descripcion && p.descripcion.toLowerCase().includes(q))
+                        );
                     },
 
-                    agregarDesdeConsulta() {
-                        if (!this.productoConsulta) return;
-
-                        const existente = this.carrito.find(item => item.id === this.productoConsulta.id);
+                    agregarDesdeConsulta(producto) {
+                        const existente = this.carrito.find(item => item.id === producto.id);
                         if (existente) {
                             existente.cantidad += 1;
                         } else {
                             this.carrito.push({
-                                ...this.productoConsulta,
+                                ...producto,
                                 cantidad: 1,
-                                precio: parseFloat(this.productoConsulta.precio_venta),
+                                precio: parseFloat(producto.precio_venta),
                             });
                         }
-
                         this.calcularTotal();
                         this.guardarCarritoLocal();
                         this.cerrarModalConsulta();
                     },
+
 
                     // --- LOCAL STORAGE ---
                     guardarCarritoLocal() {
