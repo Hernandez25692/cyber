@@ -31,4 +31,12 @@ class RemesaConfigController extends Controller
 
         return redirect()->route('admin.remesas.index')->with('success', '✅ Comisión registrada correctamente.');
     }
+
+    public function destroy($id)
+    {
+        $remesa = RemesaConfig::findOrFail($id);
+        $remesa->delete();
+
+        return redirect()->route('admin.remesas.index')->with('success', '✅ Comisión eliminada correctamente.');
+    }
 }
