@@ -75,11 +75,14 @@
                                     <td class="border-b p-3 text-center">
                                         <button @click="quitarProducto(index)"
                                             class="text-red-600 hover:text-red-800 transition" title="Eliminar">
-                                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <svg class="w-6 h-6 mx-auto" fill="none" stroke="currentColor"
+                                                stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3 6h18"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2"></path>
                                                 <rect x="5" y="6" width="14" height="14" rx="2"></rect>
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M10 11v6m4-6v6">
+                                                </path>
                                             </svg>
                                         </button>
                                     </td>
@@ -176,6 +179,17 @@
                             </svg>
                             Impresiones
                         </button>
+                        <!-- BOTÓN CONSULTA DE PRECIO -->
+                        <button @click="mostrarModalConsulta = true"
+                            class="h-14 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path>
+                            </svg>
+                            Consulta Precios
+                        </button>
+
                         <button
                             class="h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -336,7 +350,8 @@
                             class="font-bold text-green-800">CYBER Y VARIEDADES SANDOVAL</span>.</p>
                     <template x-if="cambioVenta > 0">
                         <p class="text-3xl mb-6 font-extrabold text-white bg-indigo-600 rounded-xl py-4 shadow-lg">
-                            Cambio: <span class="text-yellow-300">L  <span x-text="cambioVenta.toFixed(2)"></span></span>
+                            Cambio: <span class="text-yellow-300">L <span
+                                    x-text="cambioVenta.toFixed(2)"></span></span>
                         </p>
                     </template>
                     <template x-if="cambioVenta <= 0">
@@ -611,6 +626,64 @@
             </div>
             <!-- FIN MODAL IMPRESION -->
 
+            <!-- MODAL CONSULTA DE PRECIO PERSONALIZADO -->
+            <div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
+                x-show="mostrarModalConsulta" x-transition>
+                <div
+                    class="bg-gradient-to-br from-indigo-50 via-white to-indigo-100 max-w-lg w-full p-8 rounded-3xl shadow-2xl border-4 border-indigo-400 relative">
+                    <button @click="cerrarModalConsulta()"
+                        class="absolute top-4 right-4 text-indigo-400 hover:text-red-600 transition text-2xl font-bold">
+                        &times;
+                    </button>
+
+                    <h2 class="text-3xl font-extrabold mb-6 text-indigo-800 text-center flex items-center justify-center gap-2">
+                        <svg class="w-8 h-8 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
+                        </svg>
+                        Consulta de Precio
+                    </h2>
+
+                    <input type="text" x-model="consultaBusqueda"
+                        placeholder="Buscar por código, nombre o descripción"
+                        class="w-full border-2 border-indigo-300 rounded-xl p-4 mb-5 shadow text-lg focus:ring-2 focus:ring-indigo-400 transition"
+                        @input="buscarProductoConsulta" autofocus>
+
+                    <template x-if="productoConsulta">
+                        <div class="bg-white p-6 rounded-2xl shadow-lg space-y-3 text-center border-2 border-indigo-200 cursor-pointer hover:bg-indigo-50 transition"
+                            @dblclick="agregarDesdeConsulta()">
+                            <h3 class="text-2xl font-bold text-indigo-700" x-text="productoConsulta.nombre"></h3>
+                            <p class="text-base text-gray-600" x-text="`Código: ${productoConsulta.codigo}`"></p>
+                            <template x-if="productoConsulta.descripcion">
+                                <p class="text-sm text-gray-500 italic" x-text="productoConsulta.descripcion"></p>
+                            </template>
+                            <p class="text-3xl font-extrabold text-green-700 mt-2"
+                                x-text="`L. ${parseFloat(productoConsulta.precio_venta).toFixed(2)}`"></p>
+                            <p class="text-xs text-indigo-600">(Doble clic para agregar al carrito)</p>
+                        </div>
+                    </template>
+
+                    <template x-if="!productoConsulta && consultaBusqueda.length >= 3">
+                        <div class="text-center text-red-600 font-semibold mt-6 flex flex-col items-center">
+                            <svg class="w-10 h-10 mb-2 text-red-400" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01"></path>
+                            </svg>
+                            <span>❌ Producto no encontrado.</span>
+                        </div>
+                    </template>
+                    <div class="mt-8 flex justify-center">
+                        <button @click="cerrarModalConsulta()"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-8 rounded-xl shadow text-lg transition">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN MODAL CONSULTA DE PRECIO PERSONALIZADO -->
+
         </div>
 
         <script>
@@ -634,6 +707,50 @@
                     mostrarModalRetiro: false,
                     // Servicio modal variable
                     mostrarModalServicio: false,
+
+                    // Consulta de precio
+                    mostrarModalConsulta: false,
+                    consultaBusqueda: '',
+                    productoConsulta: null,
+
+                    cerrarModalConsulta() {
+                        this.mostrarModalConsulta = false;
+                        this.consultaBusqueda = '';
+                        this.productoConsulta = null;
+                    },
+
+                    buscarProductoConsulta() {
+                        const query = this.consultaBusqueda.trim().toLowerCase();
+                        if (query.length < 3) {
+                            this.productoConsulta = null;
+                            return;
+                        }
+
+                        this.productoConsulta = this.productos.find(p =>
+                            p.codigo.toLowerCase() === query ||
+                            p.nombre.toLowerCase().includes(query) ||
+                            (p.descripcion && p.descripcion.toLowerCase().includes(query))
+                        ) || null;
+                    },
+
+                    agregarDesdeConsulta() {
+                        if (!this.productoConsulta) return;
+
+                        const existente = this.carrito.find(item => item.id === this.productoConsulta.id);
+                        if (existente) {
+                            existente.cantidad += 1;
+                        } else {
+                            this.carrito.push({
+                                ...this.productoConsulta,
+                                cantidad: 1,
+                                precio: parseFloat(this.productoConsulta.precio_venta),
+                            });
+                        }
+
+                        this.calcularTotal();
+                        this.guardarCarritoLocal();
+                        this.cerrarModalConsulta();
+                    },
 
                     // --- LOCAL STORAGE ---
                     guardarCarritoLocal() {
