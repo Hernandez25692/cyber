@@ -224,6 +224,8 @@ Route::get('/admin/usuarios/{id}/edit', [UsuarioController::class, 'edit'])->nam
 Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])->name('admin.usuarios.update');
 Route::get('/admin/reportes/utilidad-productos', [ReporteProductoController::class, 'reporteUtilidad'])->name('admin.reportes.utilidad.productos');
 Route::delete('/admin/remesas/{remesa}', [RemesaConfigController::class, 'destroy'])->name('admin.remesas.destroy');
+Route::get('/admin/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('admin.reportes.remesas');
+
 
 /*
 |--------------------------------------------------------------------------

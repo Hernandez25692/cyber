@@ -11,6 +11,7 @@ use App\Models\ServicioRealizado;
 use App\Models\RecargaRealizada;
 use App\Models\ImpresionRealizada;
 
+
 class ReporteGeneralController extends Controller
 {
     public function index(Request $request)

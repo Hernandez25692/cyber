@@ -16,14 +16,16 @@ class ReporteProductoController extends Controller
         $hasta = $request->input('hasta') ?? Carbon::now()->endOfMonth()->format('Y-m-d');
         $user_id = $request->input('user_id');
 
-        $detalles = DetalleVenta::with('venta.user', 'producto')
+        $detalles = DetalleVenta::with(['venta.user', 'producto'])
             ->whereHas('venta', function ($q) use ($desde, $hasta, $user_id) {
                 $q->whereBetween('created_at', [$desde . ' 00:00:00', $hasta . ' 23:59:59']);
                 if ($user_id) {
                     $q->where('user_id', $user_id);
                 }
             })
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(25)
+            ->appends($request->all()); // mantiene filtros al paginar
 
         $filtros = [
             'desde' => $desde,

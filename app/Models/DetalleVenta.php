@@ -24,5 +24,8 @@ class DetalleVenta extends Model
         return $this->belongsTo(Producto::class);
     }
 
-    
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

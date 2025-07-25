@@ -130,14 +130,16 @@
                             <div x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'ventas')" x-collapse
                                 class="mt-1 space-y-1 pl-12">
                                 <a href="{{ route('ventas.index') }}"
-                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">🧾
-                                    Historial de Ventas</a>
+                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                                    Historial de Ventas
+                                </a>
                                 <a href="{{ route('ventas.reporte.productos') }}"
-                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">📊
-                                    Reporte de Productos Vendidos</a>
+                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                                    Reporte de Productos Vendidos
+                                </a>
                                 <a href="{{ route('admin.reportes.utilidad.productos') }}"
                                     class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                                    💰 Reporte Utilidad Productos
+                                    Reporte Utilidad Productos
                                 </a>
                             </div>
 
@@ -331,14 +333,21 @@
 
                 <!-- Pie de sidebar -->
                 <div class="p-4 border-t border-gray-800">
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit"
-                            class="w-full flex items-center justify-center px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                            <i data-feather="log-out" class="w-4 h-4 mr-2"></i>
-                            Cerrar sesión
-                        </button>
-                    </form>
+                    <div class="space-y-3">
+                        <a href="{{ route('admin.index') }}"
+                            class="flex items-center px-4 py-2 text-sm font-medium text-blue-500 hover:text-blue-400 rounded-lg hover:bg-gray-800 transition-colors duration-200 group">
+                            <i data-feather="home" class="w-4 h-4 mr-2 group-hover:text-blue-300"></i>
+                            Panel principal
+                        </a>
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button type="submit"
+                                class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-500 hover:text-red-400 rounded-lg hover:bg-gray-800 transition-colors duration-200 group">
+                                <i data-feather="log-out" class="w-4 h-4 mr-2 group-hover:text-red-300"></i>
+                                Cerrar sesión
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </aside>
