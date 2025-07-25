@@ -11,11 +11,16 @@
                     <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Panel de Administración</h1>
                     <p class="mt-2 text-gray-600">Gestión integral de todos los servicios</p>
                 </div>
-                <div class="mt-4 md:mt-0">
+                <div class="mt-4 md:mt-0 flex flex-col md:flex-row gap-2">
                     <a href="{{ route('admin.reportes.general') }}"
-                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        class="inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
                         <i data-feather="bar-chart-2" class="w-4 h-4 mr-2"></i>
-                        Reporte General
+                        Reporte Servicios
+                    </a>
+                    <a href="{{ route('admin.reportes.cyber') }}"
+                        class="inline-flex items-center px-4 py-2 bg-indigo-50 border border-indigo-200 rounded-md shadow-sm text-sm font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+                        <i data-feather="activity" class="w-4 h-4 mr-2"></i>
+                        Reporte General Cyber
                     </a>
                 </div>
             </div>

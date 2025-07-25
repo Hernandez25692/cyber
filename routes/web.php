@@ -225,6 +225,7 @@ Route::put('/admin/usuarios/{id}', [UsuarioController::class, 'update'])->name('
 Route::get('/admin/reportes/utilidad-productos', [ReporteProductoController::class, 'reporteUtilidad'])->name('admin.reportes.utilidad.productos');
 Route::delete('/admin/remesas/{remesa}', [RemesaConfigController::class, 'destroy'])->name('admin.remesas.destroy');
 Route::get('/admin/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('admin.reportes.remesas');
+Route::get('/admin/reportes/cyber', [\App\Http\Controllers\Admin\ReporteCyberController::class, 'index'])->name('admin.reportes.cyber');
 
 
 /*
