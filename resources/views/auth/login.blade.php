@@ -115,9 +115,31 @@
                         </svg>
                     </div>
                     <input id="password" type="password" name="password" required
-                        class="input-field w-full pl-10 pr-4 py-3 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none"
+                        class="input-field w-full pl-10 pr-12 py-3 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none"
                         placeholder="••••••••">
+                    <button type="button" onclick="togglePassword()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-emerald-400 focus:outline-none">
+                        <svg id="eyeIcon" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path id="eyeOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0zm6 0c0 5-4.03 9-9 9S3 17 3 12 7.03 3 12 3s9 4.03 9 9z" />
+                            <path id="eyeClosed" style="display:none;" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M9.53 9.53A3 3 0 0012 15a3 3 0 002.47-5.47M7.05 7.05A9.003 9.003 0 003 12c0 5 4.03 9 9 9a8.96 8.96 0 005.95-2.05M17.94 17.94A9.003 9.003 0 0021 12c0-5-4.03-9-9-9a8.96 8.96 0 00-5.95 2.05" />
+                        </svg>
+                    </button>
                 </div>
+                <script>
+                    function togglePassword() {
+                        const passwordInput = document.getElementById('password');
+                        const eyeOpen = document.getElementById('eyeOpen');
+                        const eyeClosed = document.getElementById('eyeClosed');
+                        if (passwordInput.type === 'password') {
+                            passwordInput.type = 'text';
+                            eyeOpen.style.display = 'none';
+                            eyeClosed.style.display = '';
+                        } else {
+                            passwordInput.type = 'password';
+                            eyeOpen.style.display = '';
+                            eyeClosed.style.display = 'none';
+                        }
+                    }
+                </script>
                 @error('password')
                     <p class="text-red-400 text-xs mt-1 flex items-center">
                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -99,13 +99,13 @@
             </div>
 
             <!-- MENÚ LATERAL MEJORADO -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col h-full relative border border-green-100">
+            <div class="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col h-full relative border border-green-100 transition-all duration-200">
                 <!-- Menú Principal -->
-                <div x-show="menu === 'principal'" class="flex flex-col gap-6 h-full">
+                <div x-show="menu === 'principal'" class="flex flex-col gap-4 md:gap-6 h-full">
                     <button
-                        class="w-full h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl py-4 font-bold text-xl shadow transition disabled:opacity-60 flex items-center justify-center"
+                        class="w-full h-14 md:h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl py-3 md:py-4 font-bold text-lg md:text-xl shadow transition disabled:opacity-60 flex items-center justify-center"
                         :disabled="carrito.length === 0" @click="mostrarModalCobro = true">
-                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
                             <rect width="20" height="12" x="2" y="9" rx="2"></rect>
@@ -115,9 +115,9 @@
                     </button>
 
                     <button
-                        class="w-full h-16 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-4 font-bold text-xl shadow transition flex items-center justify-center"
+                        class="w-full h-14 md:h-16 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-3 md:py-4 font-bold text-lg md:text-xl shadow transition flex items-center justify-center"
                         @click="menu = 'editar'">
-                        <svg class="w-7 h-7 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6"></path>
@@ -125,11 +125,11 @@
                         Editar transacción
                     </button>
 
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-3 md:gap-4">
                         <!-- BOTÓN RECARGAS NUEVO -->
                         <button onclick="document.getElementById('modal-recarga').classList.remove('hidden')"
-                            class="h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -138,8 +138,8 @@
                         </button>
                         <!-- BOTÓN REMESAS MODIFICADO -->
                         <button @click="mostrarModalRemesa = true"
-                            class="h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2">
                                 </path>
@@ -149,8 +149,8 @@
                         </button>
                         <!-- BOTÓN RETIROS NUEVO -->
                         <button @click="mostrarModalRetiro = true"
-                            class="h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m0 0l-3-3m3 3l3-3">
                                 </path>
@@ -160,8 +160,8 @@
                         </button>
                         <!-- BOTÓN SERVICIOS NUEVO -->
                         <button @click="mostrarModalServicio = true"
-                            class="h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M9 17v-6a2 2 0 012-2h2a2 2 0 012 2v6"></path>
@@ -171,8 +171,8 @@
                         </button>
                         <!-- BOTÓN IMPRESIONES (abre modal de impresión) -->
                         <button onclick="document.getElementById('modal-impresion').classList.remove('hidden')"
-                            class="h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8 16h8M8 12h8m-8-4h8"></path>
                                 <rect width="20" height="12" x="2" y="6" rx="2"></rect>
@@ -181,8 +181,8 @@
                         </button>
                         <!-- BOTÓN CONSULTA DE PRECIO -->
                         <button @click="mostrarModalConsulta = true"
-                            class="h-14 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            class="h-12 md:h-14 bg-indigo-500 hover:bg-indigo-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"></path>
@@ -191,9 +191,9 @@
                         </button>
 
                         <button
-                            class="h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-3 text-lg"
+                            class="h-12 md:h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7">
                                 </path>
@@ -205,9 +205,9 @@
                             @csrf
                         </form>
                         <button
-                            class="col-span-2 h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center gap-3 text-lg"
+                            class="col-span-2 h-12 md:h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg"
                             @click="menu = 'admin'">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
                             </svg>
@@ -217,20 +217,20 @@
                 </div>
 
                 <!-- Submenú Editar -->
-                <div x-show="menu === 'editar'" class="flex flex-col gap-6 h-full">
+                <div x-show="menu === 'editar'" class="flex flex-col gap-4 md:gap-6 h-full">
                     <button
-                        class="w-full h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                        class="w-full h-14 md:h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="vaciarCarrito()">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                         Vaciar carrito
                     </button>
                     <button
-                        class="w-full h-16 bg-yellow-700 hover:bg-yellow-800 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                        class="w-full h-14 md:h-16 bg-yellow-700 hover:bg-yellow-800 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="alert('Función en desarrollo')">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"></path>
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -239,9 +239,9 @@
                         Editar líneas
                     </button>
                     <button
-                        class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                        class="w-full h-14 md:h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
@@ -250,19 +250,19 @@
                 </div>
 
                 <!-- Submenú Admin -->
-                <div x-show="menu === 'admin'" class="flex flex-col gap-6 h-full">
+                <div x-show="menu === 'admin'" class="flex flex-col gap-4 md:gap-6 h-full">
                     <a href="{{ route('productos.index') }}"
-                        class="w-full h-16 bg-blue-800 hover:bg-blue-900 text-white rounded-2xl font-bold shadow transition text-center flex items-center justify-center gap-3 text-xl">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                        class="w-full h-14 md:h-16 bg-blue-800 hover:bg-blue-900 text-white rounded-2xl font-bold shadow transition text-center flex items-center justify-center gap-2 md:gap-3 text-lg md:text-xl">
+                        <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 7h18M3 12h18M3 17h18"></path>
                         </svg>
                         Gestión de Productos
                     </a>
                     <button
-                        class="w-full h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-xl"
+                        class="w-full h-14 md:h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-6 h-6 inline mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
                             viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
@@ -636,7 +636,7 @@
                         &times;
                     </button>
 
-                    <h2 class="text-2xl font-bold mb-4 text-blue-900 text-center tracking-wide">🔍 Consulta de Precios</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-blue-900 text-center tracking-wide">Consulta de Precios</h2>
 
                     <div class="mb-4 flex gap-3 items-center">
                         <input type="text" x-model="consultaBusqueda"
