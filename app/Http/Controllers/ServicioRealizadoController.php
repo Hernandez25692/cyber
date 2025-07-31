@@ -24,6 +24,7 @@ class ServicioRealizadoController extends Controller
             'banco_id' => 'required|exists:bancos,id',
             'comision' => 'required|numeric|min:0',
             'referencia' => 'nullable|string|max:255',
+            'total' => 'required|numeric|min:0',
         ]);
 
         ServicioRealizado::create([
@@ -31,6 +32,7 @@ class ServicioRealizadoController extends Controller
             'banco_id' => $request->banco_id,
             'comision' => $request->comision,
             'referencia' => $request->referencia,
+            'total' => $request->total,
             'user_id' => auth()->id(),
         ]);
 

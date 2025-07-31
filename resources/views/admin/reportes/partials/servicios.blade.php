@@ -10,7 +10,15 @@
                 {{ $servicios->count() }}
             </div>
         </div>
-
+        <div class="bg-green-100 border border-green-200 p-5 rounded-xl shadow-sm flex items-center justify-between">
+            <div>
+                <h2 class="text-lg font-bold text-green-800">Total de servicios</h2>
+                <p class="text-sm text-green-600 mt-1">Suma de montos</p>
+            </div>
+            <div class="text-3xl font-bold text-green-700">
+                L {{ number_format($servicios->sum('total'), 2) }}
+            </div>
+        </div>
         <div class="bg-green-100 border border-green-200 p-5 rounded-xl shadow-sm flex items-center justify-between">
             <div>
                 <h2 class="text-lg font-bold text-green-800">Ganancia total</h2>
@@ -20,6 +28,7 @@
                 L {{ number_format($servicios->sum('comision'), 2) }}
             </div>
         </div>
+
     </div>
 
     {{-- TABLA DETALLE SERVICIOS --}}
@@ -31,6 +40,7 @@
                     <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Tipo</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Cajero</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Banco</th>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Total Servicio</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Comisión</th>
                     <th class="px-4 py-3 text-left text-xs font-medium text-green-600 uppercase">Fecha</th>
                 </tr>
@@ -42,6 +52,7 @@
                         <td class="px-4 py-3">{{ $servicio->tipoServicio->nombre ?? '—' }}</td>
                         <td class="px-4 py-3">{{ $servicio->usuario->name ?? '—' }}</td>
                         <td class="px-4 py-3">{{ $servicio->banco->nombre ?? '—' }}</td>
+                        <td class="px-4 py-3">L {{ number_format($servicio->total, 2) }}</td>
                         <td class="px-4 py-3 text-green-800 font-semibold">L {{ number_format($servicio->comision, 2) }}
                         </td>
                         <td class="px-4 py-3 text-gray-500">{{ $servicio->created_at->format('d/m/Y H:i') }}</td>

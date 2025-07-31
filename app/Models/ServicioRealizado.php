@@ -16,6 +16,7 @@ class ServicioRealizado extends Model
         'banco_id',
         'comision',
         'referencia',
+        'total',
         'user_id',
     ];
 

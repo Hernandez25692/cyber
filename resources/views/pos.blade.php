@@ -99,14 +99,15 @@
             </div>
 
             <!-- MENÚ LATERAL MEJORADO -->
-            <div class="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col h-full relative border border-green-100 transition-all duration-200">
+            <div
+                class="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col h-full relative border border-green-100 transition-all duration-200">
                 <!-- Menú Principal -->
                 <div x-show="menu === 'principal'" class="flex flex-col gap-4 md:gap-6 h-full">
                     <button
                         class="w-full h-14 md:h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl py-3 md:py-4 font-bold text-lg md:text-xl shadow transition disabled:opacity-60 flex items-center justify-center"
                         :disabled="carrito.length === 0" @click="mostrarModalCobro = true">
-                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
                             <rect width="20" height="12" x="2" y="9" rx="2"></rect>
                             <path stroke-linecap="round" stroke-linejoin="round" d="M7 19v2m10-2v2"></path>
@@ -117,8 +118,8 @@
                     <button
                         class="w-full h-14 md:h-16 bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-800 hover:to-gray-900 text-white rounded-2xl py-3 md:py-4 font-bold text-lg md:text-xl shadow transition flex items-center justify-center"
                         @click="menu = 'editar'">
-                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15.232 5.232l3.536 3.536M9 13l6-6m2 2l-6 6m-2 2h6"></path>
                         </svg>
@@ -221,8 +222,8 @@
                     <button
                         class="w-full h-14 md:h-16 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="vaciarCarrito()">
-                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                         Vaciar carrito
@@ -230,8 +231,8 @@
                     <button
                         class="w-full h-14 md:h-16 bg-yellow-700 hover:bg-yellow-800 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="alert('Función en desarrollo')">
-                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"></path>
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.5 3.5a2.121 2.121 0 013 3L7 19.5 3 21l1.5-4L16.5 3.5z"></path>
@@ -241,8 +242,8 @@
                     <button
                         class="w-full h-14 md:h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
                         Principal
@@ -262,8 +263,8 @@
                     <button
                         class="w-full h-14 md:h-16 bg-gray-500 hover:bg-gray-600 text-white rounded-2xl font-bold shadow transition flex items-center justify-center text-lg md:text-xl"
                         @click="menu = 'principal'">
-                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none" stroke="currentColor" stroke-width="2"
-                            viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 inline mr-2 md:mr-3 -mt-1" fill="none"
+                            stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18"></path>
                         </svg>
                         Principal
@@ -501,6 +502,11 @@
                         </div>
 
                         <div>
+                            <label class="block font-semibold">TOTAL SERVICIO</label>
+                            <input type="number" name="total" step="0.01"
+                                class="w-full border rounded px-3 py-2" required value="15">
+                        </div>
+                        <div>
                             <label class="block font-semibold">Referencia</label>
                             <input type="text" name="referencia" class="w-full border rounded px-3 py-2">
                         </div>
@@ -636,7 +642,8 @@
                         &times;
                     </button>
 
-                    <h2 class="text-2xl font-bold mb-4 text-blue-900 text-center tracking-wide">Consulta de Precios</h2>
+                    <h2 class="text-2xl font-bold mb-4 text-blue-900 text-center tracking-wide">Consulta de Precios
+                    </h2>
 
                     <div class="mb-4 flex gap-3 items-center">
                         <input type="text" x-model="consultaBusqueda"
@@ -659,7 +666,8 @@
                             <tbody>
                                 <template x-if="productosFiltrados.length === 0 && consultaBusqueda.length >= 3">
                                     <tr>
-                                        <td colspan="5" class="text-center py-8 text-red-600 font-semibold bg-white">
+                                        <td colspan="5"
+                                            class="text-center py-8 text-red-600 font-semibold bg-white">
                                             ❌ No se encontraron productos.
                                         </td>
                                     </tr>
@@ -667,9 +675,12 @@
                                 <template x-for="prod in productosFiltrados" :key="prod.id">
                                     <tr class="hover:bg-blue-100 transition cursor-pointer"
                                         @dblclick="agregarDesdeConsulta(prod)">
-                                        <td class="px-3 py-2 border-b border-blue-100 font-mono" x-text="prod.codigo"></td>
-                                        <td class="px-3 py-2 border-b border-blue-100 font-semibold" x-text="prod.nombre"></td>
-                                        <td class="px-3 py-2 border-b border-blue-100 text-right font-bold text-green-700" x-text="`L. ${parseFloat(prod.precio_venta).toFixed(2)}`"></td>
+                                        <td class="px-3 py-2 border-b border-blue-100 font-mono" x-text="prod.codigo">
+                                        </td>
+                                        <td class="px-3 py-2 border-b border-blue-100 font-semibold"
+                                            x-text="prod.nombre"></td>
+                                        <td class="px-3 py-2 border-b border-blue-100 text-right font-bold text-green-700"
+                                            x-text="`L. ${parseFloat(prod.precio_venta).toFixed(2)}`"></td>
                                         <td class="px-3 py-2 border-b border-blue-100 text-center">
                                             <button @click="agregarDesdeConsulta(prod)"
                                                 class="bg-blue-900 hover:bg-blue-700 text-white px-3 py-1 rounded shadow text-xs font-bold transition">

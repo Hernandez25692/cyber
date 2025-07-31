@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('tipo_servicio_id');
             $table->unsignedBigInteger('banco_id');
+            $table->decimal('total', 10, 2);
             $table->decimal('comision', 10, 2);
             $table->string('referencia')->nullable();
             $table->unsignedBigInteger('user_id');
