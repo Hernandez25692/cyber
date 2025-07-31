@@ -25,7 +25,10 @@
                 <p>Recargas: L {{ number_format($recargas, 2) }}</p>
                 <p>Servicios: L {{ number_format($servicios, 2) }}</p>
                 <p>Impresiones: L {{ number_format($impresiones, 2) }}</p>
-                <p class="mt-2 font-bold">Total Ingresos: L {{ number_format($ingresos, 2) }}</p>
+                <p class="mt-2 font-bold">Comisiones (Remesas, Retiros, Servicios): L
+                    {{ number_format($ingresos_comisiones, 2) }}</p>
+                <p class="font-bold">Total Ingresos (con comisiones): L {{ number_format($ingresos, 2) }}</p>
+
             </div>
             <div class="bg-red-100 p-4 rounded-lg">
                 <h3 class="font-bold text-red-800 mb-2">🔴 Egresos</h3>

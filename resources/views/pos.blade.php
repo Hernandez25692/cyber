@@ -190,20 +190,26 @@
                             </svg>
                             Consulta Precios
                         </button>
-                        <li>
-                            <a href="{{ route('aperturas.create') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                🟢 Apertura de Turno
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('cierres.create') }}"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                                🔴 Cierre de Turno
-                            </a>
-                        </li>
-
-
+                        <!-- BOTÓN APERTURA DE TURNO -->
+                        <a href="{{ route('aperturas.create') }}"
+                            class="h-12 md:h-14 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
+                            </svg>
+                            Apertura de Turno
+                        </a>
+                        <!-- BOTÓN CIERRE DE TURNO -->
+                        <a href="{{ route('cierres.create') }}"
+                            class="h-12 md:h-14 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4l-3-3"></path>
+                            </svg>
+                            Cierre de Turno
+                        </a>
                         <button
                             class="h-12 md:h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg"
                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -410,14 +416,6 @@
                             <input type="number" step="0.01" name="monto" id="monto"
                                 class="w-full border rounded p-2" required oninput="calcularComision()">
                         </div>
-                        <div>
-                            <label class="block font-semibold">Banco</label>
-                            <select name="banco_id" class="w-full border rounded p-2" required>
-                                @foreach ($bancos as $banco)
-                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                @endforeach
-                            </select>
-                        </div>
 
                         <div>
                             <label class="block font-semibold">Comisión</label>
@@ -468,31 +466,23 @@
                             <input type="number" step="0.01" name="monto" id="montoRetiro"
                                 class="w-full border rounded p-2" required oninput="calcularComisionRetiro()">
                         </div>
+
                         <div>
-                            <label class="block font-semibold">Banco</label>
-                            <select name="banco_id" class="w-full border rounded p-2" required>
-                                @foreach ($bancos as $banco)
-                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
-                                @endforeach
-                            </select>
+                            <label class="block font-semibold">Comisión</label>
+                            <input type="text" id="comisionRetiro"
+                                class="w-full border rounded p-2 bg-gray-100 font-bold text-purple-700" readonly>
+                            <!-- input oculto con el valor real -->
+                            <input type="hidden" name="comision" id="inputComisionRetiro">
+                        </div>
 
-                            <div>
-                                <label class="block font-semibold">Comisión</label>
-                                <input type="text" id="comisionRetiro"
-                                    class="w-full border rounded p-2 bg-gray-100 font-bold text-purple-700" readonly>
-                                <!-- input oculto con el valor real -->
-                                <input type="hidden" name="comision" id="inputComisionRetiro">
-                            </div>
+                        <div>
+                            <label class="block font-semibold">Referencia (opcional)</label>
+                            <input type="text" name="referencia" class="w-full border rounded p-2">
+                        </div>
 
-                            <div>
-                                <label class="block font-semibold">Referencia (opcional)</label>
-                                <input type="text" name="referencia" class="w-full border rounded p-2">
-                            </div>
-
-                            <button type="submit"
-                                class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
-                                Registrar
-                            </button>
+                        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
+                            Registrar
+                        </button>
                     </form>
 
                 </div>
@@ -530,11 +520,6 @@
                             </select>
                         </div>
 
-                        <div>
-                            <label class="block font-semibold">TOTAL SERVICIO</label>
-                            <input type="number" name="total" step="0.01"
-                                class="w-full border rounded px-3 py-2" required value="15">
-                        </div>
                         <div>
                             <label class="block font-semibold">Referencia</label>
                             <input type="text" name="referencia" class="w-full border rounded px-3 py-2">

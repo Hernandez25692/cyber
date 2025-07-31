@@ -84,18 +84,23 @@ class CierreController extends Controller
         $hasta = now();
         $user_id = $apertura->user_id;
 
-        // INGRESOS
+        // INGRESOS DIRECTOS
         $ventas = Venta::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('total');
-        $recargas = RecargaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->get()->sum(fn($r) => $r->paquete->precio ?? 0);
+        $recargas = RecargaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)
+            ->get()->sum(fn($r) => $r->paquete->precio ?? 0);
         $servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
         $impresiones = ImpresionRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('precio');
 
-        $ingresos = $ventas + $recargas + $servicios + $impresiones;
+        // COMISIONES adicionales
+        $comision_retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
+        $comision_remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
 
-        // EGRESOS
+        // EGRESOS TOTALES
         $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
         $remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
 
+        $ingresos_comisiones = $servicios + $comision_remesas + $comision_retiros;
+        $ingresos = $ventas + $recargas + $impresiones + $ingresos_comisiones;
         $egresos = $retiros + $remesas;
 
         $esperado = $apertura->efectivo_inicial + $ingresos - $egresos;
@@ -109,11 +114,15 @@ class CierreController extends Controller
             'impresiones',
             'retiros',
             'remesas',
+            'comision_remesas',
+            'comision_retiros',
             'ingresos',
+            'ingresos_comisiones',
             'egresos',
             'esperado'
         ));
     }
+
 
     public function finalizar(Cierre $cierre)
     {
