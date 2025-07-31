@@ -196,6 +196,12 @@
                                 🟢 Apertura de Turno
                             </a>
                         </li>
+                        <li>
+                            <a href="{{ route('cierres.create') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                🔴 Cierre de Turno
+                            </a>
+                        </li>
 
 
                         <button

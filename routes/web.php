@@ -35,6 +35,7 @@ use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AjusteInventarioController;
 use App\Http\Controllers\ReporteProductoController;
 use App\Http\Controllers\AperturaController;
+use App\Http\Controllers\CierreController;
 
 
 /*
@@ -230,7 +231,15 @@ Route::get('/admin/reportes/cyber', [\App\Http\Controllers\Admin\ReporteCyberCon
 Route::middleware('auth')->group(function () {
     Route::get('/apertura/crear', [AperturaController::class, 'create'])->name('aperturas.create');
     Route::post('/apertura', [AperturaController::class, 'store'])->name('aperturas.store');
+    Route::get('/reporte-z/{apertura_id}', [CierreController::class, 'reporteZ'])->name('cierres.reporte_z');
 });
+
+Route::middleware('auth')->group(function () {
+    Route::get('/cierre/crear', [CierreController::class, 'create'])->name('cierres.create');
+    Route::post('/cierre', [CierreController::class, 'store'])->name('cierres.store');
+});
+Route::post('/cierre/finalizar/{cierre}', [CierreController::class, 'finalizar'])->name('cierres.finalizar');
+
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)
