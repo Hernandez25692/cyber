@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'cajero@cybersandoval.com'],
             [
-                'name' => 'Cajero',
+                'name' => 'Mirna Perez',
                 'password' => Hash::make('cajero123'),
                 'rol' => 'cajero'
             ]

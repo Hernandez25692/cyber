@@ -88,19 +88,20 @@ class CierreController extends Controller
         $ventas = Venta::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('total');
         $recargas = RecargaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)
             ->get()->sum(fn($r) => $r->paquete->precio ?? 0);
-        $servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
+        $servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('total');
         $impresiones = ImpresionRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('precio');
 
         // COMISIONES adicionales
         $comision_retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
         $comision_remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
+        $comision_servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
 
         // EGRESOS TOTALES
         $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
         $remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
 
-        $ingresos_comisiones = $servicios + $comision_remesas + $comision_retiros;
-        $ingresos = $ventas + $recargas + $impresiones + $ingresos_comisiones;
+        $ingresos_comisiones = $comision_servicios + $comision_remesas + $comision_retiros;
+        $ingresos = $ventas + $recargas + $impresiones +$servicios +$ingresos_comisiones;
         $egresos = $retiros + $remesas;
 
         $esperado = $apertura->efectivo_inicial + $ingresos - $egresos;

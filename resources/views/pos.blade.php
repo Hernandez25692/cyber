@@ -416,6 +416,14 @@
                             <input type="number" step="0.01" name="monto" id="monto"
                                 class="w-full border rounded p-2" required oninput="calcularComision()">
                         </div>
+                        <div>
+                            <label class="block font-semibold">Banco</label>
+                            <select name="banco_id" class="w-full border rounded p-2" required>
+                                @foreach ($bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div>
                             <label class="block font-semibold">Comisión</label>
@@ -466,7 +474,14 @@
                             <input type="number" step="0.01" name="monto" id="montoRetiro"
                                 class="w-full border rounded p-2" required oninput="calcularComisionRetiro()">
                         </div>
-
+                        <div>
+                            <label class="block font-semibold">Banco</label>
+                            <select name="banco_id" class="w-full border rounded p-2" required>
+                                @foreach ($bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div>
                             <label class="block font-semibold">Comisión</label>
                             <input type="text" id="comisionRetiro"
@@ -518,6 +533,11 @@
                                     <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                        <div>
+                            <label class="block font-semibold">Total</label>
+                            <input type="number" name="total" step="0.01"
+                                class="w-full border rounded px-3 py-2" required value="0">
                         </div>
 
                         <div>
@@ -587,7 +607,8 @@
                         <!-- Número -->
                         <label class="block font-semibold mb-1">Número de Celular (opcional)</label>
                         <input type="text" name="numero" class="w-full border px-3 py-2 rounded mb-4"
-                            placeholder="Ej: 99887766">
+                            placeholder="Ej: 99887766" maxlength="8" pattern="\d{0,8}" inputmode="numeric"
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0,8)">
 
                         <button type="submit"
                             class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">✅

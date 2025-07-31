@@ -43,6 +43,7 @@
                         <th class="px-4 py-2">Tipo de Servicio</th>
                         <th class="px-4 py-2">Banco</th>
                         <th class="px-4 py-2">TOTAL SERVICIO</th>
+                        <th class="px-4 py-2">Comisión</th>
                         <th class="px-4 py-2">Referencia / ID</th>
                         <th class="px-4 py-2">Realizado por</th>
                         <th class="px-4 py-2">Fecha</th>
@@ -55,6 +56,7 @@
                             <td class="px-4 py-2">{{ $servicio->tipoServicio->nombre ?? '-' }}</td>
                             <td class="px-4 py-2">{{ $servicio->banco->nombre ?? '-' }}</td>
                             <td class="px-4 py-2">L {{ number_format($servicio->total, 2) }}</td>
+                            <td class="px-4 py-2">L {{ number_format($servicio->comision, 2) }}</td>
                             <td class="px-4 py-2">{{ $servicio->referencia ?? '—' }}</td>
                             <td class="px-4 py-2">{{ $servicio->usuario->name ?? 'Desconocido' }}</td>
                             <td class="px-4 py-2">{{ $servicio->created_at->format('d/m/Y H:i') }}</td>

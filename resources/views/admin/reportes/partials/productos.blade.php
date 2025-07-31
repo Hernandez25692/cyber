@@ -1,22 +1,30 @@
 <div class="mb-12">
-    {{-- TARJETA DE RESUMEN PRODUCTOS --}}
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-        <div class="bg-blue-100 border border-blue-200 p-5 rounded-xl shadow-sm flex items-center justify-between">
+    {{-- TARJETA DE RESUMEN PRODUCTOS (UNA SOLA FILA) --}}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-blue-100 border border-blue-200 p-3 rounded-xl shadow-sm flex items-center justify-between">
             <div>
-                <h2 class="text-lg font-bold text-blue-800">Total Transacciones</h2>
-                <p class="text-sm text-blue-600 mt-1">Cantidad total</p>
+                <h2 class="text-base font-bold text-blue-800">Total Transacciones</h2>
+                <p class="text-xs text-blue-600 mt-1">Cantidad total</p>
             </div>
-            <div class="text-3xl font-bold text-blue-700">
+            <div class="text-2xl font-bold text-blue-700">
                 {{ $productos->count() }}
             </div>
         </div>
-
-        <div class="bg-blue-100 border border-blue-200 p-5 rounded-xl shadow-sm flex items-center justify-between">
+        <div class="bg-blue-100 border border-blue-200 p-3 rounded-xl shadow-sm flex items-center justify-between">
             <div>
-                <h2 class="text-lg font-bold text-blue-800">Utilidad total</h2>
-                <p class="text-sm text-blue-600 mt-1">Venta - Costo</p>
+                <h2 class="text-base font-bold text-blue-800">Total General</h2>
+                <p class="text-xs text-blue-600 mt-1">Suma de subtotales</p>
             </div>
-            <div class="text-3xl font-bold text-blue-700">
+            <div class="text-2xl font-bold text-blue-700">
+                L {{ number_format($productos->sum('subtotal'), 2) }}
+            </div>
+        </div>
+        <div class="bg-blue-100 border border-blue-200 p-3 rounded-xl shadow-sm flex items-center justify-between">
+            <div>
+                <h2 class="text-base font-bold text-blue-800">Utilidad total</h2>
+                <p class="text-xs text-blue-600 mt-1">Venta - Costo</p>
+            </div>
+            <div class="text-2xl font-bold text-blue-700">
                 L
                 {{ number_format($productos->sum(fn($p) => ($p->precio_unitario - $p->producto->precio_compra) * $p->cantidad), 2) }}
             </div>
