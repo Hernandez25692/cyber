@@ -13,6 +13,7 @@ class RemesaRealizada extends Model
         'monto',
         'comision',
         'referencia',
+        'banco_id',
     ];
 
     public function usuario()
@@ -24,8 +25,9 @@ class RemesaRealizada extends Model
         return $this->belongsTo(User::class);
     }
 
+        // Relación con banco
     public function banco()
     {
-        return $this->belongsTo(Banco::class);
+        return $this->belongsTo(Banco::class, 'banco_id');
     }
 }

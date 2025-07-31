@@ -33,6 +33,7 @@ class RetiroPOSController extends Controller
             'monto' => 'required|numeric|min:0.01',
             'comision' => 'required|numeric|min:0',
             'referencia' => 'nullable|string|max:255',
+            'banco_id' => 'required|exists:bancos,id',
         ]);
 
         RetiroRealizado::create([
@@ -40,6 +41,7 @@ class RetiroPOSController extends Controller
             'monto' => $request->monto,
             'comision' => $request->comision,
             'referencia' => $request->referencia,
+            'banco_id' => $request->banco_id,
         ]);
 
         return redirect()->route('pos')->with('success', 'Retiro registrado correctamente.');

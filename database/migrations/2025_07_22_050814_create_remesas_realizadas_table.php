@@ -17,7 +17,9 @@ return new class extends Migration
             $table->decimal('monto', 10, 2);
             $table->decimal('comision', 10, 2);
             $table->string('referencia')->nullable();
+            $table->unsignedBigInteger('banco_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('banco_id')->references('id')->on('bancos')->onDelete('cascade');
             $table->timestamps();
         });
     }

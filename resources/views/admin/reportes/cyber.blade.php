@@ -80,27 +80,39 @@
         @endphp
 
         @if ($modulo === 'todos' || $modulo === 'remesas')
+            <div class="mb-10">
             @include('admin.reportes.partials.remesas')
+            </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'retiros')
+            <div class="mb-10 border-t pt-8">
             @include('admin.reportes.partials.retiros')
+            </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'servicios')
+            <div class="mb-10 border-t pt-8">
             @include('admin.reportes.partials.servicios')
+            </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'recargas')
+            <div class="mb-10 border-t pt-8">
             @include('admin.reportes.partials.recargas')
+            </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'impresiones')
+            <div class="mb-10 border-t pt-8">
             @include('admin.reportes.partials.impresiones')
+            </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'productos')
+            <div class="mb-10 border-t pt-8">
             @include('admin.reportes.partials.productos')
+            </div>
         @endif
     </div>
 @endsection

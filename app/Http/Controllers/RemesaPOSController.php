@@ -19,6 +19,7 @@ class RemesaPOSController extends Controller
     {
         $request->validate([
             'monto' => 'required|numeric|min:0',
+            'banco_id' => 'required|exists:bancos,id',
             'referencia' => 'nullable|string|max:255',
         ]);
 
@@ -32,6 +33,7 @@ class RemesaPOSController extends Controller
 
         RemesaRealizada::create([
             'user_id' => auth()->id(),
+            'banco_id' => $request->banco_id,
             'monto' => $request->monto,
             'comision' => $config->comision,
             'referencia' => $request->referencia,

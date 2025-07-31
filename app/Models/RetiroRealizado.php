@@ -10,7 +10,7 @@ class RetiroRealizado extends Model
 {
     protected $table = 'retiros_realizados';
 
-    protected $fillable = ['user_id', 'monto', 'comision', 'referencia'];
+    protected $fillable = ['user_id', 'monto', 'comision', 'referencia', 'banco_id'];
 
     public function usuario()
     {
@@ -22,8 +22,9 @@ class RetiroRealizado extends Model
         return $this->belongsTo(User::class);
     }
 
+    // Relación con banco
     public function banco()
     {
-        return $this->belongsTo(Banco::class);
+        return $this->belongsTo(Banco::class, 'banco_id');
     }
 }
