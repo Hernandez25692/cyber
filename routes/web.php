@@ -34,7 +34,7 @@ use App\Models\Producto;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\AjusteInventarioController;
 use App\Http\Controllers\ReporteProductoController;
-
+use App\Http\Controllers\AperturaController;
 
 
 /*
@@ -227,7 +227,10 @@ Route::delete('/admin/remesas/{remesa}', [RemesaConfigController::class, 'destro
 Route::get('/admin/reportes/remesas', [ReporteRemesasController::class, 'index'])->name('admin.reportes.remesas');
 Route::get('/admin/reportes/cyber', [\App\Http\Controllers\Admin\ReporteCyberController::class, 'index'])->name('admin.reportes.cyber');
 
-
+Route::middleware('auth')->group(function () {
+    Route::get('/apertura/crear', [AperturaController::class, 'create'])->name('aperturas.create');
+    Route::post('/apertura', [AperturaController::class, 'store'])->name('aperturas.store');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

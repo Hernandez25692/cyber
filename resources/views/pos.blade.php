@@ -190,6 +190,13 @@
                             </svg>
                             Consulta Precios
                         </button>
+                        <li>
+                            <a href="{{ route('aperturas.create') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                🟢 Apertura de Turno
+                            </a>
+                        </li>
+
 
                         <button
                             class="h-12 md:h-14 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg"
@@ -463,22 +470,23 @@
                                 @endforeach
                             </select>
 
-                        <div>
-                            <label class="block font-semibold">Comisión</label>
-                            <input type="text" id="comisionRetiro"
-                                class="w-full border rounded p-2 bg-gray-100 font-bold text-purple-700" readonly>
-                            <!-- input oculto con el valor real -->
-                            <input type="hidden" name="comision" id="inputComisionRetiro">
-                        </div>
+                            <div>
+                                <label class="block font-semibold">Comisión</label>
+                                <input type="text" id="comisionRetiro"
+                                    class="w-full border rounded p-2 bg-gray-100 font-bold text-purple-700" readonly>
+                                <!-- input oculto con el valor real -->
+                                <input type="hidden" name="comision" id="inputComisionRetiro">
+                            </div>
 
-                        <div>
-                            <label class="block font-semibold">Referencia (opcional)</label>
-                            <input type="text" name="referencia" class="w-full border rounded p-2">
-                        </div>
+                            <div>
+                                <label class="block font-semibold">Referencia (opcional)</label>
+                                <input type="text" name="referencia" class="w-full border rounded p-2">
+                            </div>
 
-                        <button type="submit" class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
-                            Registrar
-                        </button>
+                            <button type="submit"
+                                class="bg-purple-600 text-white px-6 py-2 rounded hover:bg-purple-700">
+                                Registrar
+                            </button>
                     </form>
 
                 </div>
