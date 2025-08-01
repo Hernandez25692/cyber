@@ -3,93 +3,312 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Reporte Z</title>
+    <title>Reporte Z - Resumen de Cierre</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Tailwind CSS CDN (opcional, si usas Tailwind) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .receipt-style {
+            border-top: 2px dashed #e2e8f0;
+            border-bottom: 2px dashed #e2e8f0;
+        }
+        
+        .total-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        }
+        
+        .print-only {
+            display: none;
+        }
+        
+        @media print {
+            body {
+                background-color: white;
+                font-size: 12px;
+            }
+            
+            .no-print {
+                display: none;
+            }
+            
+            .print-only {
+                display: block;
+            }
+            
+            .shadow, .shadow-lg {
+                box-shadow: none;
+            }
+            
+            .break-after {
+                page-break-after: always;
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-gray-100">
-    <div class="max-w-4xl mx-auto mt-10 bg-white p-6 rounded-xl shadow">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">📊 Reporte Z - Resumen de Cierre</h2>
-
-        <div class="mb-4">
-            <p><strong>Fecha de apertura:</strong> {{ $apertura->created_at->format('d/m/Y H:i') }}</p>
-            <p><strong>Efectivo inicial:</strong> L {{ number_format($apertura->efectivo_inicial, 2) }}</p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
-            <div class="bg-green-100 p-4 rounded-lg">
-                <h3 class="font-bold text-green-800 mb-2">🟢 Ingresos</h3>
-                <p>Ventas: L {{ number_format($ventas, 2) }}</p>
-                <p>Recargas: L {{ number_format($recargas, 2) }}</p>
-                <p>Servicios: L {{ number_format($servicios, 2) }}</p>
-                <p>Impresiones: L {{ number_format($impresiones, 2) }}</p>
-                <p class="mt-2 font-bold">Comisiones (Remesas, Retiros, Servicios): L
-                    {{ number_format($ingresos_comisiones, 2) }}</p>
-                <p class="font-bold">Total Ingresos (con comisiones): L {{ number_format($ingresos, 2) }}</p>
-
+<body class="bg-gray-50">
+    <div class="max-w-4xl mx-auto my-8 bg-white p-8 rounded-xl shadow-lg">
+        <!-- Encabezado -->
+        <div class="text-center mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-left">
+                    <h1 class="text-3xl font-bold text-gray-800">REPORTE Z</h1>
+                    <p class="text-gray-600">Resumen de Cierre de Turno</p>
+                    <span class="font-semibold text-green-700">{{ auth()->user()->role ?? 'Cajero' }}:
+                    {{ auth()->user()->name ?? '' }}</span>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm text-gray-500">Generado: {{ now()->format('d/m/Y H:i') }}</p>
+                    <p class="text-sm font-semibold">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</p>
+                </div>
             </div>
-            <div class="bg-red-100 p-4 rounded-lg">
-                <h3 class="font-bold text-red-800 mb-2">🔴 Egresos</h3>
-                <p>Retiros: L {{ number_format($retiros, 2) }}</p>
-                <p>Remesas: L {{ number_format($remesas, 2) }}</p>
-                <p class="mt-2 font-bold">Total Egresos: L {{ number_format($egresos, 2) }}</p>
+            
+            <div class="receipt-style py-4 my-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="text-left">
+                        <p><span class="font-semibold">Fecha Apertura:</span> {{ $apertura->created_at->format('d/m/Y H:i') }}</p>
+                        <p><span class="font-semibold">Fecha Cierre:</span> {{ $cierre->created_at->format('d/m/Y H:i') }}</p>
+                    </div>
+                    <div class="text-right">
+                        <p><span class="font-semibold">Efectivo Inicial:</span> L {{ number_format($apertura->efectivo_inicial, 2) }}</p>
+                        <p><span class="font-semibold">Efectivo Final:</span> L {{ number_format($cierre->efectivo_final, 2) }}</p>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="bg-gray-100 p-4 rounded-lg mb-6">
-            <p><strong>Total esperado en efectivo:</strong> L {{ number_format($esperado, 2) }}</p>
-            <p><strong>Efectivo ingresado:</strong> L {{ number_format($cierre->efectivo_final, 2) }}</p>
+        <!-- Resumen Financiero -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <!-- Ingresos -->
+            <div class="border border-green-200 rounded-lg overflow-hidden">
+                <div class="bg-green-600 p-3">
+                    <h3 class="text-white font-bold text-lg flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
+                        </svg>
+                        INGRESOS
+                    </h3>
+                </div>
+                <div class="p-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>Ventas:</span>
+                            <span class="font-medium">L {{ number_format($ventas, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Recargas:</span>
+                            <span class="font-medium">L {{ number_format($recargas, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Servicios:</span>
+                            <span class="font-medium">L {{ number_format($servicios, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Impresiones:</span>
+                            <span class="font-medium">L {{ number_format($impresiones, 2) }}</span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 mt-2">
+                            <div class="flex justify-between font-semibold">
+                                <span>Comisiones:</span>
+                                <span>L {{ number_format($ingresos_comisiones, 2) }}</span>
+                            </div>
+                        </div>
+                        <div class="border-t border-green-200 pt-2 mt-2">
+                            <div class="flex justify-between font-bold text-green-700">
+                                <span>TOTAL INGRESOS:</span>
+                                <span>L {{ number_format($ingresos, 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <p class="mt-2">
-                <strong>Diferencia:</strong>
-                @if ($cierre->diferencia > 0)
-                    <span class="text-green-700 font-bold">Sobrante L
-                        {{ number_format($cierre->diferencia, 2) }}</span>
-                @elseif ($cierre->diferencia < 0)
-                    <span class="text-red-700 font-bold">Faltante L
-                        {{ number_format(abs($cierre->diferencia), 2) }}</span>
-                @else
-                    <span class="text-blue-700 font-bold">Sin diferencia</span>
-                @endif
-            </p>
+            <!-- Egresos -->
+            <div class="border border-red-200 rounded-lg overflow-hidden">
+                <div class="bg-red-600 p-3">
+                    <h3 class="text-white font-bold text-lg flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
+                        </svg>
+                        EGRESOS
+                    </h3>
+                </div>
+                <div class="p-4">
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>Retiros:</span>
+                            <span class="font-medium">L {{ number_format($retiros, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Remesas:</span>
+                            <span class="font-medium">L {{ number_format($remesas, 2) }}</span>
+                        </div>
+                        <div class="border-t border-red-200 pt-2 mt-4">
+                            <div class="flex justify-between font-bold text-red-700">
+                                <span>TOTAL EGRESOS:</span>
+                                <span>L {{ number_format($egresos, 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Resumen Final -->
+        <div class="total-box p-6 rounded-lg mb-8 border border-blue-200">
+            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">RESUMEN FINAL</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <div class="flex justify-between py-2 border-b border-gray-200">
+                        <span class="font-semibold">Efectivo Inicial:</span>
+                        <span>L {{ number_format($apertura->efectivo_inicial, 2) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-200">
+                        <span class="font-semibold">Total Ingresos:</span>
+                        <span>L {{ number_format($ingresos, 2) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 border-b border-gray-200">
+                        <span class="font-semibold">Total Egresos:</span>
+                        <span>L {{ number_format($egresos, 2) }}</span>
+                    </div>
+                    <div class="flex justify-between py-2 font-bold text-lg">
+                        <span>Total Esperado:</span>
+                        <span>L {{ number_format($esperado, 2) }}</span>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col justify-center items-center">
+                    <div class="text-center mb-4">
+                        <p class="text-sm text-gray-600">Efectivo Reportado</p>
+                        <p class="text-2xl font-bold">L {{ number_format($cierre->efectivo_final, 2) }}</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <p class="text-sm text-gray-600">Diferencia</p>
+                        @if ($diferencia > 0)
+                            <p class="text-xl font-bold text-green-600">Sobrante: L {{ number_format($diferencia, 2) }}</p>
+                        @elseif ($diferencia < 0)
+                            <p class="text-xl font-bold text-red-600">Faltante: L {{ number_format(abs($diferencia), 2) }}</p>
+                        @else
+                            <p class="text-xl font-bold text-blue-600">Sin diferencia</p>
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        <!-- Mensajes y Acciones -->
         @if ($cierre->diferencia < 0)
-            <div class="bg-red-100 border border-red-200 p-4 rounded mb-4">
-                <p class="text-red-700 font-semibold">❌ No se puede cerrar turno con faltante. Corrige los valores
-                    ingresados.</p>
+            <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-red-700 font-bold">
+                            No se puede cerrar turno con faltante. Corrige los valores ingresados.
+                        </p>
+                    </div>
+                </div>
             </div>
-            <a href="{{ route('cierres.create') }}"
-                class="inline-block px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                Corregir datos de cierre
-            </a>
+            
+            <div class="flex justify-end no-print">
+                <a href="{{ route('cierres.create') }}" class="inline-flex items-center px-4 py-2 bg-yellow-500 border border-transparent rounded-md font-semibold text-white hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
+                    Corregir datos de cierre
+                </a>
+            </div>
         @else
-            <button onclick="document.getElementById('confirmModal').classList.remove('hidden')"
-                class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
-                ✅ Cerrar Turno
-            </button>
+            <div class="flex justify-between items-center no-print">
+                <button onclick="window.print()" class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5 4v3H4a2 2 0 00-2 2v3a2 2 0 002 2h1v2a2 2 0 002 2h6a2 2 0 002-2v-2h1a2 2 0 002-2V9a2 2 0 00-2-2h-1V4a2 2 0 00-2-2H7a2 2 0 00-2 2zm8 0H7v3h6V4zm0 8H7v4h6v-4z" clip-rule="evenodd" />
+                    </svg>
+                    Imprimir Reporte
+                </button>
+                
+                <button onclick="document.getElementById('confirmModal').classList.remove('hidden')" class="inline-flex items-center px-6 py-2 bg-green-600 border border-transparent rounded-md font-semibold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                    Cerrar Turno
+                </button>
+            </div>
         @endif
+
+        <!-- Firma y sello (solo para impresión) -->
+        <div class="print-only mt-16 pt-8 border-t border-dashed border-gray-400">
+            <div class="grid grid-cols-2 gap-8">
+                <div class="text-center">
+                    <p class="mb-12 border-t border-gray-400 w-3/4 mx-auto pt-2">Firma Responsable</p>
+                </div>
+                <div class="text-center">
+                    <p class="mb-12 border-t border-gray-400 w-3/4 mx-auto pt-2">Sello y Firma Supervisor</p>
+                </div>
+            </div>
+            <p class="text-xs text-center text-gray-500 mt-4">Documento generado electrónicamente - {{ now()->format('d/m/Y H:i:s') }}</p>
+        </div>
     </div>
 
-    {{-- Modal de confirmación --}}
-    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-            <h3 class="text-lg font-bold mb-4">¿Estás seguro de cerrar el turno?</h3>
-            <p class="mb-4">No podrás modificar los datos después de confirmar.</p>
-            <div class="flex justify-end gap-4">
-                <button onclick="document.getElementById('confirmModal').classList.add('hidden')"
-                    class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">Cancelar</button>
+    <!-- Modal de confirmación -->
+    <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex items-start">
+                <div class="flex-shrink-0 mt-1">
+                    <svg class="h-6 w-6 text-yellow-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-lg font-bold text-gray-900">Confirmar Cierre de Turno</h3>
+                    <div class="mt-2">
+                        <p class="text-sm text-gray-600">¿Estás seguro de cerrar el turno? Esta acción no se puede deshacer.</p>
+                        <p class="text-sm font-semibold text-gray-700 mt-2">Diferencia: 
+                            @if ($diferencia > 0)
+                                <span class="text-green-600">Sobrante L {{ number_format($diferencia, 2) }}</span>
+                            @elseif ($diferencia < 0)
+                                <span class="text-red-600">Faltante L {{ number_format(abs($diferencia), 2) }}</span>
+                            @else
+                                <span class="text-blue-600">Sin diferencia</span>
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="document.getElementById('confirmModal').classList.add('hidden')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    Cancelar
+                </button>
                 <form method="POST" action="{{ route('cierres.finalizar', $cierre->id) }}">
                     @csrf
-                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500">
                         Confirmar Cierre
                     </button>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        // Cerrar modal al hacer clic fuera del contenido
+        document.getElementById('confirmModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
+        });
+    </script>
 </body>
 
 </html>
