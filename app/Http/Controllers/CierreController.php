@@ -19,14 +19,14 @@ class CierreController extends Controller
     public function create()
     {
         $apertura = Apertura::where('user_id', Auth::id())->latest()->firstOrFail();
-
-        // 🔴 Decodificar JSON manualmente para asegurar que sea array
         $apertura->pos_inicial = json_decode($apertura->pos_inicial, true);
-
         $bancos = Banco::all();
 
-        return view('cierres.create', compact('apertura', 'bancos'));
+        $cierre_pendiente = Cierre::where('apertura_id', $apertura->id)->where('pendiente', true)->first();
+
+        return view('cierres.create', compact('apertura', 'bancos', 'cierre_pendiente'));
     }
+
 
 
     public function store(Request $request)
@@ -39,6 +39,7 @@ class CierreController extends Controller
 
         $apertura = Apertura::where('user_id', Auth::id())->latest()->firstOrFail();
 
+        // Construcción del POS final
         $pos_final = [];
         foreach ($request->banco_id as $index => $id) {
             $pos_final[$id] = $request->pos_monto[$index];
@@ -63,22 +64,29 @@ class CierreController extends Controller
         $esperado = $apertura->efectivo_inicial + $ingresos - $egresos;
         $diferencia = $request->efectivo_final - $esperado;
 
-        Cierre::create([
-            'apertura_id' => $apertura->id,
-            'efectivo_final' => $request->efectivo_final,
-            'pos_final' => json_encode($pos_final),
-            'total_ingresos' => $ingresos,
-            'total_egresos' => $egresos,
-            'diferencia' => $diferencia,
-        ]);
+        // Si ya existe un cierre pendiente, actualízalo
+        $cierre = Cierre::updateOrCreate(
+            ['apertura_id' => $apertura->id, 'pendiente' => true],
+            [
+                'efectivo_final' => $request->efectivo_final,
+                'pos_final' => json_encode($pos_final),
+                'total_ingresos' => $ingresos,
+                'total_egresos' => $egresos,
+                'diferencia' => $diferencia,
+                'updated_at' => now(), // Forzar timestamp
+            ]
+        );
+
 
         return redirect()->route('cierres.reporte_z', $apertura->id);
     }
 
+
     public function reporteZ($apertura_id)
     {
         $apertura = Apertura::findOrFail($apertura_id);
-        $cierre = Cierre::where('apertura_id', $apertura_id)->latest()->firstOrFail();
+        $cierre = Cierre::where('apertura_id', $apertura_id)->orderByDesc('updated_at')->firstOrFail();
+
 
         $desde = $apertura->created_at;
         $hasta = now();
@@ -160,7 +168,10 @@ class CierreController extends Controller
             return redirect()->back()->with('error', 'No se puede cerrar el turno con faltante.');
         }
 
-        $cierre->update(['reporte_z_generado' => true]);
+        $cierre->update([
+            'reporte_z_generado' => true,
+            'pendiente' => false,
+        ]);
 
         return redirect()->route('dashboard')->with('success', 'Turno cerrado correctamente.');
     }

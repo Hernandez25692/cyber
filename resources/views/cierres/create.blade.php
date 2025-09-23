@@ -50,7 +50,9 @@
 
             <div class="mb-4">
                 <label class="block font-semibold mb-1">Efectivo final</label>
-                <input type="number" name="efectivo_final" step="0.01" required class="w-full border rounded p-2">
+                <input type="number" name="efectivo_final" step="0.01" required class="w-full border rounded p-2"
+                    value="{{ $cierre_pendiente->efectivo_final ?? '' }}">
+
             </div>
 
             <h3 class="font-semibold text-gray-700 mt-6 mb-3">POS por banco (valores finales)</h3>
@@ -62,8 +64,15 @@
                         <label class="block font-semibold">{{ $banco->nombre }}</label>
                     </div>
                     <div>
+                        @php
+                            $monto_guardado = '';
+                            if ($cierre_pendiente && is_array(json_decode($cierre_pendiente->pos_final, true))) {
+                                $monto_guardado = json_decode($cierre_pendiente->pos_final, true)[$banco->id] ?? '';
+                            }
+                        @endphp
                         <input type="number" name="pos_monto[]" step="0.01" class="w-full border rounded p-2"
-                            required placeholder="Monto final">
+                            required placeholder="Monto final" value="{{ $monto_guardado }}">
+
                     </div>
                 </div>
             @endforeach
@@ -76,6 +85,7 @@
 
         </form>
     </div>
+
 </body>
 
 </html>
