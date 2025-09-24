@@ -11,6 +11,7 @@ use App\Models\ServicioRealizado;
 use App\Models\RecargaRealizada;
 use App\Models\ImpresionRealizada;
 use App\Models\DetalleVenta;
+use App\Models\DepositoRealizado;
 use Carbon\Carbon;
 
 class ReporteCyberController extends Controller
@@ -34,6 +35,10 @@ class ReporteCyberController extends Controller
             ->get();
 
         $retiros = RetiroRealizado::with('banco', 'usuario')
+            ->when($user_id, fn($q) => $q->where('user_id', $user_id))
+            ->whereBetween('created_at', [$desdeCompleto, $hastaCompleto])
+            ->get();
+        $depositos = DepositoRealizado::with('banco', 'usuario')
             ->when($user_id, fn($q) => $q->where('user_id', $user_id))
             ->whereBetween('created_at', [$desdeCompleto, $hastaCompleto])
             ->get();
@@ -72,6 +77,7 @@ class ReporteCyberController extends Controller
             ],
             'remesas' => $remesas,
             'retiros' => $retiros,
+            'depositos' => $depositos,
             'servicios' => $servicios,
             'recargas' => $recargas,
             'impresiones' => $impresiones,

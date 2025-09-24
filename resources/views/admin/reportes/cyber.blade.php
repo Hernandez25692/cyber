@@ -52,6 +52,8 @@
                         <option value="todos" {{ $filtros['modulo'] == 'todos' ? 'selected' : '' }}>Todos</option>
                         <option value="remesas" {{ $filtros['modulo'] == 'remesas' ? 'selected' : '' }}>Remesas</option>
                         <option value="retiros" {{ $filtros['modulo'] == 'retiros' ? 'selected' : '' }}>Retiros</option>
+                        <option value="depositos" {{ $filtros['modulo'] == 'depositos' ? 'selected' : '' }}>Depósitos
+                        </option>
                         <option value="servicios" {{ $filtros['modulo'] == 'servicios' ? 'selected' : '' }}>Servicios
                         </option>
                         <option value="recargas" {{ $filtros['modulo'] == 'recargas' ? 'selected' : '' }}>Recargas</option>
@@ -59,6 +61,8 @@
                         </option>
                         <option value="productos" {{ $filtros['modulo'] == 'productos' ? 'selected' : '' }}>Productos
                         </option>
+
+
                     </select>
                 </div>
                 <div class="md:col-span-4 flex gap-3 mt-4">
@@ -81,38 +85,44 @@
 
         @if ($modulo === 'todos' || $modulo === 'remesas')
             <div class="mb-10">
-            @include('admin.reportes.partials.remesas')
+                @include('admin.reportes.partials.remesas')
             </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'retiros')
             <div class="mb-10 border-t pt-8">
-            @include('admin.reportes.partials.retiros')
+                @include('admin.reportes.partials.retiros')
             </div>
         @endif
-
+        @if ($modulo === 'todos' || $modulo === 'depositos')
+            <div class="mb-10 border-t pt-8">
+                @include('admin.reportes.partials.depositos')
+            </div>
+        @endif
         @if ($modulo === 'todos' || $modulo === 'servicios')
             <div class="mb-10 border-t pt-8">
-            @include('admin.reportes.partials.servicios')
+                @include('admin.reportes.partials.servicios')
             </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'recargas')
             <div class="mb-10 border-t pt-8">
-            @include('admin.reportes.partials.recargas')
+                @include('admin.reportes.partials.recargas')
             </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'impresiones')
             <div class="mb-10 border-t pt-8">
-            @include('admin.reportes.partials.impresiones')
+                @include('admin.reportes.partials.impresiones')
             </div>
         @endif
 
         @if ($modulo === 'todos' || $modulo === 'productos')
             <div class="mb-10 border-t pt-8">
-            @include('admin.reportes.partials.productos')
+                @include('admin.reportes.partials.productos')
             </div>
         @endif
+        
+
     </div>
 @endsection
