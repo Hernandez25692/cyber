@@ -13,6 +13,7 @@ use App\Models\RemesaRealizada;
 use App\Models\RetiroRealizado;
 use App\Models\ImpresionRealizada;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DepositoRealizado;
 
 class CierreController extends Controller
 {
@@ -53,8 +54,10 @@ class CierreController extends Controller
         $recargas = RecargaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->get()->sum(fn($r) => $r->paquete->precio ?? 0);
         $servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
         $impresiones = ImpresionRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('precio');
+        $depositos = DepositoRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
 
         $ingresos = $ventas + $recargas + $servicios + $impresiones;
+        $ingresos = $ventas + $recargas + $servicios + $impresiones + $depositos;
 
         $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
         $remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
@@ -110,6 +113,10 @@ class CierreController extends Controller
             ->where('user_id', $user_id)
             ->sum('precio');
 
+        $depositos = DepositoRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
+
         // COMISIONES
         $comision_retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])
             ->where('user_id', $user_id)
@@ -123,6 +130,10 @@ class CierreController extends Controller
             ->where('user_id', $user_id)
             ->sum('comision');
 
+        $comision_depositos = DepositoRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('comision');
+
         // EGRESOS
         $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])
             ->where('user_id', $user_id)
@@ -133,8 +144,8 @@ class CierreController extends Controller
             ->sum('monto');
 
         // SUMATORIA FINAL
-        $ingresos_comisiones = $comision_servicios + $comision_remesas + $comision_retiros;
-        $ingresos = $ventas + $recargas + $impresiones + $servicios + $ingresos_comisiones;
+        $ingresos_comisiones = $comision_servicios + $comision_remesas + $comision_retiros + $comision_depositos;
+        $ingresos = $ventas + $recargas + $impresiones + $servicios + $depositos + $ingresos_comisiones;
         $egresos = $retiros + $remesas;
 
         // CÁLCULO FINAL
@@ -148,10 +159,12 @@ class CierreController extends Controller
             'recargas',
             'servicios',
             'impresiones',
+            'depositos',
             'retiros',
             'remesas',
             'comision_remesas',
             'comision_retiros',
+            'comision_depositos',
             'ingresos',
             'ingresos_comisiones',
             'egresos',
