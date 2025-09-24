@@ -36,6 +36,10 @@ use App\Http\Controllers\AjusteInventarioController;
 use App\Http\Controllers\ReporteProductoController;
 use App\Http\Controllers\AperturaController;
 use App\Http\Controllers\CierreController;
+use App\Http\Controllers\DepositoPOSController;
+use App\Http\Controllers\DepositoConfigController;
+use App\Http\Controllers\ReporteDepositosController;
+use App\Http\Controllers\TipoServicioDepositoController;
 
 
 /*
@@ -239,6 +243,36 @@ Route::middleware('auth')->group(function () {
     Route::post('/cierre', [CierreController::class, 'store'])->name('cierres.store');
 });
 Route::post('/cierre/finalizar/{cierre}', [CierreController::class, 'finalizar'])->name('cierres.finalizar');
+
+Route::middleware(['auth'])->group(function () {
+    // POS Depósitos
+    Route::post('/pos/depositos/calcular-comision', [DepositoPOSController::class, 'calcularComision'])->name('pos.depositos.calcular-comision');
+    Route::post('/pos/depositos', [DepositoPOSController::class, 'store'])->name('pos.depositos.store');
+
+    // Configuración de rangos de depósitos
+    Route::get('/admin/depositos/config', [DepositoConfigController::class, 'index'])->name('admin.depositos.config.index');
+    Route::get('/admin/depositos/config/create', [DepositoConfigController::class, 'create'])->name('admin.depositos.config.create');
+    Route::post('/admin/depositos/config', [DepositoConfigController::class, 'store'])->name('admin.depositos.config.store');
+    Route::delete('/admin/depositos/config/{deposito}', [DepositoConfigController::class, 'destroy'])->name('admin.depositos.config.destroy');
+
+    // Reporte
+    Route::get('/admin/reportes/depositos', [ReporteDepositosController::class, 'index'])->name('admin.reportes.depositos.index');
+
+    // Si usas TipoServicio:
+    Route::get('/admin/depositos/config', [TipoServicioDepositoController::class, 'index'])->name('admin.depositos.config.index');
+    Route::get('/admin/depositos/config/create', [TipoServicioDepositoController::class, 'create'])->name('admin.depositos.config.create');
+    Route::post('/admin/depositos/config', [TipoServicioDepositoController::class, 'store'])->name('admin.depositos.config.store');
+    Route::delete('/admin/depositos/config/{id}', [TipoServicioDepositoController::class, 'destroy'])->name('admin.depositos.config.destroy');
+});
+
+// Configuración de rangos (depósitos)
+Route::get('/admin/depositos/config', [\App\Http\Controllers\DepositoConfigController::class, 'index'])->name('admin.depositos.config.index');
+Route::get('/admin/depositos/config/create', [\App\Http\Controllers\DepositoConfigController::class, 'create'])->name('admin.depositos.config.create');
+Route::post('/admin/depositos/config', [\App\Http\Controllers\DepositoConfigController::class, 'store'])->name('admin.depositos.config.store');
+Route::delete('/admin/depositos/config/{deposito}', [\App\Http\Controllers\DepositoConfigController::class, 'destroy'])->name('admin.depositos.config.destroy');
+
+// Reporte de depósitos
+Route::get('/admin/reportes/depositos', [\App\Http\Controllers\ReporteDepositosController::class, 'index'])->name('admin.reportes.depositos.index');
 
 /*
 |--------------------------------------------------------------------------

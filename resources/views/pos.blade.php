@@ -159,6 +159,15 @@
                             </svg>
                             Retiros
                         </button>
+                        <!-- BOTÓN DEPÓSITOS (nuevo, igual que Retiros) -->
+                        <button @click="mostrarModalDeposito = true"
+                            class="h-12 md:h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8m0 0l-3 3m3-3l3 3"></path>
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                            Depósitos
+                        </button>
                         <!-- BOTÓN SERVICIOS NUEVO -->
                         <button @click="mostrarModalServicio = true"
                             class="h-12 md:h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
@@ -504,6 +513,65 @@
             </div>
             <!-- FIN MODAL RETIRO -->
 
+            <!-- MODAL DE DEPÓSITO (igual a RETIRO, cambiando rutas/ids) -->
+            <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+                x-show="mostrarModalDeposito" x-transition>
+                <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border-2 border-emerald-300 relative">
+                    <button @click="cerrarModalDeposito()"
+                        class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+
+                    <h2 class="text-2xl font-bold mb-6 text-emerald-700 flex items-center gap-2">
+                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8m0 0l-3 3m3-3l3 3"></path>
+                            <circle cx="12" cy="12" r="10"></circle>
+                        </svg>
+                        Registrar Depósito
+                    </h2>
+
+                    <form action="{{ route('pos.depositos.store') }}" method="POST" class="space-y-4"
+                        @submit="mostrarModalDeposito = false">
+                        @csrf
+
+                        <div>
+                            <label class="block font-semibold">Monto</label>
+                            <input type="number" step="0.01" name="monto" id="montoDeposito"
+                                class="w-full border rounded p-2" required oninput="calcularComisionDeposito()">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Banco</label>
+                            <select name="banco_id" class="w-full border rounded p-2" required>
+                                @foreach ($bancos as $banco)
+                                    <option value="{{ $banco->id }}">{{ $banco->nombre }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Comisión</label>
+                            <input type="text" id="comisionDeposito"
+                                class="w-full border rounded p-2 bg-gray-100 font-bold text-emerald-700" readonly>
+                            <!-- input oculto con el valor real (como en Retiros) -->
+                            <input type="hidden" name="comision" id="inputComisionDeposito">
+                        </div>
+
+                        <div>
+                            <label class="block font-semibold">Referencia (opcional)</label>
+                            <input type="text" name="referencia" class="w-full border rounded p-2">
+                        </div>
+
+                        <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
+                            Registrar
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- FIN MODAL DEPÓSITO -->
+
             <!-- MODAL DE SERVICIO -->
             <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                 x-show="mostrarModalServicio" x-transition>
@@ -758,6 +826,8 @@
                     mostrarModalRetiro: false,
                     // Servicio modal variable
                     mostrarModalServicio: false,
+                    // Depósito modal variable
+                    mostrarModalDeposito: false,
 
                     // Consulta de precio
                     // MODAL CONSULTA DE PRECIO
@@ -953,6 +1023,10 @@
 
                     cerrarModalServicio() {
                         this.mostrarModalServicio = false;
+                    },
+
+                    cerrarModalDeposito() {
+                        this.mostrarModalDeposito = false;
                     }
                 }
             }
@@ -1033,6 +1107,41 @@
                             document.getElementById('comisionRetiro').value = 'No disponible';
                             document.getElementById('inputComisionRetiro').value = '';
                         });
+                }
+            }
+        </script>
+        <script>
+            function calcularComisionDeposito() {
+                const monto = document.getElementById('montoDeposito').value;
+
+                if (monto && parseFloat(monto) > 0) {
+                    fetch("{{ route('pos.depositos.calcular-comision') }}", {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                            },
+                            body: JSON.stringify({ monto: monto })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.comision) {
+                                document.getElementById('comisionDeposito').value =
+                                    `L. ${parseFloat(data.comision).toFixed(2)}`;
+                                document.getElementById('inputComisionDeposito').value = data.comision;
+                            } else {
+                                document.getElementById('comisionDeposito').value = '❌ No definido';
+                                document.getElementById('inputComisionDeposito').value = '';
+                            }
+                        })
+                        .catch(err => {
+                            console.error(err);
+                            document.getElementById('comisionDeposito').value = 'No disponible';
+                            document.getElementById('inputComisionDeposito').value = '';
+                        });
+                } else {
+                    document.getElementById('comisionDeposito').value = '';
+                    document.getElementById('inputComisionDeposito').value = '';
                 }
             }
         </script>

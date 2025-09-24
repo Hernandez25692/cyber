@@ -22,6 +22,7 @@
                         <i data-feather="activity" class="w-4 h-4 mr-2"></i>
                         Reporte General Cyber
                     </a>
+                    
                 </div>
             </div>
 

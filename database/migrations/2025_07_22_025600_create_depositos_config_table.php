@@ -9,10 +9,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('depositos_realizados', function (Blueprint $table) {
+        Schema::create('depositos_config', function (Blueprint $table) {
             $table->id();
+            $table->string('nombre');
+            $table->decimal('monto_min', 10, 2);
+            $table->decimal('monto_max', 10, 2);
+            $table->decimal('comision', 10, 2);
             $table->timestamps();
         });
     }
@@ -22,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('depositos_realizados');
+        Schema::dropIfExists('depositos_config');
     }
 };
