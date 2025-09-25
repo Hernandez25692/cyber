@@ -193,6 +193,33 @@
                             </div>
                         </div>
 
+
+
+                        <!-- Depósitos -->
+                        <div x-data="{ open: false }" class="nav-item">
+                            <button
+                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'depositos' ? null : 'depositos'"
+                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
+                                :class="{ 'bg-gray-800': open }">
+                                <div class="flex items-center">
+                                    <i data-feather="upload" class="w-5 h-5 mr-3 text-blue-400"></i>
+                                    <span>Depósitos</span>
+                                </div>
+                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200"
+                                    :class="{ 'transform rotate-180': open }"></i>
+                            </button>
+                            <div x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'depositos')"
+                                x-collapse class="mt-1 space-y-1 pl-12">
+                                <a href="{{ route('admin.depositos.config.index') }}"
+                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                                    Configuración Depósitos
+                                </a>
+                                <a href="{{ route('admin.reportes.depositos.index') }}"
+                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
+                                    Reporte Depósitos
+                                </a>
+                            </div>
+                        </div>
                         <!-- Servicios -->
                         <div x-data="{ open: false }" class="nav-item">
                             <button
@@ -306,50 +333,6 @@
                             </div>
                         </div>
 
-                        <!-- Comisiones -->
-                        <div x-data="{ open: false }" class="nav-item">
-                            <button
-                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'comisiones' ? null : 'comisiones'"
-                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                                :class="{ 'bg-gray-800': open }">
-                                <div class="flex items-center">
-                                    <i data-feather="award" class="w-5 h-5 mr-3 text-purple-400"></i>
-                                    <span>Comisiones</span>
-                                </div>
-                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200"
-                                    :class="{ 'transform rotate-180': open }"></i>
-                            </button>
-                            <div x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'comisiones')"
-                                x-collapse class="mt-1 space-y-1 pl-12">
-                                <a href="#"
-                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Comisiones
-                                    y Servicios</a>
-                                <a href="#"
-                                    class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">Reportes</a>
-                            </div>
-                        </div>
-                        <!-- Depósitos -->
-                        <div x-data="{ open: false }" class="nav-item">
-                            <button
-                                @click="open = !open; if(window.innerWidth < 1024) mobileSubmenu = mobileSubmenu === 'depositos' ? null : 'depositos'"
-                                class="w-full flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
-                                :class="{ 'bg-gray-800': open }">
-                                <div class="flex items-center">
-                                    <i data-feather="upload" class="w-5 h-5 mr-3 text-blue-400"></i>
-                                    <span>Depósitos</span>
-                                </div>
-                                <i data-feather="chevron-down" class="w-4 h-4 transition-transform duration-200"
-                                    :class="{ 'transform rotate-180': open }"></i>
-                            </button>
-                            <div x-show="open || (window.innerWidth < 1024 && mobileSubmenu === 'depositos')" x-collapse class="mt-1 space-y-1 pl-12">
-                                <a href="{{ route('admin.depositos.config.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                                    Configuración Depósitos
-                                </a>
-                                <a href="{{ route('admin.reportes.depositos.index') }}" class="block px-3 py-2 text-sm rounded-lg hover:bg-gray-800 transition-colors duration-200">
-                                    Reporte Depósitos
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </nav>
 
