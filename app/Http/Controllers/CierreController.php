@@ -186,6 +186,6 @@ class CierreController extends Controller
             'pendiente' => false,
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Turno cerrado correctamente.');
+        return redirect()->route('pos')->with('success', 'Turno cerrado correctamente.');
     }
 }

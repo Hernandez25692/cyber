@@ -14,9 +14,12 @@ class Cierre extends Model
         'total_egresos',
         'diferencia',
         'reporte_z_generado',
+        'pendiente',
     ];
 
     protected $casts = [
+        'reporte_z_generado' => 'boolean',
+        'pendiente' => 'boolean',
         'pos_final' => 'array',
     ];
 

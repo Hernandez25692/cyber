@@ -19,160 +19,210 @@
             .shadow, .shadow-lg { box-shadow: none; }
             .break-after { page-break-after: always; }
         }
+        /* Estilo para el ticket de impresión tipo RMS */
+        .rms-ticket {
+            font-family: 'Roboto Mono', monospace;
+            width: 320px;
+            margin: 0 auto;
+            background: #fff;
+            color: #222;
+            font-size: 13px;
+            padding: 0;
+        }
+        .rms-ticket .title {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 2px;
+        }
+        .rms-ticket .subtitle {
+            text-align: center;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        .rms-ticket .section {
+            border-top: 1px dashed #bbb;
+            margin: 8px 0;
+            padding-top: 6px;
+        }
+        .rms-ticket .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2px;
+        }
+        .rms-ticket .total {
+            font-weight: bold;
+            font-size: 15px;
+            border-top: 1px solid #222;
+            margin-top: 6px;
+            padding-top: 4px;
+        }
+        .rms-ticket .diff {
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 8px;
+        }
+        .rms-ticket .small {
+            font-size: 11px;
+            color: #666;
+        }
     </style>
 </head>
 
 <body class="bg-gray-50">
     <div class="max-w-4xl mx-auto my-8 bg-white p-8 rounded-xl shadow-lg">
-        <!-- Encabezado -->
-        <div class="text-center mb-8">
-            <div class="flex justify-between items-center mb-4">
-                <div class="text-left">
-                    <h1 class="text-3xl font-bold text-gray-800">REPORTE Z</h1>
-                    <p class="text-gray-600">Resumen de Cierre de Turno</p>
-                    <span class="font-semibold text-green-700">
-                        {{ auth()->user()->role ?? 'Cajero' }}: {{ auth()->user()->name ?? '' }}
-                    </span>
-                </div>
-                <div class="text-right">
-                    <p class="text-sm text-gray-500">Generado: {{ now()->format('d/m/Y H:i') }}</p>
-                    <p class="text-sm font-semibold">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</p>
-                </div>
-            </div>
-            <div class="receipt-style py-4 my-4">
-                <div class="grid grid-cols-2 gap-4">
+        <div id="printable-area">
+            <!-- Encabezado -->
+            <div class="text-center mb-8">
+                <div class="flex justify-between items-center mb-4">
                     <div class="text-left">
-                        <p><span class="font-semibold">Fecha Apertura:</span> {{ $apertura->created_at->format('d/m/Y H:i') }}</p>
-                        <p><span class="font-semibold">Fecha Cierre:</span> {{ $cierre->created_at->format('d/m/Y H:i') }}</p>
+                        <h1 class="text-3xl font-bold text-gray-800">REPORTE Z</h1>
+                        <p class="text-gray-600">Resumen de Cierre de Turno</p>
+                        <span class="font-semibold text-green-700">
+                            {{ auth()->user()->role ?? 'Cajero' }}: {{ auth()->user()->name ?? '' }}
+                        </span>
                     </div>
                     <div class="text-right">
-                        <p><span class="font-semibold">Efectivo Inicial:</span> L {{ number_format($apertura->efectivo_inicial, 2) }}</p>
-                        <p><span class="font-semibold">Efectivo Final:</span> L {{ number_format($cierre->efectivo_final, 2) }}</p>
+                        <p class="text-sm text-gray-500">Generado: {{ now()->format('d/m/Y H:i') }}</p>
+                        <p class="text-sm font-semibold">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</p>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Resumen Financiero -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <!-- Ingresos -->
-            <div class="border border-green-200 rounded-lg overflow-hidden mb-6 md:mb-0">
-                <div class="bg-green-600 p-3">
-                    <h3 class="text-white font-bold text-lg flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
-                        </svg>
-                        INGRESOS
-                    </h3>
-                </div>
-                <div class="p-4 space-y-2">
-                    @php
-                        $comisiones = [
-                            ['label' => 'Remesas', 'value' => $comision_remesas ?? 0],
-                            ['label' => 'Retiros', 'value' => $comision_retiros ?? 0],
-                            ['label' => 'Depósitos', 'value' => $comision_depositos ?? 0],
-                            ['label' => 'Servicios', 'value' => $comision_servicios ?? 0],
-                        ];
-                    @endphp
-                    @foreach([
-                        ['label' => 'Ventas', 'value' => $ventas],
-                        ['label' => 'Recargas', 'value' => $recargas],
-                        ['label' => 'Servicios', 'value' => $servicios],
-                        ['label' => 'Impresiones', 'value' => $impresiones],
-                        ['label' => 'Depósitos', 'value' => $depositos]
-                    ] as $item)
-                        <div class="flex justify-between">
-                            <span>{{ $item['label'] }}:</span>
-                            <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
+                <div class="receipt-style py-4 my-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-left">
+                            <p><span class="font-semibold">Fecha Apertura:</span> {{ $apertura->created_at->format('d/m/Y H:i') }}</p>
+                            <p><span class="font-semibold">Fecha Cierre:</span> {{ $cierre->created_at->format('d/m/Y H:i') }}</p>
                         </div>
-                    @endforeach
-                    <div class="border-t border-gray-200 pt-2 mt-2">
-                        <div class="flex justify-between font-semibold">
-                            <span>Comisiones:</span>
-                            <span>L {{ number_format($ingresos_comisiones, 2) }}</span>
-                        </div>
-                        <div class="text-xs text-gray-500 mt-1 space-y-0.5">
-                            @foreach($comisiones as $com)
-                                <div class="flex justify-between">
-                                    <span>• {{ $com['label'] }}</span>
-                                    <span>L {{ number_format($com['value'], 2) }}</span>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div class="border-t border-green-200 pt-2 mt-2">
-                        <div class="flex justify-between font-bold text-green-700">
-                            <span>TOTAL INGRESOS:</span>
-                            <span>L {{ number_format($ingresos, 2) }}</span>
+                        <div class="text-right">
+                            <p><span class="font-semibold">Efectivo Inicial:</span> L {{ number_format($apertura->efectivo_inicial, 2) }}</p>
+                            <p><span class="font-semibold">Efectivo Final:</span> L {{ number_format($cierre->efectivo_final, 2) }}</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Egresos -->
-            <div class="border border-red-200 rounded-lg overflow-hidden mb-6 md:mb-0">
-                <div class="bg-red-600 p-3">
-                    <h3 class="text-white font-bold text-lg flex items-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
-                        </svg>
-                        EGRESOS
-                    </h3>
-                </div>
-                <div class="p-4 space-y-2">
-                    @foreach([
-                        ['label' => 'Retiros', 'value' => $retiros],
-                        ['label' => 'Remesas', 'value' => $remesas]
-                    ] as $item)
-                        <div class="flex justify-between">
-                            <span>{{ $item['label'] }}:</span>
-                            <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
+            <!-- Resumen Financiero -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Ingresos -->
+                <div class="border border-green-200 rounded-lg overflow-hidden mb-6 md:mb-0">
+                    <div class="bg-green-600 p-3">
+                        <h3 class="text-white font-bold text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
+                            </svg>
+                            INGRESOS
+                        </h3>
+                    </div>
+                    <div class="p-4 space-y-2">
+                        @php
+                            $comisiones = [
+                                ['label' => 'Remesas', 'value' => $comision_remesas ?? 0],
+                                ['label' => 'Retiros', 'value' => $comision_retiros ?? 0],
+                                ['label' => 'Depósitos', 'value' => $comision_depositos ?? 0],
+                                ['label' => 'Servicios', 'value' => $comision_servicios ?? 0],
+                            ];
+                        @endphp
+                        @foreach([
+                            ['label' => 'Ventas', 'value' => $ventas],
+                            ['label' => 'Recargas', 'value' => $recargas],
+                            ['label' => 'Servicios', 'value' => $servicios],
+                            ['label' => 'Impresiones', 'value' => $impresiones],
+                            ['label' => 'Depósitos', 'value' => $depositos]
+                        ] as $item)
+                            <div class="flex justify-between">
+                                <span>{{ $item['label'] }}:</span>
+                                <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
+                            </div>
+                        @endforeach
+                        <div class="border-t border-gray-200 pt-2 mt-2">
+                            <div class="flex justify-between font-semibold">
+                                <span>Comisiones:</span>
+                                <span>L {{ number_format($ingresos_comisiones, 2) }}</span>
+                            </div>
+                            <div class="text-xs text-gray-500 mt-1 space-y-0.5">
+                                @foreach($comisiones as $com)
+                                    <div class="flex justify-between">
+                                        <span>• {{ $com['label'] }}</span>
+                                        <span>L {{ number_format($com['value'], 2) }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    @endforeach
-                    <div class="border-t border-red-200 pt-2 mt-4">
-                        <div class="flex justify-between font-bold text-red-700">
-                            <span>TOTAL EGRESOS:</span>
-                            <span>L {{ number_format($egresos, 2) }}</span>
+                        <div class="border-t border-green-200 pt-2 mt-2">
+                            <div class="flex justify-between font-bold text-green-700">
+                                <span>TOTAL INGRESOS:</span>
+                                <span>L {{ number_format($ingresos, 2) }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Egresos -->
+                <div class="border border-red-200 rounded-lg overflow-hidden mb-6 md:mb-0">
+                    <div class="bg-red-600 p-3">
+                        <h3 class="text-white font-bold text-lg flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z" clip-rule="evenodd" />
+                            </svg>
+                            EGRESOS
+                        </h3>
+                    </div>
+                    <div class="p-4 space-y-2">
+                        @foreach([
+                            ['label' => 'Retiros', 'value' => $retiros],
+                            ['label' => 'Remesas', 'value' => $remesas]
+                        ] as $item)
+                            <div class="flex justify-between">
+                                <span>{{ $item['label'] }}:</span>
+                                <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
+                            </div>
+                        @endforeach
+                        <div class="border-t border-red-200 pt-2 mt-4">
+                            <div class="flex justify-between font-bold text-red-700">
+                                <span>TOTAL EGRESOS:</span>
+                                <span>L {{ number_format($egresos, 2) }}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Resumen Final -->
-        <div class="total-box p-6 rounded-lg mb-8 border border-blue-200">
-            <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">RESUMEN FINAL</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    @foreach([
-                        ['label' => 'Efectivo Inicial', 'value' => $apertura->efectivo_inicial],
-                        ['label' => 'Total Ingresos', 'value' => $ingresos],
-                        ['label' => 'Total Egresos', 'value' => $egresos]
-                    ] as $item)
-                        <div class="flex justify-between py-2 border-b border-gray-200">
-                            <span class="font-semibold">{{ $item['label'] }}:</span>
-                            <span>L {{ number_format($item['value'], 2) }}</span>
+            <!-- Resumen Final -->
+            <div class="total-box p-6 rounded-lg mb-8 border border-blue-200">
+                <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">RESUMEN FINAL</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        @foreach([
+                            ['label' => 'Efectivo Inicial', 'value' => $apertura->efectivo_inicial],
+                            ['label' => 'Total Ingresos', 'value' => $ingresos],
+                            ['label' => 'Total Egresos', 'value' => $egresos]
+                        ] as $item)
+                            <div class="flex justify-between py-2 border-b border-gray-200">
+                                <span class="font-semibold">{{ $item['label'] }}:</span>
+                                <span>L {{ number_format($item['value'], 2) }}</span>
+                            </div>
+                        @endforeach
+                        <div class="flex justify-between py-2 font-bold text-lg">
+                            <span>Total Esperado:</span>
+                            <span>L {{ number_format($esperado, 2) }}</span>
                         </div>
-                    @endforeach
-                    <div class="flex justify-between py-2 font-bold text-lg">
-                        <span>Total Esperado:</span>
-                        <span>L {{ number_format($esperado, 2) }}</span>
                     </div>
-                </div>
-                <div class="flex flex-col justify-center items-center">
-                    <div class="text-center mb-4">
-                        <p class="text-sm text-gray-600">Efectivo Reportado</p>
-                        <p class="text-2xl font-bold">L {{ number_format($cierre->efectivo_final, 2) }}</p>
-                    </div>
-                    <div class="text-center">
-                        <p class="text-sm text-gray-600">Diferencia</p>
-                        @if ($diferencia > 0)
-                            <p class="text-xl font-bold text-green-600">Sobrante: L {{ number_format($diferencia, 2) }}</p>
-                        @elseif ($diferencia < 0)
-                            <p class="text-xl font-bold text-red-600">Faltante: L {{ number_format(abs($diferencia), 2) }}</p>
-                        @else
-                            <p class="text-xl font-bold text-blue-600">Sin diferencia</p>
-                        @endif
+                    <div class="flex flex-col justify-center items-center">
+                        <div class="text-center mb-4">
+                            <p class="text-sm text-gray-600">Efectivo Reportado</p>
+                            <p class="text-2xl font-bold">L {{ number_format($cierre->efectivo_final, 2) }}</p>
+                        </div>
+                        <div class="text-center">
+                            <p class="text-sm text-gray-600">Diferencia</p>
+                            @if ($diferencia > 0)
+                                <p class="text-xl font-bold text-green-600">Sobrante: L {{ number_format($diferencia, 2) }}</p>
+                            @elseif ($diferencia < 0)
+                                <p class="text-xl font-bold text-red-600">Faltante: L {{ number_format(abs($diferencia), 2) }}</p>
+                            @else
+                                <p class="text-xl font-bold text-blue-600">Sin diferencia</p>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
@@ -207,7 +257,7 @@
             </div>
         @else
             <div class="flex justify-between items-center no-print">
-                <button onclick="window.print()"
+                <button onclick="printTicket()"
                     class="inline-flex items-center px-4 py-2 bg-gray-200 border border-transparent rounded-md font-semibold text-gray-700 hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd"
@@ -227,19 +277,6 @@
                 </button>
             </div>
         @endif
-
-        <!-- Firma y sello (solo para impresión) -->
-        <div class="print-only mt-16 pt-8 border-t border-dashed border-gray-400">
-            <div class="grid grid-cols-2 gap-8">
-                <div class="text-center">
-                    <p class="mb-12 border-t border-gray-400 w-3/4 mx-auto pt-2">Firma Responsable</p>
-                </div>
-                <div class="text-center">
-                    <p class="mb-12 border-t border-gray-400 w-3/4 mx-auto pt-2">Sello y Firma Supervisor</p>
-                </div>
-            </div>
-            <p class="text-xs text-center text-gray-500 mt-4">Documento generado electrónicamente - {{ now()->format('d/m/Y H:i:s') }}</p>
-        </div>
 
         <!-- Modal de confirmación -->
         <div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
@@ -289,6 +326,78 @@
                     this.classList.add('hidden');
                 }
             });
+
+            // Función para imprimir el ticket estilo RMS
+            function printTicket() {
+                // Construye el contenido del ticket usando los datos del DOM
+                let area = document.getElementById('printable-area');
+                // Puedes personalizar el contenido del ticket aquí si quieres menos información
+                let ticketHTML = `
+                <div class="rms-ticket">
+                    <div class="title">REPORTE Z</div>
+                    <div class="subtitle">Resumen de Cierre de Turno</div>
+                    <div class="small">Generado: {{ now()->format('d/m/Y H:i') }}</div>
+                    <div class="small">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</div>
+                    <div class="section">
+                        <div class="row"><span>Cajero:</span><span>{{ auth()->user()->name ?? '' }}</span></div>
+                        <div class="row"><span>Rol:</span><span>{{ auth()->user()->role ?? 'Cajero' }}</span></div>
+                        <div class="row"><span>Fecha Apertura:</span><span>{{ $apertura->created_at->format('d/m/Y H:i') }}</span></div>
+                        <div class="row"><span>Fecha Cierre:</span><span>{{ $cierre->created_at->format('d/m/Y H:i') }}</span></div>
+                    </div>
+                    <div class="section">
+                        <div class="row"><span>Efectivo Inicial:</span><span>L {{ number_format($apertura->efectivo_inicial, 2) }}</span></div>
+                        <div class="row"><span>Efectivo Final:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
+                    </div>
+                    <div class="section">
+                        <div class="row"><span>Ventas:</span><span>L {{ number_format($ventas, 2) }}</span></div>
+                        <div class="row"><span>Recargas:</span><span>L {{ number_format($recargas, 2) }}</span></div>
+                        <div class="row"><span>Servicios:</span><span>L {{ number_format($servicios, 2) }}</span></div>
+                        <div class="row"><span>Impresiones:</span><span>L {{ number_format($impresiones, 2) }}</span></div>
+                        <div class="row"><span>Depósitos:</span><span>L {{ number_format($depositos, 2) }}</span></div>
+                        <div class="row"><span>Comisiones:</span><span>L {{ number_format($ingresos_comisiones, 2) }}</span></div>
+                        <div class="row small">Remesas: L {{ number_format($comision_remesas ?? 0, 2) }}</div>
+                        <div class="row small">Retiros: L {{ number_format($comision_retiros ?? 0, 2) }}</div>
+                        <div class="row small">Depósitos: L {{ number_format($comision_depositos ?? 0, 2) }}</div>
+                        <div class="row small">Servicios: L {{ number_format($comision_servicios ?? 0, 2) }}</div>
+                        <div class="total row"><span>TOTAL INGRESOS:</span><span>L {{ number_format($ingresos, 2) }}</span></div>
+                    </div>
+                    <div class="section">
+                        <div class="row"><span>Retiros:</span><span>L {{ number_format($retiros, 2) }}</span></div>
+                        <div class="row"><span>Remesas:</span><span>L {{ number_format($remesas, 2) }}</span></div>
+                        <div class="total row"><span>TOTAL EGRESOS:</span><span>L {{ number_format($egresos, 2) }}</span></div>
+                    </div>
+                    <div class="section">
+                        <div class="row"><span>Total Esperado:</span><span>L {{ number_format($esperado, 2) }}</span></div>
+                        <div class="row"><span>Efectivo Reportado:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
+                        <div class="diff">
+                            @if ($diferencia > 0)
+                                <span style="color:green;">Sobrante: L {{ number_format($diferencia, 2) }}</span>
+                            @elseif ($diferencia < 0)
+                                <span style="color:red;">Faltante: L {{ number_format(abs($diferencia), 2) }}</span>
+                            @else
+                                <span style="color:blue;">Sin diferencia</span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="section small" style="text-align:center;">
+                        <div>Gracias por su trabajo</div>
+                        
+                    </div>
+                </div>
+                <script>
+                    window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 500); }
+                <\/script>
+                `;
+
+                let printWindow = window.open('', '', 'width=400,height=600');
+                printWindow.document.write('<html><head><title>Ticket de Cierre</title>');
+                printWindow.document.write('<style>' +
+                    document.querySelector('style').innerHTML +
+                    '</style></head><body>');
+                printWindow.document.write(ticketHTML);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
+            }
         </script>
     </div>
 </body>
