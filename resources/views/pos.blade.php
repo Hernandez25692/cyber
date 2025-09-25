@@ -16,6 +16,10 @@
 
     <div class="p-6 bg-gradient-to-br from-green-50 via-white to-indigo-100 min-h-[calc(100vh-5rem)]"
         x-data="posApp()">
+        @php
+            $turnoAbierto = \App\Models\Apertura::abiertaPara(auth()->id()) !== null;
+        @endphp
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-10rem)]">
             <!-- FACTURACIÓN -->
             <div
@@ -103,9 +107,11 @@
                 class="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex flex-col h-full relative border border-green-100 transition-all duration-200">
                 <!-- Menú Principal -->
                 <div x-show="menu === 'principal'" class="flex flex-col gap-4 md:gap-6 h-full">
+                    <!-- Cobrar -->
                     <button
                         class="w-full h-14 md:h-16 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white rounded-2xl py-3 md:py-4 font-bold text-lg md:text-xl shadow transition disabled:opacity-60 flex items-center justify-center"
-                        :disabled="carrito.length === 0" @click="mostrarModalCobro = true">
+                        :disabled="carrito.length === 0 || !turnoAbierto"
+                        @click="if(requireTurnoAbierto()) mostrarModalCobro = true">
                         <svg class="w-6 h-6 md:w-7 md:h-7 inline mr-2 md:mr-3 -mt-1" fill="none"
                             stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M17 9V7a5 5 0 00-10 0v2"></path>
@@ -128,7 +134,8 @@
 
                     <div class="grid grid-cols-2 gap-3 md:gap-4">
                         <!-- BOTÓN RECARGAS NUEVO -->
-                        <button onclick="document.getElementById('modal-recarga').classList.remove('hidden')"
+                        <button
+                            @click="if(requireTurnoAbierto()) document.getElementById('modal-recarga').classList.remove('hidden')"
                             class="h-12 md:h-14 bg-yellow-500 hover:bg-yellow-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -138,7 +145,7 @@
                             Recargas
                         </button>
                         <!-- BOTÓN REMESAS MODIFICADO -->
-                        <button @click="mostrarModalRemesa = true"
+                        <button @click="if(requireTurnoAbierto()) mostrarModalRemesa = true"
                             class="h-12 md:h-14 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -149,7 +156,7 @@
                             Remesas
                         </button>
                         <!-- BOTÓN RETIROS NUEVO -->
-                        <button @click="mostrarModalRetiro = true"
+                        <button @click="if(requireTurnoAbierto()) mostrarModalRetiro = true"
                             class="h-12 md:h-14 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -160,16 +167,18 @@
                             Retiros
                         </button>
                         <!-- BOTÓN DEPÓSITOS (nuevo, igual que Retiros) -->
-                        <button @click="mostrarModalDeposito = true"
+                        <button @click="if(requireTurnoAbierto()) mostrarModalDeposito = true"
                             class="h-12 md:h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8m0 0l-3 3m3-3l3 3"></path>
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8m0 0l-3 3m3-3l3 3">
+                                </path>
                                 <circle cx="12" cy="12" r="10"></circle>
                             </svg>
                             Depósitos
                         </button>
                         <!-- BOTÓN SERVICIOS NUEVO -->
-                        <button @click="mostrarModalServicio = true"
+                        <button @click="if(requireTurnoAbierto()) mostrarModalServicio = true"
                             class="h-12 md:h-14 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -180,7 +189,8 @@
                             Servicios
                         </button>
                         <!-- BOTÓN IMPRESIONES (abre modal de impresión) -->
-                        <button onclick="document.getElementById('modal-impresion').classList.remove('hidden')"
+                        <button
+                            @click="if(requireTurnoAbierto()) document.getElementById('modal-impresion').classList.remove('hidden')"
                             class="h-12 md:h-14 bg-pink-600 hover:bg-pink-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
@@ -200,18 +210,22 @@
                             Consulta Precios
                         </button>
                         <!-- BOTÓN APERTURA DE TURNO -->
-                        <a href="{{ route('aperturas.create') }}"
-                            class="h-12 md:h-14 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                        <a href="{{ $turnoAbierto ? 'javascript:void(0)' : route('aperturas.create') }}"
+                            @if ($turnoAbierto) onclick="Swal.fire('Turno activo', 'Ya tienes un turno abierto. Ciérralo antes de abrir otro.', 'info')" @endif
+                            class="h-12 md:h-14 {{ $turnoAbierto ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-500 hover:bg-green-600' }} text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3"></path>
                             </svg>
-                            Apertura de Turno
+                            {{ $turnoAbierto ? 'Turno abierto' : 'Apertura de Turno' }}
                         </a>
+
                         <!-- BOTÓN CIERRE DE TURNO -->
-                        <a href="{{ route('cierres.create') }}"
-                            class="h-12 md:h-14 bg-red-500 hover:bg-red-600 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                        <a 
+                            href="{{ $turnoAbierto ? route('cierres.create') : 'javascript:void(0)' }}"
+                            @click="if(!turnoAbierto){ Swal.fire({icon: 'warning', title: 'Debes abrir turno', text: 'Abre un turno para poder cerrar.', confirmButtonColor: '#16a34a'}); return false; }"
+                            class="h-12 md:h-14 {{ $turnoAbierto ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 cursor-not-allowed' }} text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
                                 viewBox="0 0 24 24">
                                 <circle cx="12" cy="12" r="10"></circle>
@@ -519,13 +533,15 @@
                 <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-8 border-2 border-emerald-300 relative">
                     <button @click="cerrarModalDeposito()"
                         class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
 
                     <h2 class="text-2xl font-bold mb-6 text-emerald-700 flex items-center gap-2">
-                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <svg class="w-7 h-7 text-emerald-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8m0 0l-3 3m3-3l3 3"></path>
                             <circle cx="12" cy="12" r="10"></circle>
                         </svg>
@@ -564,7 +580,8 @@
                             <input type="text" name="referencia" class="w-full border rounded p-2">
                         </div>
 
-                        <button type="submit" class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
+                        <button type="submit"
+                            class="bg-emerald-600 text-white px-6 py-2 rounded hover:bg-emerald-700">
                             Registrar
                         </button>
                     </form>
@@ -750,7 +767,7 @@
 
                     <div class="mb-4 flex gap-3 items-center">
                         <input type="text" x-model="consultaBusqueda"
-                            placeholder="Buscar por código, nombre o descripción"
+                            placeholder="Buscar por código ó nombre"
                             class="flex-1 border border-blue-900 rounded px-4 py-2 text-base focus:ring-2 focus:ring-blue-900 bg-blue-50 font-semibold text-blue-900 transition"
                             @input="buscarProductosConsulta">
                     </div>
@@ -808,6 +825,21 @@
         <script>
             function posApp() {
                 return {
+                    turnoAbierto: @json($turnoAbierto),
+                    requireTurnoAbierto() {
+                        if (!this.turnoAbierto) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Debes abrir turno',
+                                text: 'Abre un turno para poder operar en el POS.',
+                                confirmButtonColor: '#16a34a'
+                            });
+                            return false;
+                        }
+                        return true;
+                    },
+
+
                     search: '',
                     carrito: [],
                     total: 0,
@@ -958,6 +990,7 @@
                     },
 
                     registrarVenta() {
+                        if (!this.requireTurnoAbierto()) return;
                         if (this.montoRecibido < this.total || this.carrito.length === 0) return;
                         const payload = {
                             productos: this.carrito.map(p => ({
@@ -1028,6 +1061,7 @@
                     cerrarModalDeposito() {
                         this.mostrarModalDeposito = false;
                     }
+
                 }
             }
         </script>
@@ -1121,7 +1155,9 @@
                                 'Content-Type': 'application/json',
                                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                             },
-                            body: JSON.stringify({ monto: monto })
+                            body: JSON.stringify({
+                                monto: monto
+                            })
                         })
                         .then(res => res.json())
                         .then(data => {

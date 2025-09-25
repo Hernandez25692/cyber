@@ -26,4 +26,16 @@ class Apertura extends Model
     {
         return $this->belongsTo(Banco::class, 'banco_id');
     }
+
+    public static function abiertaPara(int $userId): ?self
+    {
+        $apertura = self::where('user_id', $userId)->latest()->first();
+        if (!$apertura) return null;
+
+        $cerrado = \App\Models\Cierre::where('apertura_id', $apertura->id)
+            ->where('pendiente', false)
+            ->exists();
+
+        return $cerrado ? null : $apertura;
+    }
 }
