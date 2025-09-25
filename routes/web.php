@@ -40,6 +40,7 @@ use App\Http\Controllers\DepositoPOSController;
 use App\Http\Controllers\DepositoConfigController;
 use App\Http\Controllers\ReporteDepositosController;
 use App\Http\Controllers\TipoServicioDepositoController;
+use App\Http\Controllers\Admin\ReporteCierresController;
 
 
 /*
@@ -274,6 +275,8 @@ Route::delete('/admin/depositos/config/{deposito}', [\App\Http\Controllers\Depos
 // Reporte de depósitos
 Route::get('/admin/reportes/depositos', [\App\Http\Controllers\ReporteDepositosController::class, 'index'])->name('admin.reportes.depositos.index');
 
+Route::get('/admin/reportes/cierres', [ReporteCierresController::class, 'index'])
+    ->name('admin.reportes.cierres');
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

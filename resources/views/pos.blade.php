@@ -247,15 +247,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
                         </form>
-                        <button
-                            class="col-span-2 h-12 md:h-14 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg"
-                            @click="menu = 'admin'">
-                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                            Admin
-                        </button>
+                        
                     </div>
                 </div>
 

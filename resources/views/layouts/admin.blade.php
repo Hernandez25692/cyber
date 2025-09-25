@@ -340,15 +340,26 @@
                 <div class="p-4 border-t border-gray-800">
                     <div class="space-y-3">
                         <a href="{{ route('admin.index') }}"
-                            class="flex items-center px-4 py-2 text-sm font-medium text-blue-500 hover:text-blue-400 rounded-lg hover:bg-gray-800 transition-colors duration-200 group">
-                            <i data-feather="home" class="w-4 h-4 mr-2 group-hover:text-blue-300"></i>
+                            class="flex items-center px-4 py-2 text-sm font-semibold text-blue-500 rounded-lg transition-colors duration-200 hover:bg-blue-50 hover:text-blue-700 group">
+                            <span class="flex items-center justify-center w-8 h-8 bg-blue-100 rounded-full mr-2 group-hover:bg-blue-200">
+                                <i data-feather="home" class="w-4 h-4 text-blue-500 group-hover:text-blue-700"></i>
+                            </span>
                             Panel principal
+                        </a>
+                        <a href="{{ route('admin.reportes.cierres') }}"
+                            class="flex items-center px-4 py-2 text-sm font-semibold text-indigo-500 rounded-lg transition-colors duration-200 hover:bg-indigo-50 hover:text-indigo-700 group">
+                            <span class="flex items-center justify-center w-8 h-8 bg-indigo-100 rounded-full mr-2 group-hover:bg-indigo-200">
+                                <i data-feather="bar-chart-2" class="w-4 h-4 text-indigo-500 group-hover:text-indigo-700"></i>
+                            </span>
+                            Reportes Z / Cierres
                         </a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit"
-                                class="flex items-center w-full px-4 py-2 text-sm font-medium text-red-500 hover:text-red-400 rounded-lg hover:bg-gray-800 transition-colors duration-200 group">
-                                <i data-feather="log-out" class="w-4 h-4 mr-2 group-hover:text-red-300"></i>
+                                class="flex items-center w-full px-4 py-2 text-sm font-semibold text-red-500 rounded-lg transition-colors duration-200 hover:bg-red-50 hover:text-red-700 group">
+                                <span class="flex items-center justify-center w-8 h-8 bg-red-100 rounded-full mr-2 group-hover:bg-red-200">
+                                    <i data-feather="log-out" class="w-4 h-4 text-red-500 group-hover:text-red-700"></i>
+                                </span>
                                 Cerrar sesión
                             </button>
                         </form>
