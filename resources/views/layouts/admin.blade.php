@@ -78,7 +78,7 @@
                 <!-- Logo y marca -->
                 <div class="flex items-center justify-between h-16 px-6 py-4 border-b border-gray-800">
                     <div class="flex items-center space-x-3">
-                        <img src="{{ asset('storage/logo/LOGO1.png') }}" alt="Logo"
+                        <img src="{{ asset('storage/logo/logo1.png') }}" alt="Logo Cyber"
                             class="w-10 h-10 object-contain rounded-full">
                         <span
                             class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
