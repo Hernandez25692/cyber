@@ -1229,6 +1229,7 @@
                 &nbsp;|&nbsp;
                 <span class="font-semibold text-indigo-700">CYBER Y VARIEDADES SANDOVAL</span>
             </div>
+            
             <div class="flex items-center gap-4 mt-1 md:mt-0">
                 <span id="fechaHoraActual"></span>
                 <span id="estadoConexion" class="ml-4 flex items-center gap-1">

@@ -58,6 +58,7 @@ class UsuarioController extends Controller
     {
         $usuario = User::findOrFail($id);
 
+        // Validación base (sin password)
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email,' . $usuario->id,
@@ -65,12 +66,21 @@ class UsuarioController extends Controller
             'activo' => 'required|boolean',
         ]);
 
-        $usuario->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'rol' => $request->rol,
-            'activo' => $request->activo,
-        ]);
+        // Si viene password (no vacío), validar y preparar hash
+        if ($request->filled('password')) {
+            $request->validate([
+                'password' => 'confirmed|min:6',
+            ]);
+            $usuario->password = Hash::make($request->password);
+        }
+
+        // Actualizar el resto de campos
+        $usuario->name   = $request->name;
+        $usuario->email  = $request->email;
+        $usuario->rol    = $request->rol;
+        $usuario->activo = $request->activo;
+
+        $usuario->save();
 
         return redirect()->route('admin.usuarios.index')->with('success', '✅ Usuario actualizado.');
     }
