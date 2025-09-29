@@ -161,7 +161,10 @@
         
         <div class="mt-8 pt-6 divider text-center">
             <p class="text-gray-400 text-xs tracking-wide">
-                © 2025 CYBER Y VARIEDADES SANDOVAL v1.0.0
+            © 2025 CYBER Y VARIEDADES SANDOVAL v1.0.0
+            </p>
+            <p class="text-gray-500 text-xs mt-1">
+            Desarrollado por José Hernandez
             </p>
         </div>
     </div>
