@@ -30,6 +30,7 @@
                 'servicios' => ['total' => $servicios->sum('comision'), 'comision' => $servicios->sum('comision')],
                 'recargas' => ['total' => $recargas->sum(fn($r) => $r->paquete->precio ?? 0), 'comision' => 0],
                 'impresiones' => ['total' => $impresiones->sum('precio'), 'comision' => $impresiones->sum('precio')],
+                'depositos' => ['total' => $depositos->sum('monto'), 'comision' => $depositos->sum('comision')],
             ];
             foreach ($totales as $datos) {
                 $totalGlobal += $datos['total'];
@@ -162,12 +163,13 @@
         {{-- SECCIONES INDIVIDUALES --}}
         <div class="space-y-10">
             @foreach ([
-            'remesas' => ['title' => 'Remesas', 'icon' => 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'color' => 'blue'],
-            'retiros' => ['title' => 'Retiros', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'color' => 'red'],
-            'servicios' => ['title' => 'Servicios', 'icon' => 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4', 'color' => 'pink'],
-            'recargas' => ['title' => 'Recargas', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', 'color' => 'green'],
-            'impresiones' => ['title' => 'Impresiones', 'icon' => 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z', 'color' => 'yellow'],
-        ] as $variable => $config)
+                'remesas' => ['title' => 'Remesas', 'icon' => 'M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z', 'color' => 'blue'],
+                'retiros' => ['title' => 'Retiros', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'color' => 'red'],
+                'servicios' => ['title' => 'Servicios', 'icon' => 'M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4', 'color' => 'pink'],
+                'recargas' => ['title' => 'Recargas', 'icon' => 'M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z', 'color' => 'green'],
+                'impresiones' => ['title' => 'Impresiones', 'icon' => 'M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z', 'color' => 'yellow'],
+                'depositos' => ['title' => 'Depósitos', 'icon' => 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', 'color' => 'teal'],
+            ] as $variable => $config)
                 @php
                     $items = $$variable;
                     $title = $config['title'];
@@ -178,6 +180,7 @@
                         'recargas' => $items->sum(fn($i) => $i->paquete->precio ?? 0),
                         'impresiones' => $items->sum('precio'),
                         'servicios' => $items->sum('comision'),
+                        'depositos' => $items->sum('monto'),
                         default => $items->sum('monto'),
                     };
 
@@ -185,11 +188,11 @@
                         'recargas' => 0,
                         'impresiones' => $items->sum('precio'),
                         'servicios' => $items->sum('comision'),
+                        'depositos' => $items->sum('comision'),
                         default => $items->sum('comision'),
                     };
 
-                    // Determinar si mostrar columna comisión
-                    $mostrarComision = in_array($variable, ['remesas', 'retiros', 'servicios']);
+                    $mostrarComision = in_array($variable, ['remesas', 'retiros', 'servicios', 'depositos']);
                 @endphp
 
                 <div class="bg-white rounded-2xl shadow border-l-8 border-{{ $color }}-500 overflow-hidden">
@@ -297,13 +300,15 @@
                                             </td>
                                             <td
                                                 class="px-6 py-4 whitespace-nowrap font-medium 
-                                            @if ($variable === 'remesas') text-blue-600 @elseif($variable === 'retiros') text-red-600 @else text-gray-900 @endif">
+                                            @if ($variable === 'remesas') text-blue-600 @elseif($variable === 'retiros') text-red-600 @elseif($variable === 'depositos') text-teal-600 @else text-gray-900 @endif">
                                                 @if ($variable === 'recargas')
                                                     L {{ number_format($item->paquete->precio ?? 0, 2) }}
                                                 @elseif($variable === 'impresiones')
                                                     L {{ number_format($item->precio, 2) }}
                                                 @elseif($variable === 'servicios')
                                                     L {{ number_format($item->comision, 2) }}
+                                                @elseif($variable === 'depositos')
+                                                    L {{ number_format($item->monto ?? 0, 2) }}
                                                 @else
                                                     L {{ number_format($item->monto ?? 0, 2) }}
                                                 @endif
@@ -353,6 +358,14 @@
                                                             class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">{{ $item->servicio->nombre ?? '' }}</span>
                                                         <span
                                                             class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">{{ $item->tipo->nombre ?? '' }}</span>
+                                                    </div>
+                                                @elseif($variable === 'depositos')
+                                                    <div class="flex items-center space-x-2">
+                                                        <span
+                                                            class="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded">Ref:
+                                                            {{ $item->referencia }}</span>
+                                                        <span
+                                                            class="bg-gray-100 text-gray-800 text-xs px-2 py-1 rounded">{{ $item->banco->nombre ?? '' }}</span>
                                                     </div>
                                                 @endif
                                             </td>

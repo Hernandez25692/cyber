@@ -10,7 +10,7 @@ use App\Models\RetiroRealizado;
 use App\Models\ServicioRealizado;
 use App\Models\RecargaRealizada;
 use App\Models\ImpresionRealizada;
-
+use App\Models\DepositoRealizado;
 
 class ReporteGeneralController extends Controller
 {
@@ -29,6 +29,7 @@ class ReporteGeneralController extends Controller
         $serviciosQuery = ServicioRealizado::with('tipoServicio', 'banco', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
         $recargasQuery = RecargaRealizada::with('proveedor', 'paquete', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
         $impresionesQuery = ImpresionRealizada::with('servicio', 'tipo', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
+        $depositosQuery = DepositoRealizado::with('banco', 'usuario')->whereBetween('created_at', [$desde, $hasta]);
 
         if ($user_id) {
             $remesasQuery->where('user_id', $user_id);
@@ -36,6 +37,7 @@ class ReporteGeneralController extends Controller
             $serviciosQuery->where('user_id', $user_id);
             $recargasQuery->where('user_id', $user_id);
             $impresionesQuery->where('user_id', $user_id);
+            $depositosQuery->where('user_id', $user_id);
         }
 
         // Ejecutar queries
@@ -44,6 +46,7 @@ class ReporteGeneralController extends Controller
         $servicios = $serviciosQuery->get();
         $recargas = $recargasQuery->get();
         $impresiones = $impresionesQuery->get();
+        $depositos = $depositosQuery->get();
 
         // Cálculos de totales
         $totales = [
@@ -67,13 +70,17 @@ class ReporteGeneralController extends Controller
                 'total' => $impresiones->sum('precio'),
                 'ganancia' => 0, // si manejas comisión, ajusta aquí
             ],
+            'depositos' => [
+                'total' => $depositos->sum('monto'),
+                'ganancia' => $depositos->sum('comision'),
+            ],
         ];
 
         // Resumen general
         $resumen = [
-            'total_operaciones' => $remesas->count() + $retiros->count() + $servicios->count() + $recargas->count() + $impresiones->count(),
-            'total_ganancia' => $totales['remesas']['ganancia'] + $totales['retiros']['ganancia'] + $totales['servicios']['ganancia'],
-            'total_monto' => $totales['remesas']['total'] + $totales['retiros']['total'] + $totales['recargas']['total'] + $totales['impresiones']['total'],
+            'total_operaciones' => $remesas->count() + $retiros->count() + $servicios->count() + $recargas->count() + $impresiones->count() + $depositos->count(),
+            'total_ganancia' => $totales['remesas']['ganancia'] + $totales['retiros']['ganancia'] + $totales['servicios']['ganancia'] + $totales['depositos']['ganancia'],
+            'total_monto' => $totales['remesas']['total'] + $totales['retiros']['total'] + $totales['recargas']['total'] + $totales['impresiones']['total'] + $totales['depositos']['total'],
         ];
 
         return view('admin.reportes.general', [
@@ -83,6 +90,7 @@ class ReporteGeneralController extends Controller
             'servicios' => $servicios,
             'recargas' => $recargas,
             'impresiones' => $impresiones,
+            'depositos' => $depositos,
             'totales' => $totales,
             'resumen' => $resumen,
             'filtros' => [
