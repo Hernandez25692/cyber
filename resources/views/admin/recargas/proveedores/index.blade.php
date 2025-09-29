@@ -2,62 +2,48 @@
 @section('title', 'Proveedores de Recarga')
 
 @section('content')
-<div class="max-w-7xl mx-auto px-4 py-8 bg-gradient-to-br from-blue-50 to-gray-100 min-h-screen">
+<div class="max-w-7xl mx-auto px-4 py-10 bg-gradient-to-br from-blue-100 to-gray-50 min-h-screen">
     <!-- Título principal y subtítulo -->
-    <div class="mb-10">
-        <h1 class="text-4xl font-extrabold text-blue-800 mb-2 flex items-center gap-3 drop-shadow">
-            <span class="text-3xl">📱</span> Proveedores de Recarga
+    <div class="mb-12 text-center">
+        <h1 class="text-5xl font-extrabold text-blue-900 mb-3 flex items-center justify-center gap-3 drop-shadow-lg">
+            <span class="text-4xl">📱</span> Proveedores de Recarga
         </h1>
-        <p class="text-base text-gray-600">Administra los proveedores disponibles para recargas en la plataforma.</p>
+        <p class="text-lg text-gray-700">Administra los proveedores disponibles para recargas en la plataforma.</p>
     </div>
 
     <!-- Sección de acciones -->
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4">
-        <a href="{{ route('admin.index') }}" class="bg-gray-600 text-white px-5 py-2 rounded-lg shadow-md hover:bg-gray-700 transition flex items-center gap-2 font-medium">
+    <div class="flex flex-col sm:flex-row items-center justify-between mb-10 gap-4">
+        <a href="{{ route('admin.index') }}" class="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-xl shadow hover:bg-gray-100 transition flex items-center gap-2 font-semibold">
             ← Regresar
         </a>
         <a href="{{ route('admin.recargas.proveedores.create') }}"
-           class="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-5 py-2 rounded-lg shadow-md hover:from-blue-700 hover:to-blue-500 transition flex items-center gap-2 font-medium">
+           class="bg-gradient-to-r from-blue-600 to-blue-400 text-white px-6 py-2 rounded-xl shadow hover:from-blue-700 hover:to-blue-500 transition flex items-center gap-2 font-semibold">
             ➕ Nuevo Proveedor
         </a>
     </div>
 
     <!-- Tarjeta principal de proveedores -->
-    <div class="bg-white rounded-2xl shadow-lg p-8 border border-blue-100">
-        <h2 class="text-xl font-bold text-blue-700 mb-6 flex items-center gap-2">
-            <span class="text-lg">📋</span> Lista de Proveedores
+    <div class="bg-white rounded-3xl shadow-xl p-10 border border-blue-200">
+        <h2 class="text-2xl font-bold text-blue-800 mb-8 flex items-center gap-2">
+            <span class="text-xl">📋</span> Lista de Proveedores
         </h2>
         <div class="overflow-x-auto">
-            <table class="min-w-full text-sm rounded-xl overflow-hidden">
-                <thead class="bg-blue-100">
+            <table class="min-w-full text-base rounded-xl overflow-hidden">
+                <thead class="bg-blue-200">
                     <tr>
-                        <th class="px-5 py-3 text-left font-semibold text-blue-700">#</th>
-                        <th class="px-5 py-3 text-left font-semibold text-blue-700">Nombre</th>
-                        <th class="px-5 py-3 text-left font-semibold text-blue-700">Acciones</th>
+                        <th class="px-6 py-4 text-left font-semibold text-blue-800">#</th>
+                        <th class="px-6 py-4 text-left font-semibold text-blue-800">Nombre</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-blue-50">
+                <tbody class="divide-y divide-blue-100">
                     @forelse ($proveedores as $item)
                         <tr class="hover:bg-blue-50 transition">
-                            <td class="px-5 py-3">{{ $item->id }}</td>
-                            <td class="px-5 py-3 font-medium text-gray-800">{{ $item->nombre }}</td>
-                            <td class="px-5 py-3">
-                                <div class="flex gap-2">
-                                    <form action="{{ route('admin.recargas.proveedores.destroy', $item) }}" method="POST"
-                                        onsubmit="return confirm('¿Eliminar proveedor?')">
-                                        @csrf @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-100 text-red-700 px-4 py-1.5 rounded-lg hover:bg-red-200 transition flex items-center gap-1 font-semibold shadow-sm">
-                                            🗑 <span class="hidden sm:inline">Eliminar</span>
-                                        </button>
-                                    </form>
-                                    <!-- Aquí puedes agregar más acciones si lo deseas -->
-                                </div>
-                            </td>
+                            <td class="px-6 py-4">{{ $item->id }}</td>
+                            <td class="px-6 py-4 font-semibold text-gray-900">{{ $item->nombre }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3" class="px-5 py-6 text-center text-gray-400">No hay proveedores registrados.</td>
+                            <td colspan="2" class="px-6 py-8 text-center text-gray-400">No hay proveedores registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>
