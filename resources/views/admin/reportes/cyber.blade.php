@@ -61,6 +61,9 @@
                         </option>
                         <option value="productos" {{ $filtros['modulo'] == 'productos' ? 'selected' : '' }}>Productos
                         </option>
+                        <option value="salidas" {{ $filtros['modulo'] == 'salidas' ? 'selected' : '' }}>Salidas de efectivo
+                        </option>
+
 
 
                     </select>
@@ -94,6 +97,12 @@
                 @include('admin.reportes.partials.retiros')
             </div>
         @endif
+        @if ($modulo === 'todos' || $modulo === 'salidas')
+            <div class="mb-10 border-t pt-8">
+                @include('admin.reportes.partials.salidas')
+            </div>
+        @endif
+
         @if ($modulo === 'todos' || $modulo === 'depositos')
             <div class="mb-10 border-t pt-8">
                 @include('admin.reportes.partials.depositos')
@@ -122,7 +131,7 @@
                 @include('admin.reportes.partials.productos')
             </div>
         @endif
-        
+
 
     </div>
 @endsection

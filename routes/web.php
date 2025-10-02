@@ -41,7 +41,7 @@ use App\Http\Controllers\DepositoConfigController;
 use App\Http\Controllers\ReporteDepositosController;
 use App\Http\Controllers\TipoServicioDepositoController;
 use App\Http\Controllers\Admin\ReporteCierresController;
-
+use App\Http\Controllers\SalidaEfectivoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -277,6 +277,11 @@ Route::get('/admin/reportes/depositos', [\App\Http\Controllers\ReporteDepositosC
 
 Route::get('/admin/reportes/cierres', [ReporteCierresController::class, 'index'])
     ->name('admin.reportes.cierres');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/salidas-efectivo', [SalidaEfectivoController::class, 'index'])->name('salidas.index');   // Listado + filtros
+    Route::post('/salidas-efectivo', [SalidaEfectivoController::class, 'store'])->name('salidas.store'); // Registro desde modal POS (AJAX)
+});
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

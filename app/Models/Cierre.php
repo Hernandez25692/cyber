@@ -27,4 +27,8 @@ class Cierre extends Model
     {
         return $this->belongsTo(Apertura::class);
     }
+    public function salidasEfectivo()
+    {
+        return $this->hasMany(SalidaEfectivo::class, 'cierre_id');
+    }
 }

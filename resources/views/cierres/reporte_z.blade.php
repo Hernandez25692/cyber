@@ -219,21 +219,68 @@
                         </h3>
                     </div>
                     <div class="p-4 space-y-2">
-                        @foreach ([['label' => 'Retiros', 'value' => $retiros], ['label' => 'Remesas', 'value' => $remesas]] as $item)
+                        @foreach ([
+        ['label' => 'Retiros', 'value' => $retiros ?? 0],
+        ['label' => 'Remesas', 'value' => $remesas ?? 0],
+        // 👉 NUEVO: Salidas de efectivo
+        ['label' => 'Salidas de efectivo', 'value' => $salidas_efectivo ?? 0],
+    ] as $item)
                             <div class="flex justify-between">
                                 <span>{{ $item['label'] }}:</span>
                                 <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
                             </div>
                         @endforeach
+
                         <div class="border-t border-red-200 pt-2 mt-4">
                             <div class="flex justify-between font-bold text-red-700">
                                 <span>TOTAL EGRESOS:</span>
-                                <span>L {{ number_format($egresos, 2) }}</span>
+                                <span>L {{ number_format($egresos ?? 0, 2) }}</span>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
+            {{-- Detalle de Salidas de Efectivo --}}
+            @if (isset($lista_salidas) && $lista_salidas->count())
+                <div class="mb-8 border border-red-100 rounded-lg overflow-hidden">
+                    <div class="bg-red-50 px-4 py-2">
+                        <h3 class="text-red-700 font-semibold">Detalle de Salidas de Efectivo</h3>
+                    </div>
+                    <div class="p-4 overflow-auto">
+                        <table class="min-w-full text-sm">
+                            <thead>
+                                <tr class="text-left border-b">
+                                    <th class="py-2 px-3">Fecha/Hora</th>
+                                    <th class="py-2 px-3">Motivo</th>
+                                    <th class="py-2 px-3">Observación</th>
+                                    <th class="py-2 px-3 text-right">Monto (L)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($lista_salidas as $s)
+                                    <tr class="border-b">
+                                        <td class="py-2 px-3">
+                                            {{ optional($s->fecha_hora)->format('d/m/Y H:i') ?? $s->created_at->format('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="py-2 px-3">{{ $s->motivo }}</td>
+                                        <td class="py-2 px-3">{{ $s->observacion }}</td>
+                                        <td class="py-2 px-3 text-right">{{ number_format($s->monto, 2) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" class="py-2 px-3 text-right font-semibold">Total Salidas:</td>
+                                    <td class="py-2 px-3 text-right font-semibold">
+                                        L {{ number_format($salidas_efectivo ?? 0, 2) }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            @endif
 
             <!-- Resumen Final -->
             <div class="total-box p-6 rounded-lg mb-8 border border-blue-200">
@@ -425,10 +472,14 @@
                         <div class="total row"><span>TOTAL INGRESOS:</span><span>L {{ number_format($ingresos, 2) }}</span></div>
                     </div>
                     <div class="section">
-                        <div class="row"><span>Retiros:</span><span>L {{ number_format($retiros, 2) }}</span></div>
-                        <div class="row"><span>Remesas:</span><span>L {{ number_format($remesas, 2) }}</span></div>
-                        <div class="total row"><span>TOTAL EGRESOS:</span><span>L {{ number_format($egresos, 2) }}</span></div>
-                    </div>
+    <div class="row"><span>Retiros:</span><span>L {{ number_format($retiros, 2) }}</span></div>
+    <div class="row"><span>Remesas:</span><span>L {{ number_format($remesas, 2) }}</span></div>
+    {{-- 👉 NUEVO --}}
+    <div class="row"><span>Salidas de efectivo:</span><span>L {{ number_format($salidas_efectivo ?? 0, 2) }}</span></div>
+
+    <div class="total row"><span>TOTAL EGRESOS:</span><span>L {{ number_format($egresos, 2) }}</span></div>
+</div>
+
                     <div class="section">
                         <div class="row"><span>Total Esperado:</span><span>L {{ number_format($esperado, 2) }}</span></div>
                         <div class="row"><span>Efectivo Reportado:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>

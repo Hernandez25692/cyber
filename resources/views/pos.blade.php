@@ -166,6 +166,11 @@
                             </svg>
                             Retiros
                         </button>
+                        <button type="button" id="btnSalidaEfectivo"
+                            class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                            ➖ Salida de efectivo
+                        </button>
+
                         <!-- BOTÓN DEPÓSITOS (nuevo, igual que Retiros) -->
                         <button @click="if(requireTurnoAbierto()) mostrarModalDeposito = true"
                             class="h-12 md:h-14 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
@@ -222,8 +227,7 @@
                         </a>
 
                         <!-- BOTÓN CIERRE DE TURNO -->
-                        <a 
-                            href="{{ $turnoAbierto ? route('cierres.create') : 'javascript:void(0)' }}"
+                        <a href="{{ $turnoAbierto ? route('cierres.create') : 'javascript:void(0)' }}"
                             @click="if(!turnoAbierto){ Swal.fire({icon: 'warning', title: 'Debes abrir turno', text: 'Abre un turno para poder cerrar.', confirmButtonColor: '#16a34a'}); return false; }"
                             class="h-12 md:h-14 {{ $turnoAbierto ? 'bg-red-500 hover:bg-red-600' : 'bg-gray-400 cursor-not-allowed' }} text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
                             <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
@@ -247,7 +251,7 @@
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
                             @csrf
                         </form>
-                        
+
                     </div>
                 </div>
 
@@ -400,7 +404,53 @@
                     </button>
                 </div>
             </div>
+            <!-- Modal Salida de Efectivo -->
+            <div id="modalSalidaEfectivo" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+                <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h2 class="text-lg font-semibold">Registrar salida de efectivo</h2>
+                        <button type="button" id="btnCloseSalida"
+                            class="text-gray-500 hover:text-gray-700">&times;</button>
+                    </div>
 
+                    <form id="formSalidaEfectivo" action="{{ route('salidas.store') }}" method="POST">
+                        @csrf
+                        <div class="space-y-3">
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Motivo <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" name="motivo" required
+                                    class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring"
+                                    placeholder="Ej: Compra de insumos, caja chica, viáticos, etc.">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Monto (L) <span
+                                        class="text-red-500">*</span></label>
+                                <input type="number" name="monto" step="0.01" min="0.01" required
+                                    class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring"
+                                    placeholder="0.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-1">Observación (opcional)</label>
+                                <textarea name="observacion" rows="3" class="w-full border rounded-lg px-3 py-2 focus:outline-none focus:ring"
+                                    placeholder="Detalle opcional"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end gap-2 mt-5">
+                            <button type="button" id="btnCancelSalida"
+                                class="px-3 py-2 rounded-lg border">Cancelar</button>
+                            <button type="submit"
+                                class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
+                                Guardar salida
+                            </button>
+                        </div>
+                    </form>
+
+                    <p id="salidaError" class="mt-3 text-sm text-red-600 hidden"></p>
+                    <p id="salidaOk" class="mt-3 text-sm text-green-600 hidden"></p>
+                </div>
+            </div>
             <!-- MODAL DE REMESA -->
             <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                 x-show="mostrarModalRemesa" x-transition>
@@ -758,8 +808,7 @@
                     </h2>
 
                     <div class="mb-4 flex gap-3 items-center">
-                        <input type="text" x-model="consultaBusqueda"
-                            placeholder="Buscar por código ó nombre"
+                        <input type="text" x-model="consultaBusqueda" placeholder="Buscar por código ó nombre"
                             class="flex-1 border border-blue-900 rounded px-4 py-2 text-base focus:ring-2 focus:ring-blue-900 bg-blue-50 font-semibold text-blue-900 transition"
                             @input="buscarProductosConsulta">
                     </div>
@@ -1056,6 +1105,76 @@
 
                 }
             }
+        </script>
+        <script>
+            // Apertura/cierre modal
+            const $modal = document.getElementById('modalSalidaEfectivo');
+            const $openBtn = document.getElementById('btnSalidaEfectivo');
+            const $closeX = document.getElementById('btnCloseSalida');
+            const $cancel = document.getElementById('btnCancelSalida');
+            const $form = document.getElementById('formSalidaEfectivo');
+            const $err = document.getElementById('salidaError');
+            const $ok = document.getElementById('salidaOk');
+
+            function toggleSalidaModal(show) {
+                if (show) {
+                    $modal.classList.remove('hidden');
+                    $modal.classList.add('flex');
+                } else {
+                    $modal.classList.add('hidden');
+                    $modal.classList.remove('flex');
+                }
+                $err.classList.add('hidden');
+                $ok.classList.add('hidden');
+                $err.textContent = '';
+                $ok.textContent = '';
+            }
+
+            $openBtn?.addEventListener('click', () => toggleSalidaModal(true));
+            $closeX?.addEventListener('click', () => toggleSalidaModal(false));
+            $cancel?.addEventListener('click', () => toggleSalidaModal(false));
+
+            // Envío AJAX (evita recargar POS)
+            $form?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                $err.classList.add('hidden');
+                $ok.classList.add('hidden');
+
+                const fd = new FormData($form);
+                try {
+                    const resp = await fetch($form.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: fd
+                    });
+
+                    const data = await resp.json();
+
+                    if (!resp.ok || data.ok === false) {
+                        const msg = data?.message ||
+                            (data?.errors ? Object.values(data.errors).flat().join(' ') :
+                                'Error al registrar salida.');
+                        $err.textContent = msg;
+                        $err.classList.remove('hidden');
+                        return;
+                    }
+
+                    $ok.textContent = `Salida registrada: L ${data.monto} (${data.motivo})`;
+                    $ok.classList.remove('hidden');
+                    $form.reset();
+
+                    // Cerrar modal tras 1s (opcional)
+                    setTimeout(() => toggleSalidaModal(false), 1000);
+
+                    // TODO (opcional): refrescar totales visibles de caja si los muestras en POS.
+                } catch (ex) {
+                    $err.textContent = 'Error de red/servidor.';
+                    $err.classList.remove('hidden');
+                }
+            });
         </script>
         <script>
             const remesaRangos = @json(\App\Models\RemesaConfig::all());

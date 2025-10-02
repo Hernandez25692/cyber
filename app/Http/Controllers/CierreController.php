@@ -14,6 +14,8 @@ use App\Models\RetiroRealizado;
 use App\Models\ImpresionRealizada;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DepositoRealizado;
+use App\Models\SalidaEfectivo;
+
 
 class CierreController extends Controller
 {
@@ -54,15 +56,29 @@ class CierreController extends Controller
         $recargas = RecargaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->get()->sum(fn($r) => $r->paquete->precio ?? 0);
         $servicios = ServicioRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('comision');
         $impresiones = ImpresionRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('precio');
-        $depositos = DepositoRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
+        $depositos = DepositoRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
 
-        $ingresos = $ventas + $recargas + $servicios + $impresiones;
+        // Ingresos (mantengo tu criterio actual, incluyendo depósitos)
         $ingresos = $ventas + $recargas + $servicios + $impresiones + $depositos;
 
-        $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
-        $remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])->where('user_id', $user_id)->sum('monto');
+        $retiros = RetiroRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
 
-        $egresos = $retiros + $remesas;
+        $remesas = RemesaRealizada::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
+
+        // 👉 NUEVO: Salidas de efectivo (del cajero durante el turno)
+        $salidas_efectivo = SalidaEfectivo::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
+
+        // Egresos de caja
+        $egresos = $retiros + $remesas + $salidas_efectivo;
+
 
         $esperado = $apertura->efectivo_inicial + $ingresos - $egresos;
         $diferencia = $request->efectivo_final - $esperado;
@@ -143,10 +159,16 @@ class CierreController extends Controller
             ->where('user_id', $user_id)
             ->sum('monto');
 
+        // 👉 NUEVO: Salidas de efectivo
+        $salidas_efectivo = SalidaEfectivo::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
+
         // SUMATORIA FINAL
         $ingresos_comisiones = $comision_servicios + $comision_remesas + $comision_retiros + $comision_depositos;
         $ingresos = $ventas + $recargas + $impresiones + $servicios + $depositos + $ingresos_comisiones;
-        $egresos = $retiros + $remesas;
+        $egresos = $retiros + $remesas + $salidas_efectivo;
+
 
         // CÁLCULO FINAL
         $esperado = $apertura->efectivo_inicial + $ingresos - $egresos;
@@ -169,7 +191,8 @@ class CierreController extends Controller
             'ingresos_comisiones',
             'egresos',
             'esperado',
-            'diferencia' // se pasa a la vista para usar en el cálculo correcto
+            'diferencia', // se pasa a la vista para usar en el cálculo correcto
+            'salidas_efectivo'
         ));
     }
 

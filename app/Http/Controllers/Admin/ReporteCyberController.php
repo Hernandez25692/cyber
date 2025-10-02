@@ -12,6 +12,7 @@ use App\Models\RecargaRealizada;
 use App\Models\ImpresionRealizada;
 use App\Models\DetalleVenta;
 use App\Models\DepositoRealizado;
+use App\Models\SalidaEfectivo;
 use Carbon\Carbon;
 
 class ReporteCyberController extends Controller
@@ -29,6 +30,23 @@ class ReporteCyberController extends Controller
         $users = User::all();
 
         // Consultas con relaciones
+        // === Salidas de efectivo ===
+        // Usamos 'fecha_hora' si existe; si viene null, caemos a 'created_at'
+        $salidas = SalidaEfectivo::with('usuario')
+            ->when($user_id, fn($q) => $q->where('user_id', $user_id))
+            ->where(function ($q) use ($desdeCompleto, $hastaCompleto) {
+                $q->whereBetween('fecha_hora', [$desdeCompleto, $hastaCompleto])
+                    ->orWhere(function ($qq) use ($desdeCompleto, $hastaCompleto) {
+                        $qq->whereNull('fecha_hora')
+                            ->whereBetween('created_at', [$desdeCompleto, $hastaCompleto]);
+                    });
+            })
+            ->orderByDesc('fecha_hora')
+            ->orderByDesc('created_at')
+            ->get();
+
+        $total_salidas = $salidas->sum('monto');
+
         $remesas = RemesaRealizada::with('banco', 'usuario')
             ->when($user_id, fn($q) => $q->where('user_id', $user_id))
             ->whereBetween('created_at', [$desdeCompleto, $hastaCompleto])
@@ -82,6 +100,8 @@ class ReporteCyberController extends Controller
             'recargas' => $recargas,
             'impresiones' => $impresiones,
             'productos' => $productos,
+            'salidas'       => $salidas,
+            'total_salidas' => $total_salidas,
         ]);
     }
 }
