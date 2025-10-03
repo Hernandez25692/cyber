@@ -147,22 +147,22 @@
             const cont = document.getElementById('cards');
             cont.innerHTML = '';
             const items = [
-                { label: 'Ingresos', value: money(tot.ingresos), color: 'from-blue-200 to-blue-400', text: 'text-black font-extrabold' },
-                { label: 'Costos', value: money(tot.costos), color: 'from-yellow-200 to-yellow-400', text: 'text-black font-extrabold' },
-                { label: 'Comisiones', value: money(tot.comisiones), color: 'from-green-200 to-green-400', text: 'text-black font-extrabold' },
-                { label: 'Ganancias', value: money(tot.ganancias), color: 'from-purple-200 to-purple-400', text: 'text-black font-extrabold' },
+            { label: 'Ingresos', value: money(tot.ingresos), color: 'from-blue-100 to-blue-50', shadow: 'shadow-blue-200', text: 'text-black' },
+            { label: 'Costos', value: money(tot.costos), color: 'from-yellow-100 to-yellow-50', shadow: 'shadow-yellow-200', text: 'text-black' },
+            { label: 'Comisiones', value: money(tot.comisiones), color: 'from-green-100 to-green-50', shadow: 'shadow-green-200', text: 'text-black' },
+            { label: 'Ganancias', value: money(tot.ganancias), color: 'from-purple-100 to-purple-50', shadow: 'shadow-purple-200', text: 'text-black' },
             ];
             items.forEach((i, idx) => {
-                const div = document.createElement('div');
-                div.className = `bg-gradient-to-br ${i.color} rounded-2xl shadow-xl p-6 flex flex-col gap-2 border border-blue-100`;
-                div.innerHTML = `
-                    <div class="flex items-center gap-3">
-                        <span class="text-3xl">${resumenIcon(idx)}</span>
-                        <span class="text-lg font-bold text-white">${i.label}</span>
-                    </div>
-                    <div class="text-3xl font-extrabold text-white mt-2">${i.value}</div>
-                `;
-                cont.appendChild(div);
+            const div = document.createElement('div');
+            div.className = `bg-gradient-to-br ${i.color} rounded-2xl shadow-xl p-6 flex flex-col gap-2 border border-blue-100 ${i.shadow}`;
+            div.innerHTML = `
+                <div class="flex items-center gap-3">
+                <span class="text-3xl">${resumenIcon(idx)}</span>
+                <span class="text-lg font-bold ${i.text}">${i.label}</span>
+                </div>
+                <div class="text-3xl font-extrabold ${i.text} mt-2">${i.value}</div>
+            `;
+            cont.appendChild(div);
             });
         }
 
