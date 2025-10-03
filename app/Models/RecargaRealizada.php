@@ -10,7 +10,15 @@ class RecargaRealizada extends Model
 {
     use HasFactory;
     protected $table = 'recargas_realizadas';
-    protected $fillable = ['paquete_id', 'numero', 'user_id'];
+    protected $fillable = [
+        'paquete_id',
+        'numero',
+        'user_id',
+        'precio_compra',
+        'precio_venta',
+        'comision',
+    ];
+
 
     public function paquete()
     {

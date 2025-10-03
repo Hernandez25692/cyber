@@ -33,16 +33,27 @@
                         <span class="text-gray-500 text-sm">Proveedor:</span>
                         <span class="font-medium text-gray-800">{{ $item->proveedor->nombre }}</span>
                     </div>
-                    <div class="mb-3 flex items-center gap-2">
-                        <span class="text-gray-500 text-sm">Precio:</span>
-                        <span class="font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">L {{ number_format($item->precio, 2) }}</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="block mb-1 font-semibold text-gray-600">Precio de compra (L)</label>
+                            <div class="font-semibold text-blue-700 bg-blue-50 px-2 py-1 rounded">
+                                L {{ number_format($item->precio_compra, 2) }}
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Lo que te cuesta a ti.</p>
+                        </div>
+                        <div>
+                            <label class="block mb-1 font-semibold text-gray-600">Precio de venta (L)</label>
+                            <div class="font-semibold text-green-600 bg-green-50 px-2 py-1 rounded">
+                                L {{ number_format($item->precio_venta, 2) }}
+                            </div>
+                            <p class="text-xs text-gray-500 mt-1">Lo que cobras al cliente (POS mostrará este valor).</p>
+                        </div>
                     </div>
                 </div>
                 <div class="mt-6 flex gap-2">
                     <a href="{{ route('admin.recargas.paquetes.edit', $item->id) }}" class="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500 transition text-sm font-medium">
                         ✏️ Editar
                     </a>
-                    
                 </div>
             </div>
         @empty

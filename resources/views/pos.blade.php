@@ -1316,9 +1316,10 @@
                                     data.forEach(p => {
                                         const opt = document.createElement('option');
                                         opt.value = p.id;
-                                        opt.dataset.precio = p.precio;
+                                        // Enviamos precio de VENTA en el data-atributo
+                                        opt.dataset.precio = p.precio_venta;
                                         opt.textContent =
-                                            `${p.descripcion} - L ${parseFloat(p.precio).toFixed(2)}`;
+                                            `${p.descripcion} - L ${parseFloat(p.precio_venta).toFixed(2)}`;
                                         paquete.appendChild(opt);
                                     });
                                 });
@@ -1329,7 +1330,7 @@
                 if (paquete) {
                     paquete.addEventListener('change', function() {
                         const selected = this.options[this.selectedIndex];
-                        const valor = selected.dataset.precio;
+                        const valor = selected?.dataset?.precio;
                         if (valor) {
                             precio.value = `L ${parseFloat(valor).toFixed(2)}`;
                             precioContainer.classList.remove('hidden');
@@ -1340,6 +1341,7 @@
                 }
             });
         </script>
+
         <div
             class="fixed bottom-0 left-0 w-full bg-white border-t border-green-200 py-2 px-6 flex flex-col md:flex-row items-center justify-between text-sm text-gray-700 z-40">
             <div>

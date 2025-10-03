@@ -175,6 +175,7 @@
                                 ['label' => 'Retiros', 'value' => $comision_retiros ?? 0],
                                 ['label' => 'Depósitos', 'value' => $comision_depositos ?? 0],
                                 ['label' => 'Servicios', 'value' => $comision_servicios ?? 0],
+                                ['label' => 'Recargas',  'value' => $comision_recargas  ?? 0],
                             ];
                         @endphp
                         @foreach ([['label' => 'Ventas', 'value' => $ventas], ['label' => 'Recargas', 'value' => $recargas], ['label' => 'Servicios', 'value' => $servicios], ['label' => 'Impresiones', 'value' => $impresiones], ['label' => 'Depósitos', 'value' => $depositos]] as $item)
@@ -469,6 +470,7 @@
                         <div class="row small">Retiros: L {{ number_format($comision_retiros ?? 0, 2) }}</div>
                         <div class="row small">Depósitos: L {{ number_format($comision_depositos ?? 0, 2) }}</div>
                         <div class="row small">Servicios: L {{ number_format($comision_servicios ?? 0, 2) }}</div>
+                        <div class="row small">Recargas: L {{ number_format($comision_recargas ?? 0, 2) }}</div>
                         <div class="total row"><span>TOTAL INGRESOS:</span><span>L {{ number_format($ingresos, 2) }}</span></div>
                     </div>
                     <div class="section">

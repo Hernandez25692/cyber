@@ -36,7 +36,9 @@
                             <th class="px-5 py-3 text-left text-gray-700 font-bold">Proveedor</th>
                             <th class="px-5 py-3 text-left text-gray-700 font-bold">Paquete</th>
                             <th class="px-5 py-3 text-left text-gray-700 font-bold">Número</th>
-                            <th class="px-5 py-3 text-left text-gray-700 font-bold">Precio</th>
+                            <th class="px-5 py-3 text-left text-gray-700 font-bold">Precio Compra</th>
+                            <th class="px-5 py-3 text-left text-gray-700 font-bold">Precio Venta</th>
+                            <th class="px-5 py-3 text-left text-gray-700 font-bold">Comisión</th>
                             <th class="px-5 py-3 text-left text-gray-700 font-bold">Cajero</th>
                             <th class="px-5 py-3 text-left text-gray-700 font-bold">Fecha</th>
                         </tr>
@@ -47,13 +49,17 @@
                                 <td class="px-5 py-3 font-semibold text-blue-700">{{ $r->paquete->proveedor->nombre }}</td>
                                 <td class="px-5 py-3">{{ $r->paquete->descripcion }}</td>
                                 <td class="px-5 py-3">{{ $r->numero ?? '—' }}</td>
-                                <td class="px-5 py-3 text-green-600 font-bold">L {{ number_format($r->paquete->precio, 2) }}</td>
+                                <td class="px-5 py-3 text-blue-600 font-bold">L {{ number_format($r->precio_compra ?? $r->paquete->precio_compra ?? 0, 2) }}</td>
+                                <td class="px-5 py-3 text-green-600 font-bold">L {{ number_format($r->precio_venta ?? $r->paquete->precio_venta ?? $r->paquete->precio ?? 0, 2) }}</td>
+                                <td class="px-5 py-3 text-purple-700 font-bold">
+                                    L {{ number_format(($r->precio_venta ?? $r->paquete->precio_venta ?? $r->paquete->precio ?? 0) - ($r->precio_compra ?? $r->paquete->precio_compra ?? 0), 2) }}
+                                </td>
                                 <td class="px-5 py-3">{{ $r->usuario->name }}</td>
                                 <td class="px-5 py-3">{{ $r->created_at->format('d/m/Y H:i') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="px-5 py-8 text-center text-gray-400">No hay recargas registradas.</td>
+                                <td colspan="8" class="px-5 py-8 text-center text-gray-400">No hay recargas registradas.</td>
                             </tr>
                         @endforelse
                     </tbody>
