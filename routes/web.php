@@ -42,6 +42,7 @@ use App\Http\Controllers\ReporteDepositosController;
 use App\Http\Controllers\TipoServicioDepositoController;
 use App\Http\Controllers\Admin\ReporteCierresController;
 use App\Http\Controllers\SalidaEfectivoController;
+use App\Http\Controllers\Admin\ReporteGananciasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -282,6 +283,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/salidas-efectivo', [SalidaEfectivoController::class, 'index'])->name('salidas.index');   // Listado + filtros
     Route::post('/salidas-efectivo', [SalidaEfectivoController::class, 'store'])->name('salidas.store'); // Registro desde modal POS (AJAX)
 });
+
+
+Route::middleware(['auth'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/reporte-ganancias', [ReporteGananciasController::class, 'index'])->name('reporte_ganancias.index');
+        Route::get('/reporte-ganancias/data', [ReporteGananciasController::class, 'data'])->name('reporte_ganancias.data');
+    });
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)
