@@ -147,42 +147,10 @@
             const cont = document.getElementById('cards');
             cont.innerHTML = '';
             const items = [
-                { 
-                    label: 'Ingresos', 
-                    value: money(tot.ingresos), 
-                    color: 'from-blue-500 to-blue-400', 
-                    shadow: 'shadow-blue-200',
-                    gradient: 'linear-gradient(135deg, #2563eb 0%, #60a5fa 100%)',
-                    border: 'border-blue-500',
-                    iconBg: 'bg-white/30'
-                },
-                { 
-                    label: 'Costos', 
-                    value: money(tot.costos), 
-                    color: 'from-yellow-400 to-yellow-300', 
-                    shadow: 'shadow-yellow-200',
-                    gradient: 'linear-gradient(135deg, #facc15 0%, #fde68a 100%)',
-                    border: 'border-yellow-400',
-                    iconBg: 'bg-white/30'
-                },
-                { 
-                    label: 'Comisiones', 
-                    value: money(tot.comisiones), 
-                    color: 'from-green-400 to-green-300', 
-                    shadow: 'shadow-green-200',
-                    gradient: 'linear-gradient(135deg, #34d399 0%, #bbf7d0 100%)',
-                    border: 'border-green-400',
-                    iconBg: 'bg-white/30'
-                },
-                { 
-                    label: 'Ganancias', 
-                    value: money(tot.ganancias), 
-                    color: 'from-purple-500 to-purple-400', 
-                    shadow: 'shadow-purple-200',
-                    gradient: 'linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%)',
-                    border: 'border-purple-500',
-                    iconBg: 'bg-white/30'
-                },
+                { label: 'Ingresos', value: money(tot.ingresos), color: 'from-blue-200 to-blue-400', text: 'text-black font-extrabold' },
+                { label: 'Costos', value: money(tot.costos), color: 'from-yellow-200 to-yellow-400', text: 'text-black font-extrabold' },
+                { label: 'Comisiones', value: money(tot.comisiones), color: 'from-green-200 to-green-400', text: 'text-black font-extrabold' },
+                { label: 'Ganancias', value: money(tot.ganancias), color: 'from-purple-200 to-purple-400', text: 'text-black font-extrabold' },
             ];
             items.forEach((i, idx) => {
                 const div = document.createElement('div');
