@@ -432,87 +432,190 @@
         @endif
 
         <script>
+            // Cerrar modal al hacer click fuera del contenido
             document.getElementById('confirmModal').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.add('hidden');
-                }
+            if (e.target === this) {
+                this.classList.add('hidden');
+            }
             });
 
-            // Función para imprimir el ticket estilo RMS
+            // Función para imprimir el ticket estilo RMS para rollo térmico 57mm
             function printTicket() {
-                // Construye el contenido del ticket usando los datos del DOM
-                let area = document.getElementById('printable-area');
-                // Puedes personalizar el contenido del ticket aquí si quieres menos información
-                let ticketHTML = `
-                <div class="rms-ticket">
-                    <div class="title">REPORTE Z</div>
-                    <div class="subtitle">Resumen de Cierre de Turno</div>
-                    <div class="small">Generado: {{ now()->format('d/m/Y H:i') }}</div>
-                    <div class="small">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</div>
-                    <div class="section">
-                        <div class="row"><span>Cajero:</span><span>{{ auth()->user()->name ?? '' }}</span></div>
-                        <div class="row"><span>Rol:</span><span>{{ auth()->user()->role ?? 'Cajero' }}</span></div>
-                        <div class="row"><span>Fecha Apertura:</span><span>{{ $apertura->created_at->format('d/m/Y H:i') }}</span></div>
-                        <div class="row"><span>Fecha Cierre:</span><span>{{ $cierre->created_at->format('d/m/Y H:i') }}</span></div>
-                    </div>
-                    <div class="section">
-                        <div class="row"><span>Efectivo Inicial:</span><span>L {{ number_format($apertura->efectivo_inicial, 2) }}</span></div>
-                        <div class="row"><span>Efectivo Final:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
-                    </div>
-                    <div class="section">
-                        <div class="row"><span>Ventas:</span><span>L {{ number_format($ventas, 2) }}</span></div>
-                        <div class="row"><span>Recargas:</span><span>L {{ number_format($recargas, 2) }}</span></div>
-                        <div class="row"><span>Servicios:</span><span>L {{ number_format($servicios, 2) }}</span></div>
-                        <div class="row"><span>Impresiones:</span><span>L {{ number_format($impresiones, 2) }}</span></div>
-                        <div class="row"><span>Depósitos:</span><span>L {{ number_format($depositos, 2) }}</span></div>
-                        <div class="row"><span>Comisiones:</span><span>L {{ number_format($ingresos_comisiones, 2) }}</span></div>
-                        <div class="row small">Remesas: L {{ number_format($comision_remesas ?? 0, 2) }}</div>
-                        <div class="row small">Retiros: L {{ number_format($comision_retiros ?? 0, 2) }}</div>
-                        <div class="row small">Depósitos: L {{ number_format($comision_depositos ?? 0, 2) }}</div>
-                        <div class="row small">Servicios: L {{ number_format($comision_servicios ?? 0, 2) }}</div>
-                        <div class="row small">Recargas: L {{ number_format($comision_recargas ?? 0, 2) }}</div>
-                        <div class="total row"><span>TOTAL INGRESOS:</span><span>L {{ number_format($ingresos, 2) }}</span></div>
-                    </div>
-                    <div class="section">
-    <div class="row"><span>Retiros:</span><span>L {{ number_format($retiros, 2) }}</span></div>
-    <div class="row"><span>Remesas:</span><span>L {{ number_format($remesas, 2) }}</span></div>
-    {{-- 👉 NUEVO --}}
-    <div class="row"><span>Salidas de efectivo:</span><span>L {{ number_format($salidas_efectivo ?? 0, 2) }}</span></div>
+            // Estilos optimizados para 57mm (2 1/4") de ancho
+            let thermalCSS = `
+                @media print {
+                body, .thermal-ticket {
+                    width: 57mm !important;
+                    min-width: 57mm !important;
+                    max-width: 57mm !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                    font-size: 11px !important;
+                    background: #fff !important;
+                }
+                .thermal-ticket {
+                    font-family: 'Roboto Mono', monospace;
+                    color: #222;
+                    padding: 0 2mm;
+                }
+                .thermal-title {
+                    font-size: 15px;
+                    font-weight: bold;
+                    text-align: center;
+                    margin-bottom: 2px;
+                }
+                .thermal-subtitle {
+                    text-align: center;
+                    font-size: 11px;
+                    margin-bottom: 6px;
+                }
+                .thermal-section {
+                    border-top: 1px dashed #bbb;
+                    margin: 6px 0;
+                    padding-top: 3px;
+                }
+                .thermal-row {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: 1px;
+                }
+                .thermal-total {
+                    font-weight: bold;
+                    font-size: 13px;
+                    border-top: 1px solid #222;
+                    margin-top: 4px;
+                    padding-top: 2px;
+                }
+                .thermal-diff {
+                    font-weight: bold;
+                    font-size: 12px;
+                    text-align: center;
+                    margin-top: 6px;
+                }
+                .thermal-small {
+                    font-size: 9px;
+                    color: #666;
+                }
+                }
+                body, .thermal-ticket {
+                width: 57mm !important;
+                min-width: 57mm !important;
+                max-width: 57mm !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                font-size: 11px !important;
+                background: #fff !important;
+                }
+                .thermal-ticket {
+                font-family: 'Roboto Mono', monospace;
+                color: #222;
+                padding: 0 2mm;
+                }
+                .thermal-title {
+                font-size: 15px;
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 2px;
+                }
+                .thermal-subtitle {
+                text-align: center;
+                font-size: 11px;
+                margin-bottom: 6px;
+                }
+                .thermal-section {
+                border-top: 1px dashed #bbb;
+                margin: 6px 0;
+                padding-top: 3px;
+                }
+                .thermal-row {
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 1px;
+                }
+                .thermal-total {
+                font-weight: bold;
+                font-size: 13px;
+                border-top: 1px solid #222;
+                margin-top: 4px;
+                padding-top: 2px;
+                }
+                .thermal-diff {
+                font-weight: bold;
+                font-size: 12px;
+                text-align: center;
+                margin-top: 6px;
+                }
+                .thermal-small {
+                font-size: 9px;
+                color: #666;
+                }
+            `;
 
-    <div class="total row"><span>TOTAL EGRESOS:</span><span>L {{ number_format($egresos, 2) }}</span></div>
-</div>
-
-                    <div class="section">
-                        <div class="row"><span>Total Esperado:</span><span>L {{ number_format($esperado, 2) }}</span></div>
-                        <div class="row"><span>Efectivo Reportado:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
-                        <div class="diff">
-                            @if ($diferencia > 0)
-                                <span style="color:green;">Sobrante: L {{ number_format($diferencia, 2) }}</span>
-                            @elseif ($diferencia < 0)
-                                <span style="color:red;">Faltante: L {{ number_format(abs($diferencia), 2) }}</span>
-                            @else
-                                <span style="color:blue;">Sin diferencia</span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="section small" style="text-align:center;">
-                        <div>Gracias por su trabajo</div>
-                        
-                    </div>
+            // Construye el contenido del ticket
+            let ticketHTML = `
+            <div class="thermal-ticket">
+                <div class="thermal-title">REPORTE Z</div>
+                <div class="thermal-subtitle">Resumen de Cierre de Turno</div>
+                <div class="thermal-small">Generado: {{ now()->format('d/m/Y H:i') }}</div>
+                <div class="thermal-small">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</div>
+                <div class="thermal-section">
+                <div class="thermal-row"><span>Cajero:</span><span>{{ auth()->user()->name ?? '' }}</span></div>
+                <div class="thermal-row"><span>Rol:</span><span>{{ auth()->user()->role ?? 'Cajero' }}</span></div>
+                <div class="thermal-row"><span>Apertura:</span><span>{{ $apertura->created_at->format('d/m/Y H:i') }}</span></div>
+                <div class="thermal-row"><span>Cierre:</span><span>{{ $cierre->created_at->format('d/m/Y H:i') }}</span></div>
                 </div>
-                <script>
-                    window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 500); }
-                <\/script>
-                `;
+                <div class="thermal-section">
+                <div class="thermal-row"><span>Efectivo Inicial:</span><span>L {{ number_format($apertura->efectivo_inicial, 2) }}</span></div>
+                <div class="thermal-row"><span>Efectivo Final:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
+                </div>
+                <div class="thermal-section">
+                <div class="thermal-row"><span>Ventas:</span><span>L {{ number_format($ventas, 2) }}</span></div>
+                <div class="thermal-row"><span>Recargas:</span><span>L {{ number_format($recargas, 2) }}</span></div>
+                <div class="thermal-row"><span>Servicios:</span><span>L {{ number_format($servicios, 2) }}</span></div>
+                <div class="thermal-row"><span>Impresiones:</span><span>L {{ number_format($impresiones, 2) }}</span></div>
+                <div class="thermal-row"><span>Depósitos:</span><span>L {{ number_format($depositos, 2) }}</span></div>
+                <div class="thermal-row"><span>Comisiones:</span><span>L {{ number_format($ingresos_comisiones, 2) }}</span></div>
+                <div class="thermal-row thermal-small">Remesas: L {{ number_format($comision_remesas ?? 0, 2) }}</div>
+                <div class="thermal-row thermal-small">Retiros: L {{ number_format($comision_retiros ?? 0, 2) }}</div>
+                <div class="thermal-row thermal-small">Depósitos: L {{ number_format($comision_depositos ?? 0, 2) }}</div>
+                <div class="thermal-row thermal-small">Servicios: L {{ number_format($comision_servicios ?? 0, 2) }}</div>
+                <div class="thermal-row thermal-small">Recargas: L {{ number_format($comision_recargas ?? 0, 2) }}</div>
+                <div class="thermal-total thermal-row"><span>TOTAL INGRESOS:</span><span>L {{ number_format($ingresos, 2) }}</span></div>
+                </div>
+                <div class="thermal-section">
+                <div class="thermal-row"><span>Retiros:</span><span>L {{ number_format($retiros, 2) }}</span></div>
+                <div class="thermal-row"><span>Remesas:</span><span>L {{ number_format($remesas, 2) }}</span></div>
+                <div class="thermal-row"><span>Salidas efectivo:</span><span>L {{ number_format($salidas_efectivo ?? 0, 2) }}</span></div>
+                <div class="thermal-total thermal-row"><span>TOTAL EGRESOS:</span><span>L {{ number_format($egresos, 2) }}</span></div>
+                </div>
+                <div class="thermal-section">
+                <div class="thermal-row"><span>Total Esperado:</span><span>L {{ number_format($esperado, 2) }}</span></div>
+                <div class="thermal-row"><span>Efectivo Reportado:</span><span>L {{ number_format($cierre->efectivo_final, 2) }}</span></div>
+                <div class="thermal-diff">
+                    @if ($diferencia > 0)
+                    <span style="color:green;">Sobrante: L {{ number_format($diferencia, 2) }}</span>
+                    @elseif ($diferencia < 0)
+                    <span style="color:red;">Faltante: L {{ number_format(abs($diferencia), 2) }}</span>
+                    @else
+                    <span style="color:blue;">Sin diferencia</span>
+                    @endif
+                </div>
+                </div>
+                <div class="thermal-section thermal-small" style="text-align:center;">
+                <div>Gracias por su trabajo</div>
+                </div>
+            </div>
+            <script>
+                window.onload = function() { window.print(); setTimeout(function(){ window.close(); }, 500); }
+            <\/script>
+            `;
 
-                let printWindow = window.open('', '', 'width=400,height=600');
-                printWindow.document.write('<html><head><title>Ticket de Cierre</title>');
-                printWindow.document.write('<style>' +
-                    document.querySelector('style').innerHTML +
-                    '</style></head><body>');
-                printWindow.document.write(ticketHTML);
-                printWindow.document.write('</body></html>');
-                printWindow.document.close();
+            let printWindow = window.open('', '', 'width=400,height=600');
+            printWindow.document.write('<html><head><title>Ticket de Cierre</title>');
+            printWindow.document.write('<style>' + thermalCSS + '</style></head><body>');
+            printWindow.document.write(ticketHTML);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
             }
         </script>
     </div>

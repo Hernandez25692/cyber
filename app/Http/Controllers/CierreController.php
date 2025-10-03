@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DepositoRealizado;
 use App\Models\SalidaEfectivo;
 
-
 class CierreController extends Controller
 {
     public function create()
