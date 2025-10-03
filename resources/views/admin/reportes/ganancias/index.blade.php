@@ -147,10 +147,10 @@
             const cont = document.getElementById('cards');
             cont.innerHTML = '';
             const items = [
-                { label: 'Ingresos', value: money(tot.ingresos), color: 'from-blue-500 to-blue-400' },
-                { label: 'Costos', value: money(tot.costos), color: 'from-yellow-400 to-yellow-300' },
-                { label: 'Comisiones', value: money(tot.comisiones), color: 'from-green-400 to-green-300' },
-                { label: 'Ganancias', value: money(tot.ganancias), color: 'from-purple-500 to-purple-400' },
+                { label: 'Ingresos', value: money(tot.ingresos), color: 'from-blue-500 to-blue-400', shadow: 'shadow-blue-200' },
+                { label: 'Costos', value: money(tot.costos), color: 'from-yellow-400 to-yellow-300', shadow: 'shadow-yellow-200' },
+                { label: 'Comisiones', value: money(tot.comisiones), color: 'from-green-400 to-green-300', shadow: 'shadow-green-200' },
+                { label: 'Ganancias', value: money(tot.ganancias), color: 'from-purple-500 to-purple-400', shadow: 'shadow-purple-200' },
             ];
             items.forEach((i, idx) => {
                 const div = document.createElement('div');
