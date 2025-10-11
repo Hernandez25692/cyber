@@ -20,14 +20,6 @@ class UserSeeder extends Seeder
             ]
         );
 
-        // Cajero
-        User::updateOrCreate(
-            ['email' => 'cajero@cybersandoval.com'],
-            [
-                'name' => 'Mirna Perez',
-                'password' => Hash::make('cajero123'),
-                'rol' => 'cajero'
-            ]
-        );
+        
     }
 }
