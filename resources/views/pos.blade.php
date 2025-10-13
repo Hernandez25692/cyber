@@ -312,7 +312,9 @@
 
             <!-- MODAL DE COBRO -->
             <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                x-show="mostrarModalCobro" x-transition>
+                x-show="mostrarModalCobro" x-transition
+                x-effect="if(mostrarModalCobro){ $nextTick(()=>{ $refs.montoInput?.focus(); $refs.montoInput?.select(); }); }"
+                @keydown.enter.window.prevent="if(!(montoRecibido < total || carrito.length === 0)) registrarVenta()">
                 <div class="bg-white w-full max-w-md rounded-2xl shadow-xl p-8 border-2 border-green-200 relative">
                     <button @click="cerrarModalCobro()"
                         class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
@@ -339,6 +341,7 @@
                     <div class="mb-5">
                         <label class="block mb-1 font-medium text-gray-700">Monto recibido (L):</label>
                         <input type="number" min="0" step="0.01" x-model.number="montoRecibido"
+                            x-ref="montoInput"
                             @input="calcularCambio()"
                             class="w-full border-2 border-green-200 rounded-lg p-3 font-bold text-xl">
                     </div>
