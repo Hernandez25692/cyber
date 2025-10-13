@@ -184,12 +184,18 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::delete('/remesas/{remesa}', [RemesaConfigController::class, 'destroy'])->name('remesas.destroy');
 
     // Retiros (config + tipos)
-    Route::resource('retiros/config', RetiroConfigController::class)->only(['index', 'create', 'store', 'destroy'])->names([
-        'index' => 'retiros.config.index',
-        'create' => 'retiros.config.create',
-        'store' => 'retiros.config.store',
-        'destroy' => 'retiros.config.destroy',
-    ]);
+    Route::resource('retiros/config', RetiroConfigController::class)
+        ->only(['index', 'create', 'store', 'destroy', 'edit', 'update'])
+        ->parameters(['config' => 'retiro']) // <-- clave para que el parámetro sea {retiro}
+        ->names([
+            'index'   => 'retiros.config.index',
+            'create'  => 'retiros.config.create',
+            'store'   => 'retiros.config.store',
+            'destroy' => 'retiros.config.destroy',
+            'edit'    => 'retiros.config.edit',
+            'update'  => 'retiros.config.update',
+        ]);
+
     Route::resource('retiros/servicios', TipoServicioRetiroController::class)->only(['index', 'create', 'store', 'destroy'])->names([
         'index' => 'retiros.servicios.index',
         'create' => 'retiros.servicios.create',
