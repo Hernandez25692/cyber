@@ -180,8 +180,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/reportes/cyber', [\App\Http\Controllers\Admin\ReporteCyberController::class, 'index'])->name('reportes.cyber');
 
     // Remesas (config)
-    Route::resource('remesas', RemesaConfigController::class)->only(['index', 'create', 'store'])->names('remesas');
-    Route::delete('/remesas/{remesa}', [RemesaConfigController::class, 'destroy'])->name('remesas.destroy');
+    Route::resource('remesas', RemesaConfigController::class)
+        ->only(['index', 'create', 'store', 'edit', 'update'])
+        ->names('remesas');
+
+    Route::delete('/remesas/{remesa}', [RemesaConfigController::class, 'destroy'])
+        ->name('remesas.destroy');
 
     // Retiros (config + tipos)
     Route::resource('retiros/config', RetiroConfigController::class)
@@ -225,12 +229,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/depositos/config/create', [DepositoConfigController::class, 'create'])->name('depositos.config.create');
     Route::post('/depositos/config', [DepositoConfigController::class, 'store'])->name('depositos.config.store');
     Route::delete('/depositos/config/{deposito}', [DepositoConfigController::class, 'destroy'])->name('depositos.config.destroy');
+    Route::get('/depositos/config/{deposito}/edit', [DepositoConfigController::class, 'edit'])->name('depositos.config.edit');
+    Route::put('/depositos/config/{deposito}', [DepositoConfigController::class, 'update'])->name('depositos.config.update');
 
-    // Si usas TipoServicio para depósitos:
-    Route::get('/depositos/config', [TipoServicioDepositoController::class, 'index'])->name('depositos.config.index');
-    Route::get('/depositos/config/create', [TipoServicioDepositoController::class, 'create'])->name('depositos.config.create');
-    Route::post('/depositos/config', [TipoServicioDepositoController::class, 'store'])->name('depositos.config.store');
-    Route::delete('/depositos/config/{id}', [TipoServicioDepositoController::class, 'destroy'])->name('depositos.config.destroy');
 
     Route::get('/reportes/depositos', [ReporteDepositosController::class, 'index'])->name('reportes.depositos.index');
 

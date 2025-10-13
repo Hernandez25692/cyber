@@ -27,8 +27,32 @@ class DepositoConfigController extends Controller
             'comision'  => 'required|numeric|min:0',
         ]);
 
-        DepositoConfig::create($request->all());
-        return redirect()->route('admin.depositos.config.index')->with('success', 'Rango guardado correctamente');
+        DepositoConfig::create($request->only(['nombre', 'monto_min', 'monto_max', 'comision']));
+
+        return redirect()->route('admin.depositos.config.index')
+            ->with('success', 'Rango guardado correctamente');
+    }
+
+    // 🔹 NUEVO
+    public function edit(DepositoConfig $deposito)
+    {
+        return view('admin.depositos.config.edit', compact('deposito'));
+    }
+
+    // 🔹 NUEVO
+    public function update(Request $request, DepositoConfig $deposito)
+    {
+        $request->validate([
+            'nombre'    => 'required|string|max:255',
+            'monto_min' => 'required|numeric|min:0',
+            'monto_max' => 'required|numeric|gt:monto_min',
+            'comision'  => 'required|numeric|min:0',
+        ]);
+
+        $deposito->update($request->only(['nombre', 'monto_min', 'monto_max', 'comision']));
+
+        return redirect()->route('admin.depositos.config.index')
+            ->with('success', 'Rango actualizado correctamente');
     }
 
     public function destroy(DepositoConfig $deposito)
