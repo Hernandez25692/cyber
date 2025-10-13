@@ -44,6 +44,7 @@ use App\Http\Controllers\Admin\ReporteCierresController;
 use App\Http\Controllers\SalidaEfectivoController;
 use App\Http\Controllers\Admin\ReporteGananciasController;
 
+
 /*
 |--------------------------------------------------------------------------
 | RUTA PRINCIPAL Y REDIRECCIÓN POR ROL
@@ -164,7 +165,9 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     Route::get('/inventario', fn() => redirect()->route('admin.productos.index'))->name('inventario.index');
 
     // Productos
-    Route::resource('productos', ProductoController::class)->names('productos');
+    Route::resource('productos', ProductoController::class)
+        ->except(['show'])
+        ->names('productos');
 
     // Reporte general
     Route::get('/reportes/general', [ReporteGeneralController::class, 'index'])->name('reportes.general');
@@ -238,6 +241,8 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
     // Ganancias
     Route::get('/reporte-ganancias', [ReporteGananciasController::class, 'index'])->name('reporte_ganancias.index');
     Route::get('/reporte-ganancias/data', [ReporteGananciasController::class, 'data'])->name('reporte_ganancias.data');
+    Route::get('/productos/export', [ProductoController::class, 'export'])
+        ->name('productos.export');
 });
 
 /*
@@ -268,6 +273,8 @@ Route::get('productos/{id}/entrada', [ProductoController::class, 'entrada'])
 Route::get('/ajustes/inventario', [AjusteInventarioController::class, 'crear'])
     ->middleware(['auth', 'role:admin'])
     ->name('ajustes.formulario');
+
+
 
 Route::post('productos/{id}/entrada', [ProductoController::class, 'registrarEntrada'])
     ->middleware(['auth', 'role:admin'])

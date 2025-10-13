@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Producto;
 use Illuminate\Http\Request;
 use App\Models\EntradaInventario;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\ProductosExport;
 
 
 class ProductoController extends Controller
@@ -134,5 +136,43 @@ class ProductoController extends Controller
         ]);
 
         return redirect()->route('productos.index')->with('success', 'Inventario actualizado correctamente.');
+    }
+
+    public function export(Request $request)
+    {
+        $query = \App\Models\Producto::query();
+
+        if ($request->filled('busqueda')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nombre', 'like', '%' . $request->busqueda . '%')
+                    ->orWhere('codigo', 'like', '%' . $request->busqueda . '%');
+            });
+        }
+
+        if ($request->filled('categoria')) {
+            $query->where('categoria', $request->categoria);
+        }
+
+        if ($request->filled('stock')) {
+            if ($request->stock == 'bajo') {
+                $query->where('stock', '<=', 10);
+            } elseif ($request->stock == 'sin') {
+                $query->where('stock', '=', 0);
+            } elseif ($request->stock == 'disponible') {
+                $query->where('stock', '>', 5);
+            }
+        }
+
+        if ($request->filled('min_precio')) {
+            $query->where('precio_venta', '>=', $request->min_precio);
+        }
+
+        if ($request->filled('max_precio')) {
+            $query->where('precio_venta', '<=', $request->max_precio);
+        }
+
+        $filename = 'inventario_' . now()->format('Y-m-d_His') . '.xlsx';
+
+        return Excel::download(new ProductosExport($query), $filename);
     }
 }
