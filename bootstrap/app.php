@@ -11,6 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // Alias de middleware por ruta (Laravel 11)
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+
+        // Middleware global existente
         $middleware->append(\App\Http\Middleware\RedirectBasedOnRole::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

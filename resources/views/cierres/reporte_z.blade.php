@@ -128,7 +128,7 @@
                         <h1 class="text-3xl font-bold text-gray-800">REPORTE Z</h1>
                         <p class="text-gray-600">Resumen de Cierre de Turno</p>
                         <span class="font-semibold text-green-700">
-                            {{ auth()->user()->role ?? 'Cajero' }}: {{ auth()->user()->name ?? '' }}
+                            {{ auth()->user()->role ?? 'Usuario' }}: {{ auth()->user()->name ?? '' }}
                         </span>
                     </div>
                     <div class="text-right">
@@ -559,7 +559,7 @@
                 <div class="thermal-small">Generado: {{ now()->format('d/m/Y H:i') }}</div>
                 <div class="thermal-small">Punto de Venta: {{ $puntoVentaNombre ?? '001' }}</div>
                 <div class="thermal-section">
-                <div class="thermal-row"><span>Cajero:</span><span>{{ auth()->user()->name ?? '' }}</span></div>
+                <div class="thermal-row"><span>Usuario:</span><span>{{ auth()->user()->name ?? '' }}</span></div>
                 <div class="thermal-row"><span>Rol:</span><span>{{ auth()->user()->role ?? 'Cajero' }}</span></div>
                 <div class="thermal-row"><span>Apertura:</span><span>{{ $apertura->created_at->format('d/m/Y H:i') }}</span></div>
                 <div class="thermal-row"><span>Cierre:</span><span>{{ $cierre->created_at->format('d/m/Y H:i') }}</span></div>

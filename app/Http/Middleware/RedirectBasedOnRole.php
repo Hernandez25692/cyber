@@ -10,15 +10,11 @@ class RedirectBasedOnRole
 {
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::check() && $request->is('/dashboard')) {
+        if (Auth::check() && $request->path() === 'dashboard') {
             $rol = Auth::user()->rol;
-
-            if ($rol === 'admin') {
-                return redirect('/admin');
-            }
-
-            return redirect('/pos');
+            return $rol === 'admin' ? redirect('/admin') : redirect('/pos');
         }
+
 
         return $next($request);
     }
