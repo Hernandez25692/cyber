@@ -30,7 +30,7 @@
         <!-- Acciones -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-3">
             <div class="flex gap-3">
-                <a href="{{ route('productos.create') }}"
+                <a href="{{ route('admin.productos.create') }}"
                     class="bg-blue-700 text-white px-5 py-2 rounded shadow hover:bg-blue-800 flex items-center gap-2 font-semibold">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
@@ -139,7 +139,7 @@
                                     @endif
                                 </td>
                                 <td class="p-3 flex gap-2">
-                                    <a href="{{ route('productos.edit', $producto) }}"
+                                    <a href="{{ route('admin.productos.edit', $producto) }}"
                                         class="bg-yellow-50 text-yellow-700 px-3 py-1 rounded hover:bg-yellow-100 flex items-center gap-1 border border-yellow-200 shadow-sm">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"
                                             viewBox="0 0 24 24">

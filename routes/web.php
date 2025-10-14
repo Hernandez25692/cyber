@@ -96,9 +96,7 @@ Route::middleware(['auth', 'role:cajero'])->prefix('pos')->group(function () {
     Route::post('/retiros/calcular', [RetiroPOSController::class, 'calcularComision'])->name('pos.retiros.calcular');
     Route::post('/retiros/registrar', [RetiroPOSController::class, 'store'])->name('pos.retiros.store');
 
-    // Recargas (POS)
-    Route::post('/recargas', [RecargaPOSController::class, 'store'])->name('recargas.store');
-    Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
+
 
     // Impresiones (POS)
     Route::post('/impresiones', [ImpresionPOSController::class, 'store'])->name('impresiones.store');
@@ -110,7 +108,9 @@ Route::middleware(['auth', 'role:cajero'])->prefix('pos')->group(function () {
     // Servicios (POS)
     Route::post('/servicio', [ServicioRealizadoController::class, 'store'])->name('pos.servicios.store');
 });
-
+// Recargas (POS)
+Route::post('/recargas', [RecargaPOSController::class, 'store'])->name('recargas.store');
+Route::get('/paquetes-por-proveedor/{id}', [RecargaPOSController::class, 'paquetesPorProveedor']);
 // Endpoints auxiliares usados por POS (cajero)
 Route::get('/bancos-por-tipo/{tipoId}', [ServicioDataController::class, 'bancosPorTipo'])
     ->middleware(['auth', 'role:cajero']);
