@@ -175,33 +175,77 @@
                                 ['label' => 'Retiros', 'value' => $comision_retiros ?? 0],
                                 ['label' => 'Depósitos', 'value' => $comision_depositos ?? 0],
                                 ['label' => 'Servicios', 'value' => $comision_servicios ?? 0],
-                                ['label' => 'Recargas',  'value' => $comision_recargas  ?? 0],
+                                ['label' => 'Recargas', 'value' => $comision_recargas ?? 0],
                             ];
                         @endphp
-                        @foreach ([['label' => 'Ventas', 'value' => $ventas], ['label' => 'Recargas', 'value' => $recargas], ['label' => 'Servicios', 'value' => $servicios], ['label' => 'Impresiones', 'value' => $impresiones], ['label' => 'Depósitos', 'value' => $depositos]] as $item)
-                            <div class="flex justify-between">
-                                <span>{{ $item['label'] }}:</span>
-                                <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
-                            </div>
-                        @endforeach
-                        <div class="border-t border-gray-200 pt-2 mt-2">
-                            <div class="flex justify-between font-semibold">
-                                <span>Comisiones:</span>
-                                <span>L {{ number_format($ingresos_comisiones, 2) }}</span>
-                            </div>
-                            <div class="text-xs text-gray-500 mt-1 space-y-0.5">
-                                @foreach ($comisiones as $com)
-                                    <div class="flex justify-between">
-                                        <span>• {{ $com['label'] }}</span>
-                                        <span>L {{ number_format($com['value'], 2) }}</span>
-                                    </div>
-                                @endforeach
-                            </div>
+                        @php
+                            $ventas_val = $ventas ?? 0;
+                            $impresiones_val = $impresiones ?? 0;
+                            $suma_ventas_impresiones = $ventas_val + $impresiones_val;
+
+                            // items que solo se muestran como detalle y NO se incluyen en la suma
+                            $detalles = [
+                                ['label' => 'Recargas', 'value' => $recargas ?? 0],
+                                ['label' => 'Servicios', 'value' => $servicios ?? 0],
+                                ['label' => 'Depósitos', 'value' => $depositos ?? 0],
+                            ];
+                        @endphp
+                        {{-- Detalle adicional (no afecta la suma) --}}
+                        <div class="border-t border-gray-100 pt-2 mt-2 text-sm text-gray-600">
+                            @foreach ($detalles as $d)
+                                <div class="flex justify-between">
+                                    <span>• {{ $d['label'] }}</span>
+                                    <span>L {{ number_format($d['value'], 2) }}</span>
+                                </div>
+                            @endforeach
                         </div>
-                        <div class="border-t border-green-200 pt-2 mt-2">
-                            <div class="flex justify-between font-bold text-green-700">
-                                <span>TOTAL INGRESOS:</span>
-                                <span>L {{ number_format($ingresos, 2) }}</span>
+                        <div class="flex items-center my-3">
+                            <div class="flex-grow border-t border-gray-200"></div>
+                            <span class="mx-3 text-xs text-gray-400 uppercase">FIN</span>
+                            <div class="flex-grow border-t border-gray-200"></div>
+                        </div>
+
+
+                        <div class="bg-green-50 border border-green-100 rounded-lg p-3 shadow-sm">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-semibold text-green-800">Detalle de Ingresos</h4>
+                                <span class="text-xs text-green-600 uppercase">Resumen</span>
+                            </div>
+                            <div class="flex justify-between font-semibold">
+                                <span>Ventas + Impresiones:</span>
+                                <span>L {{ number_format($suma_ventas_impresiones, 2) }}</span>
+                            </div>
+
+
+                            <div class="divide-y divide-green-100">
+                                <div class="py-2 flex justify-between text-xs">
+                                    <span class="text-gray-600">Ventas</span>
+                                    <span class="text-gray-600">L {{ number_format($ventas_val, 2) }}</span>
+                                </div>
+
+                                <div class="py-2 flex justify-between text-xs">
+                                    <span class="text-gray-600">Impresiones</span>
+                                    <span class="text-gray-600">L {{ number_format($impresiones_val, 2) }}</span>
+                                </div>
+
+                                <div class="py-2 flex justify-between text-sm">
+                                    <span class="text-gray-700 font-bold">Comisiones</span>
+                                    <span class="font-bold">L {{ number_format($ingresos_comisiones, 2) }}</span>
+                                </div>
+
+                                <div class="py-2 text-xs text-gray-500">
+                                    @foreach ($comisiones as $com)
+                                        <div class="flex justify-between">
+                                            <span>• {{ $com['label'] }}</span>
+                                            <span>L {{ number_format($com['value'], 2) }}</span>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+                                <div class="pt-3 mt-3 border-t border-green-200 flex justify-between items-center">
+                                    <span class="font-bold text-green-700">TOTAL INGRESOS:</span>
+                                    <span class="font-bold text-green-700">L {{ number_format($ingresos, 2) }}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -219,69 +263,73 @@
                             EGRESOS
                         </h3>
                     </div>
-                    <div class="p-4 space-y-2">
-                        @foreach ([
-        ['label' => 'Retiros', 'value' => $retiros ?? 0],
-        ['label' => 'Remesas', 'value' => $remesas ?? 0],
-        // 👉 NUEVO: Salidas de efectivo
-        ['label' => 'Salidas de efectivo', 'value' => $salidas_efectivo ?? 0],
-    ] as $item)
-                            <div class="flex justify-between">
-                                <span>{{ $item['label'] }}:</span>
-                                <span class="font-medium">L {{ number_format($item['value'], 2) }}</span>
-                            </div>
-                        @endforeach
+                    <div class="p-4 space-y-4">
+                        @php
+                            // Detalles que NO afectan la suma final (solo como referencia)
+                            $egreso_detalles = [
+                                ['label' => 'Retiros', 'value' => $retiros ?? 0],
+                                ['label' => 'Remesas', 'value' => $remesas ?? 0],
+                            ];
 
-                        <div class="border-t border-red-200 pt-2 mt-4">
-                            <div class="flex justify-between font-bold text-red-700">
-                                <span>TOTAL EGRESOS:</span>
-                                <span>L {{ number_format($egresos ?? 0, 2) }}</span>
+                            // Salidas que SI afectan la suma de egresos (efectivo)
+                            $salidas = $salidas_efectivo ?? 0;
+                        @endphp
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {{-- Detalle (no afecta suma) --}}
+                            <div class="border border-red-100 rounded-lg bg-white p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-sm font-semibold text-red-700">Egresos (Detalle)</h4>
+                                    <span class="text-xs text-gray-400">Información</span>
+                                </div>
+                                <div class="space-y-2 text-sm text-gray-600">
+                                    @foreach ($egreso_detalles as $d)
+                                        <div class="flex justify-between items-center">
+                                            <div class="flex items-center space-x-2">
+                                                <span class="text-red-500 font-semibold">•</span>
+                                                <span>{{ $d['label'] }}</span>
+                                            </div>
+                                            <div class="font-mono">L {{ number_format($d['value'], 2) }}</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                <p class="mt-3 text-xs text-gray-400">Estos items son solo referencia y NO afectan el total de egresos que se resta del efectivo.</p>
+                            </div>
+
+                            {{-- Salidas de efectivo (afecta suma) --}}
+                            <div class="border border-red-100 rounded-lg bg-red-50 p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-sm font-semibold text-red-800">Salidas de Efectivo</h4>
+                                    <span class="text-xs text-red-600">Afecta suma</span>
+                                </div>
+
+                                
+
+                                <div class="mt-3 pt-3 border-t border-red-100 flex items-center justify-between">
+                                    <span class="font-semibold text-red-700">Salidas:</span>
+                                    <span class="font-bold text-red-800">L {{ number_format($salidas, 2) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Resumen de Egresos --}}
+                        <div class="mt-2 border-t pt-3">
+                            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                                
+                                <div class="bg-white border border-red-100 rounded-lg px-4 py-2">
+                                    <div class="flex items-baseline space-x-4">
+                                        <span class="text-xs text-gray-500">Total Egresos </span>
+                                        <span class="text-lg font-bold text-red-700">L {{ number_format($salidas, 2) }}</span>
+                                    </div>
+                                    <div class="text-xs text-gray-400 mt-1">(Solo salidas de efectivo se restan del total)</div>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                 </div>
             </div>
-            {{-- Detalle de Salidas de Efectivo --}}
-            @if (isset($lista_salidas) && $lista_salidas->count())
-                <div class="mb-8 border border-red-100 rounded-lg overflow-hidden">
-                    <div class="bg-red-50 px-4 py-2">
-                        <h3 class="text-red-700 font-semibold">Detalle de Salidas de Efectivo</h3>
-                    </div>
-                    <div class="p-4 overflow-auto">
-                        <table class="min-w-full text-sm">
-                            <thead>
-                                <tr class="text-left border-b">
-                                    <th class="py-2 px-3">Fecha/Hora</th>
-                                    <th class="py-2 px-3">Motivo</th>
-                                    <th class="py-2 px-3">Observación</th>
-                                    <th class="py-2 px-3 text-right">Monto (L)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($lista_salidas as $s)
-                                    <tr class="border-b">
-                                        <td class="py-2 px-3">
-                                            {{ optional($s->fecha_hora)->format('d/m/Y H:i') ?? $s->created_at->format('d/m/Y H:i') }}
-                                        </td>
-                                        <td class="py-2 px-3">{{ $s->motivo }}</td>
-                                        <td class="py-2 px-3">{{ $s->observacion }}</td>
-                                        <td class="py-2 px-3 text-right">{{ number_format($s->monto, 2) }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <td colspan="3" class="py-2 px-3 text-right font-semibold">Total Salidas:</td>
-                                    <td class="py-2 px-3 text-right font-semibold">
-                                        L {{ number_format($salidas_efectivo ?? 0, 2) }}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            @endif
+            
 
             <!-- Resumen Final -->
             <div class="total-box p-6 rounded-lg mb-8 border border-blue-200">
@@ -322,7 +370,7 @@
         </div>
 
         <!-- Mensajes y Acciones -->
-        @if ($cierre->diferencia < 0)
+        @if ($diferencia < 0)
             <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
                 <div class="flex items-center">
                     <div class="flex-shrink-0">
@@ -434,15 +482,15 @@
         <script>
             // Cerrar modal al hacer click fuera del contenido
             document.getElementById('confirmModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.classList.add('hidden');
-            }
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
             });
 
             // Función para imprimir el ticket estilo RMS para rollo térmico 57mm
             function printTicket() {
-            // Estilos optimizados para 57mm (2 1/4") de ancho
-            let thermalCSS = `
+                // Estilos optimizados para 57mm (2 1/4") de ancho
+                let thermalCSS = `
                 @media print {
                 body, .thermal-ticket {
                     width: 57mm !important;
@@ -551,8 +599,8 @@
                 }
             `;
 
-            // Construye el contenido del ticket
-            let ticketHTML = `
+                // Construye el contenido del ticket
+                let ticketHTML = `
             <div class="thermal-ticket">
                 <div class="thermal-title">REPORTE Z</div>
                 <div class="thermal-subtitle">Resumen de Cierre de Turno</div>
@@ -610,12 +658,12 @@
             <\/script>
             `;
 
-            let printWindow = window.open('', '', 'width=400,height=600');
-            printWindow.document.write('<html><head><title>Ticket de Cierre</title>');
-            printWindow.document.write('<style>' + thermalCSS + '</style></head><body>');
-            printWindow.document.write(ticketHTML);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
+                let printWindow = window.open('', '', 'width=400,height=600');
+                printWindow.document.write('<html><head><title>Ticket de Cierre</title>');
+                printWindow.document.write('<style>' + thermalCSS + '</style></head><body>');
+                printWindow.document.write(ticketHTML);
+                printWindow.document.write('</body></html>');
+                printWindow.document.close();
             }
         </script>
     </div>

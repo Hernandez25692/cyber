@@ -44,7 +44,6 @@ use App\Http\Controllers\Admin\ReporteCierresController;
 use App\Http\Controllers\SalidaEfectivoController;
 use App\Http\Controllers\Admin\ReporteGananciasController;
 
-
 /*
 |--------------------------------------------------------------------------
 | RUTA PRINCIPAL Y REDIRECCIÓN POR ROL
@@ -74,19 +73,19 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+
 /*
 |--------------------------------------------------------------------------
 | MÓDULO POS (CAJERO)
 |--------------------------------------------------------------------------
 */
+
+Route::resource('productos', ProductoController::class)->names('productos');
 Route::middleware(['auth', 'role:cajero'])->prefix('pos')->group(function () {
     Route::get('/', [POSController::class, 'index'])->name('pos');
 
     // Ventas (POS)
     Route::post('/ventas', [VentaController::class, 'store'])->name('ventas.store');
-
-    // Productos (si POS gestiona productos según tu diseño)
-    Route::resource('productos', ProductoController::class)->names('productos');
 
     // Remesas (POS)
     Route::get('/remesas', [RemesaPOSController::class, 'form'])->name('remesas.form');

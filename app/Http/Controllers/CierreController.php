@@ -218,11 +218,11 @@ class CierreController extends Controller
             ->where('user_id', $user_id)
             ->sum('monto');
 
-        $egresos = $retiros + $remesas + $salidas_efectivo;
+        $egresos = $salidas_efectivo;
 
         // ===== TOTALES PARA CUADRE
         // Ingresos = base (ventas + recargas_compra + servicios + impresiones + depósitos) + comisiones (incluida recargas)
-        $ingresos = $ventas + $recargas + $impresiones + $servicios + $depositos + $ingresos_comisiones;
+        $ingresos = $ventas  + $impresiones   + $ingresos_comisiones;
 
         $esperado   = $apertura->efectivo_inicial + $ingresos - $egresos;
         $diferencia = $cierre->efectivo_final - $esperado;
@@ -231,7 +231,7 @@ class CierreController extends Controller
             'apertura',
             'cierre',
             'ventas',
-            'recargas',             // << compra
+            'recargas',
             'servicios',
             'impresiones',
             'depositos',
@@ -256,13 +256,74 @@ class CierreController extends Controller
 
     public function finalizar(Cierre $cierre)
     {
-        if ($cierre->diferencia < 0) {
-            return redirect()->back()->with('error', 'No se puede cerrar el turno con faltante.');
+        // Fuente de datos
+        $apertura = $cierre->apertura;
+        $desde    = $apertura->created_at;
+        $hasta    = now();
+        $user_id  = $apertura->user_id;
+
+        // ===== Recalcular con REGLA NUEVA =====
+        // INGRESOS = Ventas + Impresiones + (todas las comisiones)
+        $ventas = \App\Models\Venta::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('total');
+
+        $impresiones = \App\Models\ImpresionRealizada::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('precio');
+
+        $comision_retiros = \App\Models\RetiroRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('comision');
+
+        $comision_remesas = \App\Models\RemesaRealizada::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('comision');
+
+        $comision_servicios = \App\Models\ServicioRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('comision');
+
+        $comision_depositos = \App\Models\DepositoRealizado::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('comision');
+
+        $comision_recargas = \App\Models\RecargaRealizada::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->get()
+            ->sum(function ($r) {
+                if (!is_null($r->comision)) return (float)$r->comision;
+                $venta  = (float)($r->precio_venta ?? 0);
+                $compra = (float)($r->precio_compra ?? 0);
+                return max($venta - $compra, 0);
+            });
+
+        $ingresos_comisiones = $comision_servicios + $comision_remesas + $comision_retiros + $comision_depositos + $comision_recargas;
+        $ingresos = $ventas + $impresiones + $ingresos_comisiones;
+
+        // EGRESOS = SOLO salidas de efectivo
+        $salidas_efectivo = \App\Models\SalidaEfectivo::whereBetween('created_at', [$desde, $hasta])
+            ->where('user_id', $user_id)
+            ->sum('monto');
+
+        $egresos = $salidas_efectivo;
+
+        // CUADRE
+        $esperado   = $apertura->efectivo_inicial + $ingresos - $egresos;
+        $diferencia = $cierre->efectivo_final - $esperado;
+
+        // Rechazar si hay faltante (según nueva regla)
+        if ($diferencia < 0) {
+            return redirect()->back()->with('error', 'No se puede cerrar el turno con faltante (según la regla nueva).');
         }
 
+        // Persistir los totales "nuevos" en el cierre antes de marcarlo como cerrado
         $cierre->update([
+            'total_ingresos'     => $ingresos,
+            'total_egresos'      => $egresos,
+            'diferencia'         => $diferencia,
             'reporte_z_generado' => true,
-            'pendiente' => false,
+            'pendiente'          => false,
         ]);
 
         return redirect()->route('pos')->with('success', 'Turno cerrado correctamente.');

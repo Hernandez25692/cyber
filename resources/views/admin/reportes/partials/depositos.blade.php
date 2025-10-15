@@ -1,8 +1,8 @@
 {{-- resources/views/admin/reportes/partials/depositos.blade.php --}}
 @php
     // Calcula totales rápido (si no vienen del controlador)
-    $totalMonto = $depositos->sum('monto');
     $totalComision = $depositos->sum('comision');
+    $totalMonto = $depositos->sum('monto') + $totalComision;
     $totalNeto = $totalMonto - $totalComision;
 @endphp
 
