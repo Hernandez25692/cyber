@@ -614,10 +614,16 @@
 
                         <div>
                             <label class="block font-semibold">Comisión</label>
-                            <input type="text" id="comisionDeposito"
-                                class="w-full border rounded p-2 bg-gray-100 font-bold text-emerald-700" readonly>
-                            <!-- input oculto con el valor real (como en Retiros) -->
-                            <input type="hidden" name="comision" id="inputComisionDeposito">
+                            <div class="flex gap-2">
+                                <!-- Valor sugerido (calculo automático, solo lectura) -->
+                                <input type="text" id="comisionDeposito"
+                                    class="w-1/2 border rounded p-2 bg-gray-100 font-bold text-emerald-700"
+                                    readonly placeholder="--">
+
+                                <!-- Valor editable que se enviará al servidor -->
+                                <input type="number" name="comision" id="inputComisionDeposito" step="0.01" min="0"
+                                    class="w-1/2 border rounded p-2" placeholder="Editar comisión (L)">
+                            </div>
                         </div>
 
                         <div>
