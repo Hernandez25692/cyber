@@ -170,6 +170,16 @@
                             class="px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700">
                             ➖ Salida de efectivo
                         </button>
+                        <!-- BOTÓN CONSUMO (no requiere turno) -->
+                        <button type="button" id="btnConsumo"
+                            class="h-12 md:h-14 bg-orange-600 hover:bg-orange-700 text-white rounded-2xl font-semibold shadow transition flex items-center justify-center gap-2 md:gap-3 text-base md:text-lg">
+                            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M4 6h16M4 10h16M10 14h10M10 18h10"></path>
+                            </svg>
+                            Consumo
+                        </button>
 
                         <!-- BOTÓN DEPÓSITOS (nuevo, igual que Retiros) -->
                         <button @click="if(requireTurnoAbierto()) mostrarModalDeposito = true"
@@ -341,8 +351,7 @@
                     <div class="mb-5">
                         <label class="block mb-1 font-medium text-gray-700">Monto recibido (L):</label>
                         <input type="number" min="0" step="0.01" x-model.number="montoRecibido"
-                            x-ref="montoInput"
-                            @input="calcularCambio()"
+                            x-ref="montoInput" @input="calcularCambio()"
                             class="w-full border-2 border-green-200 rounded-lg p-3 font-bold text-xl">
                     </div>
                     <div class="mb-5">
@@ -617,12 +626,13 @@
                             <div class="flex gap-2">
                                 <!-- Valor sugerido (calculo automático, solo lectura) -->
                                 <input type="text" id="comisionDeposito"
-                                    class="w-1/2 border rounded p-2 bg-gray-100 font-bold text-emerald-700"
-                                    readonly placeholder="--">
+                                    class="w-1/2 border rounded p-2 bg-gray-100 font-bold text-emerald-700" readonly
+                                    placeholder="--">
 
                                 <!-- Valor editable que se enviará al servidor -->
-                                <input type="number" name="comision" id="inputComisionDeposito" step="0.01" min="0"
-                                    class="w-1/2 border rounded p-2" placeholder="Editar comisión (L)">
+                                <input type="number" name="comision" id="inputComisionDeposito" step="0.01"
+                                    min="0" class="w-1/2 border rounded p-2"
+                                    placeholder="Editar comisión (L)">
                             </div>
                         </div>
 
@@ -802,6 +812,87 @@
                 </div>
             </div>
             <!-- FIN MODAL IMPRESION -->
+            <!-- MODAL DE CONSUMO -->
+            <div id="modalConsumo" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
+                <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl p-6 border-2 border-orange-300 relative">
+                    <!-- Cerrar -->
+                    <button type="button" id="btnCloseConsumo"
+                        class="absolute top-3 right-3 text-gray-400 hover:text-red-600 transition">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+
+                    <h2 class="text-2xl font-bold mb-5 text-orange-700 flex items-center gap-2">
+                        <svg class="w-7 h-7 text-orange-600" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4 6h16M4 10h16M10 14h10M10 18h10"></path>
+                        </svg>
+                        Registrar Consumo
+                    </h2>
+
+                    <form id="formConsumo" method="POST" action="{{ route('consumos.store') }}" class="space-y-4">
+                        @csrf
+
+                        <!-- Código escaneado/tecleado -->
+                        <div>
+                            <label class="block font-semibold">Código de barras / Código</label>
+                            <input type="text" id="consumo_codigo" name="codigo_barra"
+                                class="w-full border rounded px-3 py-2"
+                                placeholder="Escanea o escribe y presiona Enter" autocomplete="off">
+                            <p class="text-xs text-gray-500 mt-1">Al presionar Enter se consultará y se llenarán los
+                                campos.</p>
+                        </div>
+
+                        <!-- Producto encontrado -->
+                        <input type="hidden" id="consumo_producto_id" name="producto_id">
+                        <div>
+                            <label class="block font-semibold">Producto</label>
+                            <input type="text" id="consumo_nombre" name="nombre"
+                                class="w-full border rounded px-3 py-2 bg-gray-50" placeholder="Nombre del producto"
+                                readonly>
+                        </div>
+
+                        <!-- Cantidad y costo -->
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block font-semibold">Cantidad</label>
+                                <input type="number" step="0.01" min="0.01" id="consumo_cantidad"
+                                    name="cantidad" class="w-full border rounded px-3 py-2" value="1">
+                            </div>
+                            <div>
+                                <label class="block font-semibold">Costo unitario (L)</label>
+                                <input type="number" step="0.01" min="0" id="consumo_costo"
+                                    name="costo_unitario" class="w-full border rounded px-3 py-2" value="0.00">
+                            </div>
+                        </div>
+
+                        <!-- Observación -->
+                        <div>
+                            <label class="block font-semibold">Observación (opcional)</label>
+                            <input type="text" id="consumo_observacion" name="observacion"
+                                class="w-full border rounded px-3 py-2" placeholder="Detalle opcional">
+                        </div>
+
+                        <!-- Mensajes -->
+                        <p id="consumoError" class="text-sm text-red-600 hidden"></p>
+                        <p id="consumoOk" class="text-sm text-green-600 hidden"></p>
+
+                        <div class="flex justify-end gap-2 pt-2">
+                            <button type="button" id="btnCancelConsumo" class="px-4 py-2 rounded-lg border">
+                                Cancelar
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 rounded-lg bg-orange-600 text-white hover:bg-orange-700">
+                                Guardar consumo
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- FIN MODAL DE CONSUMO -->
 
             <!-- MODAL CONSULTA DE PRECIO -->
             <div class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50"
@@ -1301,6 +1392,165 @@
                 }
             }
         </script>
+
+        <script>
+            // --------- Modal Consumo: abrir/cerrar ----------
+            const $modalConsumo = document.getElementById('modalConsumo');
+            const $btnConsumo = document.getElementById('btnConsumo');
+            const $btnCloseConsumo = document.getElementById('btnCloseConsumo');
+            const $btnCancelConsumo = document.getElementById('btnCancelConsumo');
+
+            const $formConsumo = document.getElementById('formConsumo');
+            const $codigo = document.getElementById('consumo_codigo');
+            const $productoId = document.getElementById('consumo_producto_id');
+            const $nombre = document.getElementById('consumo_nombre');
+            const $cantidad = document.getElementById('consumo_cantidad');
+            const $costo = document.getElementById('consumo_costo');
+            const $obs = document.getElementById('consumo_observacion');
+
+            const $errConsumo = document.getElementById('consumoError');
+            const $okConsumo = document.getElementById('consumoOk');
+
+            function toggleConsumoModal(show) {
+                if (show) {
+                    $modalConsumo.classList.remove('hidden');
+                    $modalConsumo.classList.add('flex');
+                    $errConsumo.classList.add('hidden');
+                    $okConsumo.classList.add('hidden');
+                    $errConsumo.textContent = '';
+                    $okConsumo.textContent = '';
+                    $formConsumo.reset();
+                    // Enfocar código
+                    setTimeout(() => $codigo?.focus(), 50);
+                } else {
+                    $modalConsumo.classList.add('hidden');
+                    $modalConsumo.classList.remove('flex');
+                }
+            }
+
+            $btnConsumo?.addEventListener('click', () => toggleConsumoModal(true));
+            $btnCloseConsumo?.addEventListener('click', () => toggleConsumoModal(false));
+            $btnCancelConsumo?.addEventListener('click', () => toggleConsumoModal(false));
+
+            // Cerrar al click fuera
+            $modalConsumo?.addEventListener('click', (e) => {
+                if (e.target === $modalConsumo) toggleConsumoModal(false);
+            });
+
+            // --------- Buscar por código (Enter en input código) ----------
+            $codigo?.addEventListener('keydown', async (e) => {
+                if (e.key !== 'Enter') return;
+                e.preventDefault();
+
+                $errConsumo.classList.add('hidden');
+                $okConsumo.classList.add('hidden');
+                $errConsumo.textContent = '';
+                $okConsumo.textContent = '';
+
+                const valor = ($codigo.value || '').trim();
+                if (!valor) return;
+
+                try {
+                    const url = new URL("{{ route('consumos.buscar_por_codigo') }}", window.location.origin);
+                    url.searchParams.set('codigo', valor);
+
+                    const resp = await fetch(url, {
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    const data = await resp.json();
+
+                    if (!resp.ok || !data.found) {
+                        $productoId.value = '';
+                        $nombre.value = '';
+                        $costo.value = '0.00';
+                        $errConsumo.textContent = data?.message || 'Producto no encontrado.';
+                        $errConsumo.classList.remove('hidden');
+                        return;
+                    }
+
+                    // Llenar campos con lo encontrado (editable por el usuario)
+                    $productoId.value = data.data.producto_id ?? '';
+                    $codigo.value = data.data.codigo_barra ?? valor;
+                    $nombre.value = data.data.nombre ?? '';
+                    $costo.value = (parseFloat(data.data.costo_unitario_default || 0)).toFixed(2);
+
+                    // Foco al siguiente campo para agilizar
+                    $cantidad.focus();
+                    $cantidad.select();
+
+                } catch (ex) {
+                    $errConsumo.textContent = 'Error consultando el producto.';
+                    $errConsumo.classList.remove('hidden');
+                }
+            });
+
+            // --------- Guardar Consumo (AJAX para no recargar POS) ----------
+            $formConsumo?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                $errConsumo.classList.add('hidden');
+                $okConsumo.classList.add('hidden');
+                $errConsumo.textContent = '';
+                $okConsumo.textContent = '';
+
+                // Validación mínima de cliente
+                if (!$codigo.value || !$cantidad.value || parseFloat($cantidad.value) <= 0) {
+                    $errConsumo.textContent = 'Código y cantidad son requeridos.';
+                    $errConsumo.classList.remove('hidden');
+                    return;
+                }
+                if ($costo.value === '' || parseFloat($costo.value) < 0) {
+                    $errConsumo.textContent = 'Costo unitario inválido.';
+                    $errConsumo.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const fd = new FormData($formConsumo);
+                    const resp = await fetch($formConsumo.action, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                'content'),
+                        },
+                        body: fd
+                    });
+
+                    const data = await resp.json();
+
+                    if (!resp.ok) {
+                        const msg = data?.message ||
+                            (data?.errors ? Object.values(data.errors).flat().join(' ') :
+                                'No se pudo registrar el consumo.');
+                        $errConsumo.textContent = msg;
+                        $errConsumo.classList.remove('hidden');
+                        return;
+                    }
+
+                    $okConsumo.textContent = '✅ Consumo registrado correctamente.';
+                    $okConsumo.classList.remove('hidden');
+
+                    // Preparar para escanear el siguiente
+                    $codigo.value = '';
+                    $productoId.value = '';
+                    $nombre.value = '';
+                    $cantidad.value = '1';
+                    $costo.value = '0.00';
+                    $obs.value = '';
+
+                    // Dejar foco en código
+                    $codigo.focus();
+
+                } catch (ex) {
+                    $errConsumo.textContent = 'Error de red/servidor al guardar.';
+                    $errConsumo.classList.remove('hidden');
+                }
+            });
+        </script>
+
         <!-- Recarga JS Dinámico -->
         <script>
             document.addEventListener('DOMContentLoaded', function() {

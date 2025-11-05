@@ -43,7 +43,7 @@ use App\Http\Controllers\TipoServicioDepositoController;
 use App\Http\Controllers\Admin\ReporteCierresController;
 use App\Http\Controllers\SalidaEfectivoController;
 use App\Http\Controllers\Admin\ReporteGananciasController;
-
+use App\Http\Controllers\ConsumoController;
 /*
 |--------------------------------------------------------------------------
 | RUTA PRINCIPAL Y REDIRECCIÓN POR ROL
@@ -321,6 +321,19 @@ Route::get('/reportes/impresiones', function () {
     return redirect()->route('admin.reportes.impresiones');
 })->middleware(['auth', 'role:admin'])->name('reportes.impresiones');
 
+
+Route::middleware(['auth'])->group(function () {
+
+    // Listado simple (lo usaremos luego en la vista)
+    Route::get('/consumos', [ConsumoController::class, 'index'])->name('consumos.index');
+
+    // Guardar consumo desde el modal
+    Route::post('/consumos', [ConsumoController::class, 'store'])->name('consumos.store');
+
+    // Búsqueda por código de barras (AJAX desde el modal)
+    Route::get('/consumos/buscar-por-codigo', [ConsumoController::class, 'buscarPorCodigo'])
+        ->name('consumos.buscar_por_codigo');
+});
 /*
 |--------------------------------------------------------------------------
 | AUTENTICACIÓN (Laravel Breeze)

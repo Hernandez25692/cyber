@@ -40,7 +40,7 @@
                         <td class="px-4 py-3">{{ $impresion->id }}</td>
                         <td class="px-4 py-3">{{ $impresion->usuario->name ?? '—' }}</td>
                         <td class="px-4 py-3">{{ $impresion->cliente ?? '—' }}</td>
-                        <td class="px-4 py-3 text-pink-800 font-semibold">L {{ number_format($impresion->monto, 2) }}
+                        <td class="px-4 py-3 text-pink-800 font-semibold">L {{ number_format($impresion->precio, 2) }}
                         </td>
                         <td class="px-4 py-3 text-gray-500">{{ $impresion->created_at->format('d/m/Y H:i') }}</td>
                     </tr>
