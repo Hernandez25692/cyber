@@ -629,6 +629,8 @@
                                     class="w-1/2 border rounded p-2 bg-gray-100 font-bold text-emerald-700" readonly
                                     placeholder="--">
 
+                                <!-- Valor real que se enviará al servidor (oculto, solo un campo visible arriba) -->
+                                <input type="hidden" name="comision" id="inputComisionDeposito" value="">
                             </div>
                         </div>
 
