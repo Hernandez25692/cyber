@@ -629,10 +629,6 @@
                                     class="w-1/2 border rounded p-2 bg-gray-100 font-bold text-emerald-700" readonly
                                     placeholder="--">
 
-                                <!-- Valor editable que se enviará al servidor -->
-                                <input type="number" name="comision" id="inputComisionDeposito" step="0.01"
-                                    min="0" class="w-1/2 border rounded p-2"
-                                    placeholder="Editar comisión (L)">
                             </div>
                         </div>
 
